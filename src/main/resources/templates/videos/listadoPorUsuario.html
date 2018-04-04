@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<title>Listado de vídeos</title>
+</head>
+<body>
+	<h1 th:text="'Listado de vídeos de ' + ${usuario.nombre}"></h1>
+
+	<div>
+		<div th:if="${mensaje}">
+			<p th:text="${mensaje}"></p>
+		</div>
+		<form method="POST" enctype="multipart/form-data" action="/videos">
+		<fieldset>
+    		<legend>Subir Vídeo:</legend>		
+    		<label for="video">Selecciona vídeo a subir</label><br>
+    		<input type="file" name="video" id="video"><br><br>
+    		<input type="submit" value="Subir Vídeo">
+			</fieldset>
+		</form>
+	</div>
+	<br>
+	<div>
+		<table border="1">
+			<tr>
+				<th>Título</th>
+				<th>Fecha creación</th>
+				<th>Vídeo</th>
+			</tr>
+			<tr th:each="video : ${videos}">
+				<td>
+					<p th:text="${video.titulo}"></p>
+				</td>				
+				<td>
+					<p th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></p>
+				</td>
+				<td>
+					<video width="400" controls>
+					  <source th:src="'/videos/' + ${video.ruta}">
+					</video>				
+				</td>
+			</tr>
+		
+		</table>
+	</div>
+
+</body>
+</html>
