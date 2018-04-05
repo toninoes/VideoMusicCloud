@@ -8,7 +8,8 @@ public class VideoLocationProperties {
     /**
      * Localización de los vídeos
      */
-    private String location = "src/main/resources/static/videos";
+    //private String location = "src/main/resources/static/videos";
+	private String location = "../videos";
 
     public String getLocation() {
         return location;
