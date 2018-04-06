@@ -1,6 +1,9 @@
 package vmc.service;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.Valid;
 
@@ -11,62 +14,79 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import vmc.exception.CampoUnicoException;
 import vmc.exception.ErrorInternoServidorException;
 import vmc.exception.RecursoNoEncontradoException;
+import vmc.model.Rol;
 import vmc.model.Usuario;
+import vmc.repository.RolRepository;
 import vmc.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
 
 	@Autowired
-	private UsuarioRepository usuarioService;
+	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+    private RolRepository rolRepository;
+	
+	@Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	public List<Usuario> findAll() {
-		return usuarioService.findAll();
+		return usuarioRepository.findAll();
 	}
 	
 	public Usuario findById(@PathVariable long id) {
-		Usuario usuario = usuarioService.findById(id)
+		Usuario usuario = usuarioRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
 
 		return usuario;
 	}	
 	
 	public Usuario findByMail(@PathVariable String mail) {
-		Usuario usuario = usuarioService.findByMail(mail)
+		/*Usuario usuario = usuarioRepository.findByMail(mail)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "mail", mail));
 		
-		return usuario;
+		return usuario;*/
+		return usuarioRepository.findByMail(mail);
 	}
 	
+	public void saveUser(Usuario user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setActivo(true);
+        Rol userRole = rolRepository.findByRol("ADMIN");
+        user.setRoles(new HashSet<Rol>(Arrays.asList(userRole)));
+		usuarioRepository.save(user);
+	}
+	/*
 	public ResponseEntity<Usuario> create(@Valid @RequestBody Usuario u) {
 		
 		Usuario usuario = new Usuario();
 		
 		// control unicidad de mail
-		if(usuarioService.findByMail(u.getMail()).isPresent())
+		if(usuarioRepository.findByMail(u.getMail()).isPresent())
 			throw new CampoUnicoException("Usuario", "mail", u.getMail());
 		
 		try {
-			usuario = usuarioService.save(u);
+			usuario = usuarioRepository.save(u);
 		} catch (ErrorInternoServidorException e) {
 			throw new ErrorInternoServidorException("guardar", "Usuario", u.getId(), e.getMessage());
 		}
 		
         return new ResponseEntity<Usuario>(usuario, HttpStatus.CREATED);
     }
+    */
 	
 	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Usuario u) {
 
-		Usuario usuario = usuarioService.findById(id)
+		Usuario usuario = usuarioRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
 
 		try {
 			usuario.setNombre(u.getNombre());
 			usuario.setApellidos(u.getApellidos());
-			usuarioService.save(usuario);
+			usuarioRepository.save(usuario);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Usuario", id, e.getMessage());
 		}
@@ -75,11 +95,11 @@ public class UsuarioService {
 	}
 	
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
-		Usuario usuario = usuarioService.findById(id)
+		Usuario usuario = usuarioRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
 
 	    try {
-	    	usuarioService.delete(usuario);
+	    	usuarioRepository.delete(usuario);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("borrar", "Usuario", id, e.getMessage());
 		}

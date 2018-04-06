@@ -40,10 +40,10 @@ public class UsuarioRestController {
 		return usuarioService.findByMail(mail);
 	}
 	
-	@PostMapping
+	/*@PostMapping
 	public ResponseEntity<Usuario> create(@Valid @RequestBody Usuario u) {
         return usuarioService.create(u);
-    }
+    }*/
 	
 	@PutMapping("/{id}")	
 	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Usuario u) {

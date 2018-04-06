@@ -16,7 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
-import vmc.VideoLocationProperties;
+
+import vmc.config.VideoLocationProperties;
 import vmc.exception.AlmacenamientoException;
 import vmc.exception.AlmacenamientoFicheroNoEncontradoException;
 

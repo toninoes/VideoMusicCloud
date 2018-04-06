@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
-import vmc.VideoLocationProperties;
+import vmc.config.VideoLocationProperties;
 import vmc.service.AlmacenamientoService;
 
 @SpringBootApplication

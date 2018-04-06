@@ -1,37 +1,58 @@
 package vmc.model;
 
 import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.Transient;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuario  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "usuario_id")
 	private long id;
 	
-	@NotBlank
+	@NotEmpty(message = "*Introduzca su nombre")
 	private String nombre;
 	
-	@NotBlank
+	@NotEmpty(message = "*Introduzca sus apellidos")
 	private String apellidos;
 	
 	@Column(unique = true)
+	@Email(message = "*Introduzca un email válido")
+	@NotEmpty(message = "*Introduzca un email")
 	private String mail;
 
-	@NotBlank
+	@Length(min = 6, message = "*Su contraseña debe contener al menos 6 caracteres")
+	@NotEmpty(message = "*Introduzca su contraseña de acceso")
+	@Transient
 	private String password;
+	
+	private Boolean activo;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
+	private Set<Rol> roles;
 	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -98,6 +119,24 @@ public class Usuario  {
 	public Date getActualizacion() {
 		return actualizacion;
 	}
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
+	}
+
+	public Set<Rol> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Rol> roles) {
+		this.roles = roles;
+	}
+	
+	
 
 	
 }

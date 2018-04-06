@@ -1,4 +1,4 @@
-package vmc;
+package vmc.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
