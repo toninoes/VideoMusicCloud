@@ -7,11 +7,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
-import vmc.config.VideoLocationProperties;
+import vmc.config.VideoLocationConfig;
 import vmc.service.AlmacenamientoService;
 
 @SpringBootApplication
-@EnableConfigurationProperties(VideoLocationProperties.class)
+@EnableConfigurationProperties(VideoLocationConfig.class)
 public class Application extends SpringBootServletInitializer {
 	
 	public static void main(String[] args) throws Exception {

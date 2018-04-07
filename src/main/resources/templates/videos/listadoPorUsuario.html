@@ -13,9 +13,13 @@
 		</div>
 		<form method="POST" enctype="multipart/form-data" action="/videos">
 		<fieldset>
-    		<legend>Subir Vídeo:</legend>		
+    		<legend>Subir Vídeo:</legend>	
+    		<label for="titulo">Título</label><br>
+    		<input type="text" name="titulo" id="titulo"><br><br>
+    			
     		<label for="video">Selecciona vídeo a subir</label><br>
     		<input type="file" name="video" id="video"><br><br>
+    		
     		<input type="submit" value="Subir Vídeo">
 			</fieldset>
 		</form>
@@ -37,7 +41,7 @@
 				</td>
 				<td>
 					<video width="400" controls>
-					  <source th:src="'/videos/' + ${video.ruta}">
+					  <source th:src="'/videos/' + ${video.nombre}">
 					</video>				
 				</td>
 			</tr>

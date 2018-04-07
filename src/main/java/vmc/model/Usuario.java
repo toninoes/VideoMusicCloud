@@ -17,8 +17,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
@@ -29,29 +27,30 @@ import org.springframework.data.annotation.Transient;
 public class Usuario  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "usuario_id")
 	private long id;
 	
-	@NotEmpty(message = "*Introduzca su nombre")
+	@NotBlank(message = "*Introduzca su nombre")
 	private String nombre;
 	
-	@NotEmpty(message = "*Introduzca sus apellidos")
+	@NotBlank(message = "*Introduzca sus apellidos")
 	private String apellidos;
 	
 	@Column(unique = true)
 	@Email(message = "*Introduzca un email válido")
-	@NotEmpty(message = "*Introduzca un email")
+	@NotBlank(message = "*Introduzca un email")
 	private String mail;
 
 	@Length(min = 6, message = "*Su contraseña debe contener al menos 6 caracteres")
-	@NotEmpty(message = "*Introduzca su contraseña de acceso")
+	@NotBlank(message = "*Introduzca su contraseña de acceso")
 	@Transient
 	private String password;
 	
 	private Boolean activo;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
+	@JoinTable(name = "usuario_rol", 
+			   joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"), 
+			   inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
 	private Set<Rol> roles;
 	
 	@Column(nullable = false, updatable = false)

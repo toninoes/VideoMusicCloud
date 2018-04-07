@@ -3,7 +3,7 @@ package vmc.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("storage")
-public class VideoLocationProperties {
+public class VideoLocationConfig {
 
     /**
      * Localización de los vídeos, puede utilizarse ruta absoluta o relativa

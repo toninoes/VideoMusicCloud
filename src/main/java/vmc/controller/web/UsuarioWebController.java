@@ -39,12 +39,6 @@ public class UsuarioWebController {
 		model.addAttribute("usuario", usuarioService.findByMail(mail));
 		return "usuarios/detalle";
 	}
-
-	/*@PostMapping
-	public String create(Model model, @Valid @RequestBody Usuario u) {
-		model.addAttribute("usuario", usuarioService.create(u));
-        return "usuarios/listado";
-    }*/
 	
 	@PutMapping("/{id}")	
 	public String update(Model model, @PathVariable(value = "id") Long id, @Valid @RequestBody Usuario u) {

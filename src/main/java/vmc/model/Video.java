@@ -23,17 +23,16 @@ public class Video {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@NotBlank
+	@NotBlank(message = "*Introduzca un título para el vídeo")
 	private String titulo;
 	
 	@NotBlank
-	private String ruta;
+	private String nombre;
 	
 	@ManyToOne
 	@JoinColumn(name="usuario_id", nullable = false)
 	private Usuario usuario;
 
-	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -48,10 +47,10 @@ public class Video {
 		super();
 	}
 
-	public Video(@NotBlank String titulo, @NotBlank String ruta, Usuario usuario) {
+	public Video(@NotBlank String titulo, @NotBlank String nombre, Usuario usuario) {
 		super();
 		this.titulo = titulo;
-		this.ruta = ruta;
+		this.nombre = nombre;
 		this.usuario = usuario;
 	}
 
@@ -63,12 +62,12 @@ public class Video {
 		this.titulo = titulo;
 	}
 
-	public String getRuta() {
-		return ruta;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setRuta(String ruta) {
-		this.ruta = ruta;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public Usuario getUsuario() {

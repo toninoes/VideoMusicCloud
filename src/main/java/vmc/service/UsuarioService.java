@@ -45,38 +45,16 @@ public class UsuarioService {
 	}	
 	
 	public Usuario findByMail(@PathVariable String mail) {
-		/*Usuario usuario = usuarioRepository.findByMail(mail)
-	            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "mail", mail));
-		
-		return usuario;*/
 		return usuarioRepository.findByMail(mail);
 	}
 	
-	public void saveUser(Usuario user) {
+	public void create(Usuario user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActivo(true);
-        Rol userRole = rolRepository.findByRol("ADMIN");
+        Rol userRole = rolRepository.findByRol("USER");
         user.setRoles(new HashSet<Rol>(Arrays.asList(userRole)));
 		usuarioRepository.save(user);
 	}
-	/*
-	public ResponseEntity<Usuario> create(@Valid @RequestBody Usuario u) {
-		
-		Usuario usuario = new Usuario();
-		
-		// control unicidad de mail
-		if(usuarioRepository.findByMail(u.getMail()).isPresent())
-			throw new CampoUnicoException("Usuario", "mail", u.getMail());
-		
-		try {
-			usuario = usuarioRepository.save(u);
-		} catch (ErrorInternoServidorException e) {
-			throw new ErrorInternoServidorException("guardar", "Usuario", u.getId(), e.getMessage());
-		}
-		
-        return new ResponseEntity<Usuario>(usuario, HttpStatus.CREATED);
-    }
-    */
 	
 	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Usuario u) {
 

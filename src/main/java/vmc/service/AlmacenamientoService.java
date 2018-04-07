@@ -17,7 +17,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 
-import vmc.config.VideoLocationProperties;
+import vmc.config.VideoLocationConfig;
 import vmc.exception.AlmacenamientoException;
 import vmc.exception.AlmacenamientoFicheroNoEncontradoException;
 
@@ -26,7 +26,7 @@ public class AlmacenamientoService {
 	private Path rootLocation;
 
     @Autowired
-    public AlmacenamientoService(VideoLocationProperties properties) {
+    public AlmacenamientoService(VideoLocationConfig properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 

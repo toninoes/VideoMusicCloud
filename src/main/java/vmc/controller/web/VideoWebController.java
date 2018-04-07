@@ -47,10 +47,9 @@ public class VideoWebController {
     }
     
     @PostMapping
-    public String subirVideo(@RequestParam("video") MultipartFile video, RedirectAttributes redirectAttributes) {
-    	videoService.subirVideo(video);
-        redirectAttributes.addFlashAttribute("mensaje", 
-        		"Video " + video.getOriginalFilename() + " subido correctamente.");
+    public String subirVideo(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, RedirectAttributes ra) {
+    	videoService.subirVideo(t, v);
+        ra.addFlashAttribute("mensaje", "Video " + v.getOriginalFilename() + " subido correctamente.");
 
         return "redirect:/videos";
     }

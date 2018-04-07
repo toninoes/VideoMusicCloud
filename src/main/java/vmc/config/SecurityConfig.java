@@ -15,7 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -23,12 +23,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 	
-	@Value("${spring.queries.users-query}")
+	@Value("${VideoMusicCloud.queries.users-query}")
 	private String usersQuery;
 	
-	@Value("${spring.queries.roles-query}")
+	@Value("${VideoMusicCloud.queries.roles-query}")
 	private String rolesQuery;
-
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/login").permitAll()
-				.antMatchers("/registration").permitAll()
+				.antMatchers("/registro").permitAll()
 				.antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
 				.authenticated().and().csrf().disable().formLogin()
 				.loginPage("/login").failureUrl("/login?error=true")
