@@ -1,7 +1,9 @@
 # VideoMusicCloud
-## Proyectos Informáticos 2018 - Universidad de Cádiz
-
 Aplicación web en Java de repositorio de videos musicales
+
+
+## Proyectos Informáticos 2018 - Universidad de Cádiz
+Grado en Ingenierı́a Informática. Curso 2017-2018
 
 
 ### Participantes en el proyecto
