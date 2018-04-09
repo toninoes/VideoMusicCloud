@@ -1,5 +1,5 @@
-# VideoMusicCloud - Proyectos Informáticos 2018
-## Universidad de Cádiz
+# VideoMusicCloud
+## Proyectos Informáticos 2018 - Universidad de Cádiz
 
 Aplicación web en Java de repositorio de videos musicales
 
@@ -23,6 +23,7 @@ Aplicación web en Java de repositorio de videos musicales
 - Apache Maven 3
 - Apache Tomcat 8
 - Git
+- IDE: Spring Tool Suite 3.9.2
 
 
 ### Sincronizar el repositorio
