@@ -48,10 +48,16 @@ public class UsuarioService {
 		return usuarioRepository.findByMail(mail);
 	}
 	
-	public void create(Usuario user) {
+	public void create(Usuario user, Boolean esAdmin) {
+		Rol userRole;
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActivo(true);
-        Rol userRole = rolRepository.findByRol("USER");
+        
+        if(esAdmin)
+        	userRole = rolRepository.findByRol("ADMIN");
+        else        	
+        	userRole = rolRepository.findByRol("USER");
+        
         user.setRoles(new HashSet<Rol>(Arrays.asList(userRole)));
 		usuarioRepository.save(user);
 	}

@@ -49,7 +49,7 @@ public class LoginWebController {
 		if (bindingResult.hasErrors()) {
 			modelAndView.setViewName("registro");
 		} else {
-			usuarioService.create(u);
+			usuarioService.create(u, false);
 			modelAndView.addObject("mensaje", "Usuario registrado correctamente");
 			modelAndView.addObject("usuario", new Usuario());
 			modelAndView.setViewName("registro");

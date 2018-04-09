@@ -66,8 +66,8 @@ public class Usuario  {
 	public Usuario() {
 		super();
 	}
-
-	public Usuario(@NotBlank String nombre, @NotBlank String apellidos, String mail, @NotBlank String password) {
+	
+	public Usuario(String nombre, String apellidos, String mail, String password) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
