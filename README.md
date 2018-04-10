@@ -30,7 +30,7 @@ Grado en Ingenierı́a Informática. Curso 2017-2018
 
 ### Sincronizar el repositorio
 
-- La primera vez: ejecutar los siguientes comandos en el directorio donde vaya a almacenar los archivos de la aplicación ("workspace"):
+- **La primera vez:** ejecutar los siguientes comandos en el directorio donde vaya a almacenar los archivos de la aplicación ("workspace"):
 
 ```sh
 pinf2018@vmc ~/workspace $ mkdir VideoMusicCloud
@@ -40,13 +40,13 @@ pinf2018@vmc ~/workspace/VideoMusicCloud $ git remote add origin https://github.
 pinf2018@vmc ~/workspace/VideoMusicCloud $ git pull origin master
 ```
 
-- El resto de las veces: para descargar archivos con las últimas modificaciones de los demás participantes en el proyecto, ubicados ya dentro del directorio del proyecto ("~/workspace/VideoMusicCloud"):
+- **El resto de las veces:** para descargar archivos con las últimas modificaciones de los demás participantes en el proyecto, ubicados ya dentro del directorio del proyecto ("~/workspace/VideoMusicCloud"):
 
 ```sh
 pinf2018@vmc ~/workspace/VideoMusicCloud $ git pull origin master
 ```
 
-- Tras realizar nuestras propias aportaciones/modificaciones, para subir nuevos cambios al repositorio:
+- Tras realizar nuestras propias aportaciones/modificaciones y subir los nuevos cambios al repositorio:
 
 ```sh
 pinf2018@vmc ~/workspace/VideoMusicCloud $ git add --all
