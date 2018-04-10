@@ -50,14 +50,18 @@ public class VideoService {
 	}
 	
 	@ResponseBody
-    public ResponseEntity<Resource> servirVideo(@PathVariable String nombrevideo) {
+    public ResponseEntity<Resource> descargar(@PathVariable String nombrevideo) {
 
         Resource video = almacenamientoService.loadAsResource(nombrevideo);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; nombrevideo=\"" + video.getFilename() + "\"").body(video);
     }
 	
-	public ResponseEntity<?> subirVideo(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v) {
+	public void borrar(@PathVariable String filename) {
+        almacenamientoService.delete(filename);
+    }
+	
+	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v) {
 		
     	if(esUnVideo(v)) {
     		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

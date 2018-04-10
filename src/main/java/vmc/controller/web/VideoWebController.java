@@ -43,12 +43,12 @@ public class VideoWebController {
     @GetMapping("/{nombrevideo:.+}")
     @ResponseBody
     public ResponseEntity<Resource> servirVideo(@PathVariable String nombrevideo) {
-    	return videoService.servirVideo(nombrevideo);
+    	return videoService.descargar(nombrevideo);
     }
     
     @PostMapping
     public String subirVideo(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, RedirectAttributes ra) {
-    	videoService.subirVideo(t, v);
+    	videoService.subir(t, v);
         ra.addFlashAttribute("mensaje", "Video " + v.getOriginalFilename() + " subido correctamente.");
 
         return "redirect:/videos";
