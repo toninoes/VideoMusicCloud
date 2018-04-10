@@ -2,7 +2,7 @@
 Aplicación web en Java de repositorio de videos musicales
 
 
-## Proyectos Informáticos 2018 - Universidad de Cádiz
+## Proyectos Informáticos - Universidad de Cádiz
 Grado en Ingenierı́a Informática. Curso 2017-2018
 
 
@@ -20,12 +20,12 @@ Grado en Ingenierı́a Informática. Curso 2017-2018
 
 - Java SE Development Kit 8
 - Thymeleaf
-- Spring Boot
-- MySQL Community Server 5
-- Apache Maven 3
-- Apache Tomcat 8
+- Spring Boot 2.0.0
+- MySQL Community Server 5.7.21
+- Apache Maven 3.5.3
+- Apache Tomcat 8.0.50
 - Git
-- IDE: Spring Tool Suite 3.9.2
+- Spring Tool Suite 3.9.2
 
 
 ### Sincronizar el repositorio
