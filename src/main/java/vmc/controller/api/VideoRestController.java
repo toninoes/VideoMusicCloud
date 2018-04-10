@@ -1,4 +1,4 @@
-package vmc.controller.rest;
+package vmc.controller.api;
 
 public class VideoRestController {
 
