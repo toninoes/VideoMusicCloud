@@ -43,7 +43,7 @@ public class Comentario {
 		super();
 	}
 	
-	public Comentario(String descripcion) {
+	public Comentario(@NotBlank String descripcion) {
 		this.descripcion = descripcion;
 	}
 	
@@ -53,5 +53,13 @@ public class Comentario {
 	
 	public String getDescripcion() {return this.descripcion;}
 	public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
 }
