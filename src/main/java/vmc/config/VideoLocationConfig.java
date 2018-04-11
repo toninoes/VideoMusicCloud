@@ -18,7 +18,7 @@ public class VideoLocationConfig {
 	//private String location = "/home/toni/videos";
 	
 	//o en una partición concreta de un equipo Windows.
-	private String location = "videos";
+	private String location = "../videos";
 
     public String getLocation() {
         return location;
