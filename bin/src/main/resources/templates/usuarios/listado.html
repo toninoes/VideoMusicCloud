@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<title>Listado de usuarios</title>
+</head>
+<body>
+	<h1>Listado de Usuarios</h1>
+	<div>
+		<table border="1">
+			<tr>
+				<th>Nombre y apellidos</th>
+				<th>e-mail</th>
+				<th>Vídeos</th>
+			</tr>
+			<tr th:each="usuario : ${usuarios}">
+				<td><a th:href="'/usuarios/' + ${usuario.id}" th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></a></td>
+				<td><a th:href = "'mailto:' + ${usuario.mail}" th:text="${usuario.mail}"></a></td>
+				<td><a th:href="'/videos/usuario/' + ${usuario.id}" th:text="Ver"></a></td>
+			</tr>
+		
+		</table>
+	</div>
+
+</body>
+</html>
