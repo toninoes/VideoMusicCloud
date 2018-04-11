@@ -3,6 +3,8 @@ package vmc.controller.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vmc.model.Usuario;
 import vmc.service.UsuarioService;
 import vmc.service.VideoService;
 
@@ -33,10 +36,12 @@ public class VideoWebController {
         return "videos/listado";
     }
     
-    @GetMapping("/usuario/{id}")
-	public String findVideosByUsuarioId(Model model, @PathVariable long id) {
-		model.addAttribute("videos", videoService.findVideosByUsuarioId(id));
-		model.addAttribute("usuario", usuarioService.findById(id));
+    @GetMapping("/misvideos")
+	public String findVideosByUsuarioId(Model model) {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		model.addAttribute("videos", videoService.findVideosByUsuarioId(usuario.getId()));
+		model.addAttribute("usuario", usuario);
 		return "videos/listadoPorUsuario";
 	}
 	

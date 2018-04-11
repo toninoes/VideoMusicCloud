@@ -41,8 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		
+	protected void configure(HttpSecurity http) throws Exception {		
 		http.
 			authorizeRequests()
 				.antMatchers("/").permitAll()
@@ -51,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
 				.authenticated().and().csrf().disable().formLogin()
 				.loginPage("/login").failureUrl("/login?error=true")
-				.defaultSuccessUrl("/admin/home")
+				//.defaultSuccessUrl("/admin/home")
+				.defaultSuccessUrl("/videos/misvideos")
 				.usernameParameter("mail")
 				.passwordParameter("password")
 				.and().logout()
