@@ -1,6 +1,9 @@
 @charset "UTF-8";
 /*
+<<<<<<< HEAD
 
+=======
+>>>>>>> fc5bf3efea5a87f0f9cac6d2b5a914c9204bc6c1
 /*  		00 - RESET   				*/
 /*  		01 - HEADER   				*/
 /*  		02 - HEADER BACKGROUND		*/
@@ -46,6 +49,52 @@ ul, li, ol { list-style: none; margin: 0; padding: 0; }
 
 .custom-container { max-width: 1800px; }
 
+<<<<<<< HEAD
+=======
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+div { margin: 0; }
+
+td { text-align: center; padding: 3px; }
+
+.custom-margin { margin-top: 20px; margin-bottom: 20px; }
+
+.custom-font { 
+	font-family: 'Conv_helveticaneuecyr-roman'; 
+}
+
+.custom-label-file {
+	position: relative;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	left: 0;
+	top: 0;
+}
+
+.custom-input-file {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	filter: alpha(opacity=0);
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	opacity: 0;
+	background-color: transparent;
+	color: transparent;
+}
+
+.custom-space {
+	display: block;
+	position: relative;
+	float: left;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+>>>>>>> fc5bf3efea5a87f0f9cac6d2b5a914c9204bc6c1
 .custom-column-5 { width: 20%; padding: 0 15px; float: left; }
 
 .custom-column-5:nth-child(5n+1) { clear: both; }

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:include="bootstrap :: head">
 	<meta charset="utf-8" />
 	<title th:text="'Detalles ' + ${usuario.nombre} + ' ' + ${usuario.apellidos}"></title>
 </head>
 <body>
-
-	<h1 th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></h1>
-	
-	<p th:text="${usuario.mail}"></p>
-	
-	<a th:href="'/videos/usuario/' + ${usuario.id}">Vídeos</a>
-
+	<div th:include="header :: body"></div>
+	<div th:id="@{content-block}" th:class="@{custom-container-5}">
+		<h1 th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></h1>
+		<p th:text="${usuario.mail}"></p>
+		<a th:href="'/videos/usuario/' + ${usuario.id}">Vídeos</a>
+	</div>
+	<div th:include="scripts :: div"></div>
 </body>
 </html>
