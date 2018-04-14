@@ -1,53 +1,61 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:include="bootstrap :: head">
 	<meta charset="utf-8" />
 	<title>Listado de vídeos</title>
 </head>
 <body>
-	<h1 th:text="'Listado de vídeos de ' + ${usuario.nombre}"></h1>
-
-	<div>
-		<div th:if="${mensaje}">
-			<p th:text="${mensaje}"></p>
+	<div th:include="header :: body"></div>
+		<div th:class="@{custom-margin}">
+			<div th:id="@{content-block}" th:class="@{col-md-8 col-md-offset-4}">
+			<h3 th:text="'Listado de vídeos de ' + ${usuario.nombre}" th:class="@{custom-font}"></h3>
+			<div th:if="${mensaje}">
+				<p th:text="${mensaje}"></p>
+			</div>
+			<form method="POST" enctype="multipart/form-data" action="/videos" th:class="@{custom-margin custom-font}">
+				<fieldset>
+	    			<legend>Subir Vídeo:</legend>
+	    		</fieldset>
+				<table border="0" th:class="@{custom-font}">
+	    			<tr>	
+	    				<td><span th:class="@{folder}"></span></td>
+	    				<td><a class="btn btn-primary">
+								<label for="video" th:class="@{custom-label-file}">Selecciona vídeo a subir</label>
+								<input type="file" th:class="@{custom-input-file}" name="video" id="video">
+		    				</a></td>
+	    				<td><span th:class="@{title}"></span></td>
+	    				<td><label for="titulo"></label></td>
+	    				<td><input type="text" name="titulo" id="titulo" placeholder="Título del video" required class="form-control">
+	    				</td>
+		    			<td><span th:class="@{upload}"></span></td>
+		    			<td><a class="btn btn-primary" href="javascript:;">
+		    				<label for="subirvideo" th:class="@{custom-label-file}">Subir Video</label>
+		    				<input type="submit" value="subirvideo" name="subirvideo" id="subirvideo" th:class="@{custom-input-file}">
+		    				</a>
+		    			</td>
+		    		</tr>
+		    	</table>
+			</form>
+			<div th:class="@{custom-font}">
+				<table border="0" th:class="@{custom-font}">
+					<tr>
+						<th>Vídeo</th>
+						<th>Título</th>
+						<th>Fecha creación</th>
+					</tr>
+					<tr th:each="video : ${videos}">
+						<td>
+							<video width="400" controls>
+							  <source th:src="'/videos/' + ${video.nombre}">
+							</video>
+						</td>
+						<td th:text="${video.titulo}"></td>
+						<td th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></td>
+					</tr>
+				</table>
+			</div>
 		</div>
-		<form method="POST" enctype="multipart/form-data" action="/videos">
-		<fieldset>
-    		<legend>Subir Vídeo:</legend>	
-    		<label for="titulo">Título</label><br>
-    		<input type="text" name="titulo" id="titulo"><br><br>
-    			
-    		<label for="video">Selecciona vídeo a subir</label><br>
-    		<input type="file" name="video" id="video"><br><br>
-    		
-    		<input type="submit" value="Subir Vídeo">
-			</fieldset>
-		</form>
 	</div>
-	<br>
-	<div>
-		<table border="1">
-			<tr>
-				<th>Título</th>
-				<th>Fecha creación</th>
-				<th>Vídeo</th>
-			</tr>
-			<tr th:each="video : ${videos}">
-				<td>
-					<p th:text="${video.titulo}"></p>
-				</td>				
-				<td>
-					<p th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></p>
-				</td>
-				<td>
-					<video width="400" controls>
-					  <source th:src="'/videos/' + ${video.nombre}">
-					</video>				
-				</td>
-			</tr>
-		
-		</table>
-	</div>
-
+	<div th:include="scripts :: div"></div>
 </body>
 </html>

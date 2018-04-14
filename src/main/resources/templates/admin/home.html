@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 
-<head>
+<head th:include="bootstrap :: head">
 <title>Admin Page</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -11,7 +11,8 @@
 </head>
 
 <body>
-	<div class="container">
+	<div th:include="header :: body"></div>
+	<div th:id="@{content-block}" th:class="@{custom-container-5}">
 	
 		<form th:action="@{/logout}" method="get">
 			<button class="btn btn-md btn-danger btn-block" name="registro"
@@ -31,5 +32,6 @@
 		</div>
 		
 	</div>
+	<div th:include="scripts :: div"></div>
 </body>
 </html>
