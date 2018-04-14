@@ -1,12 +1,103 @@
 <!DOCTYPE html>
+<!--  <html lang="es" xmlns:th="http://www.thymeleaf.org">-->
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8" />
+	<link rel="shortcut icon" href="./static/img/favicon.png">
+	<link rel="stylesheet" href="./static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="./static/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./static/css/icon.css">
+	<link rel="stylesheet" href="./static/css/loader.css">
+	<link rel="stylesheet" href="./static/css/idangerous.swiper.css">
+	<link rel="stylesheet" href="./static/css/stylesheet.css">
 	<title>Listado de vídeos</title>
 </head>
 <body>
 	<h1 th:text="'Listado de vídeos de ' + ${usuario.nombre}"></h1>
-
+	
+	<div class="be-loader">
+	    <div class="spinner">
+			<div class="spinner-container container1">
+				<div class="circle1"></div>
+				<div class="circle2"></div>
+				<div class="circle3"></div>
+			    <div class="circle4"></div>
+			</div>
+			<div class="spinner-container container2">
+			    <div class="circle1"></div>
+			    <div class="circle2"></div>
+			    <div class="circle3"></div>
+			    <div class="circle4"></div>
+			</div>
+			<div class="spinner-container container3">
+			    <div class="circle1"></div>
+			    <div class="circle2"></div>
+			    <div class="circle3"></div>
+			    <div class="circle4"></div>
+	  		</div>
+		</div>
+	 </div>
+	
+	<!-- THE HEADER -->
+	<header>
+		<div class="container-fluid custom-container">
+			<div class="row no_row row-header">
+				<div class="brand-be">
+					<a href="listadoPorUsuario.html"><img src="./static/img/logo.png" alt="logo" class="be_logo">
+					</a>
+				</div>
+				<div class="header-menu-block">
+					<button class="cmn-toggle-switch cmn-toggle-switch__htx"><span></span></button>
+					<ul class="header-menu" id="one">
+						<li class="active-header"><a href="blog-detail-2.html">Find Projects</a><i class="fa fa-angle-down"></i>
+							<ul>
+								<li>
+									<a href="activity.html">ACTIVITY</a>
+									<i class="fa fa-angle-right"></i><i class="fa fa-angle-down"></i>
+									<ul>
+										<li><a href="page1.html">PAGE 1</a></li>
+										<li><a href="page2.html">PAGE 2</a></li>
+										<li><a href="page3.html">PAGE 3</a></li>
+									</ul>
+								</li>
+								<li><a href="search.html">SEARCH</a></li>
+							</ul>
+						</li>
+						<li><a href="activity.html">Jobs</a></li>
+						<li><a href="search.html">Find Candidates</a><i class="fa fa-angle-down"></i>
+							<ul>
+								<li><a href="author-edit.html">AUTHOR EDIT</a></li>
+								<li><a href="author-login.html">AUTHOR LOGIN</a></li>
+								<li><a href="messages.html">MESSAGES</a></li>
+								<li><a href="messages-2.html">MESSAGES 2</a></li>
+							</ul>
+						</li>
+						<li><a href="blog-detail-2.html">Community</a><i class="fa fa-angle-down"></i>
+						<ul>
+							<li><a href="blog.html">BLOG</a></li>							
+							<li><a href="blog-2.html">BLOG 2</a></li>						
+							<li><a href="blog-3.html">BLOG 3</a></li>
+							<li><a href="statictics.html">STATISTICS</a></li>
+							<li><a href="faq.html">FAQ</a></li>
+							<li><a href="about-us.html">ABOUT US</a></li>
+							<li><a href="contact-us.html">CONTACT US</a></li>
+							<li><a href="shortcodes.html">SHORTCODES</a></li>
+						</ul></li>
+					</ul>
+				</div>
+				<div class="login-header-block">
+					<div class="login_block">
+						<a class="btn-login btn color-1 size-2 hover-2" href="blog-detail-2.html"><i class="fa fa-user"></i>
+						Log in</a>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</header>
+	
+	
+	
+	
 	<div>
 		<div th:if="${mensaje}">
 			<p th:text="${mensaje}"></p>
@@ -49,5 +140,11 @@
 		</table>
 	</div>
 
+	<script src="../../static/js/jquery.min.js"></script>
+	<script src="../../static/js/bootstrap.min.js"></script>		
+	<script src="../../static/js/idangerous.swiper.min.js"></script>
+	<script src="../../static/js/isotope.pkgd.min.js"></script>
+	<script src="../../static/js/jquery.viewportchecker.min.js"></script>		
+	<script src="../../static/js/global.js"></script>	
 </body>
 </html>
