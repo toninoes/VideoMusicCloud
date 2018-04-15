@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:include="bootstrap :: head">
+	<meta charset="utf-8" />
+	<title>Subida de vídeos</title>
+</head>
+<body>			
+	<div th:include="header :: body"></div>
+	<div th:class="@{custom-margin}">
+		<div th:id="@{content-block}" th:class="@{col-md-6 col-md-offset-4}">
+			<form method="POST" enctype="multipart/form-data" action="/videos" th:class="@{custom-margin custom-font}">
+				<fieldset>
+	    			<legend>Subir Vídeo:</legend>
+	    		</fieldset>
+				<table th:class="@{custom-font}">
+	    			<tr>	
+	    				<td th:class="@{custom-td-font}"><span th:class="@{folder}"></span></td>
+	    				<td>
+	    					<label th:class="@{btn btn-primary}">Selecciona vídeo a subir
+								<input type="file" name="video" id="video" hidden="hidden">
+		    				</label>
+		    			</td>
+	    				<td th:class="@{custom-td-font}"><span th:class="@{title}"></span></td>
+	    				<td th:class="@{custom-td}">
+	    					<label for="titulo">
+	    						<input type="text" name="titulo" id="titulo" placeholder="Título del video" required th:class="@{form-control}">
+	    					</label>
+	    				</td>
+		    			<td th:class="@{custom-td-font}"><span th:class="@{upload}"></span></td>
+		    			<td>
+		    				<label th:class="@{btn btn-primary}">Subir Video
+		    					<input type="submit" value="subirvideo" name="subirvideo" id="subirvideo" hidden="hidden">
+		    				</label>
+		    			</td>
+		    		</tr>
+		    	</table>
+			</form>
+		</div>
+	</div>
+	<div th:include="scripts :: div"></div>
+</body>
+</html>
