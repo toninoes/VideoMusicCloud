@@ -59,6 +59,7 @@ public class VideoWebController {
         return "redirect:/videos";
     }
     
+    @GetMapping("/subidaVideos")
+    public void subidaVideos() {}
     
-
 }
