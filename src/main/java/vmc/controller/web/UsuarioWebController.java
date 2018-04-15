@@ -42,6 +42,15 @@ public class UsuarioWebController {
 		return "usuarios/detalle";
 	}
 	
+	@GetMapping("/perfil")
+	public String findVideosByUsuarioId(Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(usuario.getId()));
+		model.addAttribute("usuario", usuario);
+		return "usuarios/perfil";
+	}
+	
 	@PutMapping("/{id}")	
 	public String update(Model model, @PathVariable(value = "id") Long id, @Valid @RequestBody Usuario u) {
 		model.addAttribute("usuario", usuarioService.update(id, u));

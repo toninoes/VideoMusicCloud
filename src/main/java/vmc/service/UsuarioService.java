@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,6 +19,7 @@ import vmc.exception.ErrorInternoServidorException;
 import vmc.exception.RecursoNoEncontradoException;
 import vmc.model.Rol;
 import vmc.model.Usuario;
+import vmc.model.Video;
 import vmc.repository.RolRepository;
 import vmc.repository.UsuarioRepository;
 
@@ -46,6 +48,13 @@ public class UsuarioService {
 	
 	public Usuario findByMail(@PathVariable String mail) {
 		return usuarioRepository.findByMail(mail);
+	}
+	
+	public List<Video> findVideosByUsuarioId(@PathVariable long id) {
+		Usuario usuario = usuarioRepository.findById(id)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
+		
+		return usuarioRepository.findByUsuario(usuario);
 	}
 	
 	public void create(Usuario user, Boolean esAdmin) {
