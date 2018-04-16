@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
@@ -45,6 +46,9 @@ public class Usuario  {
 	@Transient
 	private String password;
 	
+	@NotBlank
+	private String foto;
+	
 	private Boolean activo;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -67,12 +71,13 @@ public class Usuario  {
 		super();
 	}
 	
-	public Usuario(String nombre, String apellidos, String mail, String password) {
+	public Usuario(String nombre, String apellidos, String mail, String password, String foto) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.mail = mail;
 		this.password = password;
+		this.foto = foto;
 	}
 
 	public String getNombre() {
@@ -135,7 +140,13 @@ public class Usuario  {
 		this.roles = roles;
 	}
 	
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
 	
+	public String getFoto() {
+		return foto;
+	}
 
 	
 }

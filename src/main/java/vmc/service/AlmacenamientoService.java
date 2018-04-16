@@ -17,20 +17,24 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 
-import vmc.config.VideoLocationConfig;
+import vmc.config.LocationConfig;
 import vmc.exception.AlmacenamientoException;
 import vmc.exception.AlmacenamientoFicheroNoEncontradoException;
 
 @Service
 public class AlmacenamientoService {
+	
 	private Path rootLocation;
-
-    @Autowired
-    public AlmacenamientoService(VideoLocationConfig properties) {
-        this.rootLocation = Paths.get(properties.getLocation());
+	
+	private Path rootLocationFotos;
+	
+	@Autowired
+    public AlmacenamientoService(LocationConfig properties) {
+		this.rootLocation = Paths.get(properties.getLocation());
+		this.rootLocationFotos = Paths.get(properties.getLocationFotos());
     }
 
-    public void store(MultipartFile file) {
+    public void store(MultipartFile file, String option) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -42,19 +46,26 @@ public class AlmacenamientoService {
                         "No se puede almacenar el fichero con una ruta relativa fuera del directorio actual "
                                 + filename);
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
-                    StandardCopyOption.REPLACE_EXISTING);
+            if(option.equals("video"))
+            	Files.copy(file.getInputStream(), this.rootLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+            else
+            	Files.copy(file.getInputStream(), this.rootLocationFotos.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e) {
             throw new AlmacenamientoException("Error al almacenar el fichero " + filename, e);
         }
     }
 
-    public Stream<Path> loadAll() {
+    public Stream<Path> loadAll(String option) {
         try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
-                    .map(path -> this.rootLocation.relativize(path));
+            if(option.equals("video"))
+            	return Files.walk(this.rootLocation, 1)
+            				.filter(path -> !path.equals(this.rootLocation))
+            				.map(path -> this.rootLocation.relativize(path));
+            else
+            	return Files.walk(this.rootLocationFotos, 1)
+        				.filter(path -> !path.equals(this.rootLocationFotos))
+        				.map(path -> this.rootLocationFotos.relativize(path));
         }
         catch (IOException e) {
             throw new AlmacenamientoException("Error al leer los ficheros almacenados", e);
@@ -62,13 +73,16 @@ public class AlmacenamientoService {
 
     }
 
-    public Path load(String filename) {
-        return rootLocation.resolve(filename);
+    public Path load(String filename, String option) {
+    	if(option.equals("video"))
+    		return rootLocation.resolve(filename);
+    	else
+    		return rootLocationFotos.resolve(filename);
     }
 
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String filename, String option) {
         try {
-            Path file = load(filename);
+            Path file = load(filename, option);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
@@ -84,22 +98,29 @@ public class AlmacenamientoService {
         }
     }
 
-    public void delete(String filename) {
+    public void delete(String filename, String option) {
         try {
-			FileSystemUtils.deleteRecursively(rootLocation.resolve(filename));
+        	if(option.equals("video"))
+        		FileSystemUtils.deleteRecursively(rootLocation.resolve(filename));
+        	else
+        		FileSystemUtils.deleteRecursively(rootLocationFotos.resolve(filename));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
     
-    public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    public void deleteAll(String option) {
+    	if(option.equals("video"))
+    		FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    	else
+    		FileSystemUtils.deleteRecursively(rootLocationFotos.toFile());
     }
 
     public void init() {
         try {
             Files.createDirectories(rootLocation);
+            Files.createDirectories(rootLocationFotos);
         }
         catch (IOException e) {
             throw new AlmacenamientoException("No se pudo inicializar el almacenamiento", e);

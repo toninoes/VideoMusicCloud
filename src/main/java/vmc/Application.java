@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
-import vmc.config.VideoLocationConfig;
+import vmc.config.LocationConfig;
 import vmc.model.Rol;
 import vmc.model.Usuario;
 import vmc.repository.RolRepository;
@@ -17,7 +17,7 @@ import vmc.service.AlmacenamientoService;
 import vmc.service.UsuarioService;
 
 @SpringBootApplication
-@EnableConfigurationProperties(VideoLocationConfig.class)
+@EnableConfigurationProperties(LocationConfig.class)
 public class Application extends SpringBootServletInitializer {
 	
 	@Autowired
@@ -41,7 +41,7 @@ public class Application extends SpringBootServletInitializer {
 	public CommandLineRunner loadData(UsuarioService usrSrv) {
 		return (args) -> {
 			if (usrRep.findAll().size() == 0) {		
-				Usuario administrador = new Usuario("admin", "admin", "admin@admin.com", "123456");
+				Usuario administrador = new Usuario("admin", "admin", "admin@admin.com", "123456", "img/ava_10.jpg");
 				usrRep.save(administrador);
 				
 				rolRep.save(new Rol("ADMIN"));

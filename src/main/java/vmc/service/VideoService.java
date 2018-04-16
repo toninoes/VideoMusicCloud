@@ -52,13 +52,13 @@ public class VideoService {
 	@ResponseBody
     public ResponseEntity<Resource> descargar(@PathVariable String nombrevideo) {
 
-        Resource video = almacenamientoService.loadAsResource(nombrevideo);
+        Resource video = almacenamientoService.loadAsResource(nombrevideo, "video");
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; nombrevideo=\"" + video.getFilename() + "\"").body(video);
     }
 	
 	public void borrar(@PathVariable String filename) {
-        almacenamientoService.delete(filename);
+        almacenamientoService.delete(filename, "video");
     }
 	
 	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v) {
@@ -70,7 +70,7 @@ public class VideoService {
     		Video video = new Video(t, v.getOriginalFilename(), usuario);
     		videoRepository.save(video);
     		
-        	almacenamientoService.store(v);
+        	almacenamientoService.store(v, "video");
         	
         	return new ResponseEntity<Video>(video, HttpStatus.CREATED);
     	}else {

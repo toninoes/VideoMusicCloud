@@ -3,18 +3,27 @@ package vmc.service;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import vmc.exception.AlmacenamientoFicheroNoEncontradoException;
 import vmc.exception.ErrorInternoServidorException;
 import vmc.exception.RecursoNoEncontradoException;
 import vmc.model.Rol;
@@ -25,6 +34,9 @@ import vmc.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
+	
+	@Autowired
+	private AlmacenamientoService almacenamientoService;
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -98,6 +110,55 @@ public class UsuarioService {
 		}
 
 	    return ResponseEntity.ok().build();
+	}
+	
+	@ResponseBody
+    public ResponseEntity<Resource> descargar(@PathVariable String fotousuario) {
+
+        Resource foto = almacenamientoService.loadAsResource(fotousuario, "foto");
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; fotousuario=\fotoPerfil\"" + foto.getFilename() + "\"").body(foto);
+    }
+	
+	public void borrar(@PathVariable String filename) {
+        almacenamientoService.delete(filename, "foto");
+    }
+	
+	public ResponseEntity<?> subir(@RequestParam("foto") MultipartFile f) {
+		
+    	if(esUnaFoto(f)) {
+    		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    		Usuario usuario = findByMail(auth.getName());
+    		
+    		usuario.setFoto(f.getOriginalFilename());
+    		usuarioRepository.save(usuario);
+    		
+        	almacenamientoService.store(f, "foto");
+        	
+        	return new ResponseEntity<Usuario>(usuario, HttpStatus.CREATED);
+    	}else {
+    		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    	}        
+    }
+	
+	@ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)
+    public ResponseEntity<?> manejarAlmacenamientoFicheroNoEncontrado(AlmacenamientoFicheroNoEncontradoException exc) {
+        return ResponseEntity.notFound().build();
+    }
+	
+	private Boolean esUnaFoto(MultipartFile f) {
+		Boolean res = false;
+		
+		if(
+				f.getContentType().equals("image/gif")		||	// .gif	GIF images (lossless compression, superseded by PNG)
+				f.getContentType().equals("image/jpeg")		||	// .jpeg JPEG images
+				f.getContentType().equals("image/png")		||	// .png	PNG images
+				f.getContentType().equals("image/svg+xml")	    // .svg	SVG images (vector images)
+
+			)		
+			res = true;
+		
+		return res;
 	}
 
 }
