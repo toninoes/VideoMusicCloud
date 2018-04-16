@@ -69,6 +69,7 @@ public class Usuario  {
 
 	public Usuario() {
 		super();
+		this.foto = "img/ava_10.jpg";
 	}
 	
 	public Usuario(String nombre, String apellidos, String mail, String password, String foto) {

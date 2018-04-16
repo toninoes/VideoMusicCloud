@@ -13,8 +13,9 @@
 				<div th:class="@{col-xs-12 col-md-4 left-feild}">
 					<div th:class="@{be-user-block style-3}">
 						<div th:class="@{be-user-detail}">
-							<a th:href="@{#}" th:class="@{be-ava-user style-2}">
-								<img th:src="@{'fotoPerfil/' + ${usuario.foto}}" alt="">
+							<a th:href="@{#}" th:class="@{be-ava-user style-2}" th:switch="${usuario.foto}">
+								<img th:case="'img/ava_10.jpg'" th:src="@{/img/ava_10.jpg}" alt="">
+								<img th:case="*" th:src="@{'fotoPerfil/' + ${usuario.foto}}" alt="">
 							</a>	
 							<form method="POST" enctype="multipart/form-data" action="/usuarios/perfil">
 								<label th:class="@{be-ava-left btn color-1 size-2 hover-1}">
