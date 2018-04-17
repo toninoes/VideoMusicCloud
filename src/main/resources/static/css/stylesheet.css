@@ -76,6 +76,34 @@ td {
 	cursor: pointer !important;
 }
 
+.custom-video {
+	max-width: auto;
+	max-height: 410px;
+	min-width: auto;
+	min-height: 410px;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+}
+
+.custom-video-perfil video {
+	max-width: auto;
+	max-height: 128px;
+	min-width: auto;
+	min-height: 128px;
+	width: 100%;
+	height: 100%;
+}
+
+video {
+	max-width: 728px;
+	max-height: 410px;
+	min-width: auto;
+	min-height: 410px;
+	width: 100%;
+	height: 100%;
+}
+
 [hidden] {
 	display: none !important;
 }
@@ -589,6 +617,7 @@ form.input-search { position: relative; margin-bottom: 50px; }
 	06 - POST BLOCK
 ==================================
 */
+
 .be-post { border: 1px solid #edeff2; border-radius: 2px; width: 100%; margin-bottom: 30px !important; }
 
 .be-img-block { overflow: hidden; display: block; }

@@ -88,9 +88,11 @@
 								<div th:class="@{row}">
 									<div th:class="@{col-ml-12 col-xs-6 col-sm-4}" th:each="video : ${videos}">
 										<div th:class="be-post">
-											<video width="100%" controls th:class="@{be-img-block}">
-												<source th:src="'/videos/' + ${video.nombre}">
-											</video>
+											<div align="center" th:class="@{be-img-block custom-video-perfil}">
+												<video controls>
+													<source th:src="'/videos/' + ${video.nombre}">
+												</video>
+											</div>
 											<a th:href="@{#}" th:class="be-post-title" th:text="${video.titulo}"></a>
 											<span th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 											<div th:class="author-post">
