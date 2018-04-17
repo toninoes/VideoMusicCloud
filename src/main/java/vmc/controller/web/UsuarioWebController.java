@@ -55,6 +55,7 @@ public class UsuarioWebController {
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(usuario.getId()));
 		model.addAttribute("usuario", usuario);
+		model.addAttribute("rol", usuario.getRoles().iterator().next());
 		return "usuarios/perfil";
 	}
 	

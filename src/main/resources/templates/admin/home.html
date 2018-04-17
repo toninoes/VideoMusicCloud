@@ -11,7 +11,8 @@
 </head>
 
 <body>
-	<div th:include="header :: body"></div>
+	<!--  THE LOADER -->
+	<div th:include="spinner :: body"></div>
 	<div th:id="@{content-block}" th:class="@{custom-container-5}">
 	
 		<form th:action="@{/logout}" method="get">
@@ -32,6 +33,6 @@
 		</div>
 		
 	</div>
-	<div th:include="scripts :: div"></div>
+	<div th:include="footer :: div"></div>
 </body>
 </html>

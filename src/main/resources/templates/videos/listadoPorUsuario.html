@@ -5,44 +5,61 @@
 	<title>Listado de vídeos</title>
 </head>
 <body>
-	<div th:include="header :: body"></div>
-	<!--<div th:class="@{custom-margin}">
-		<div th:id="@{content-block}" th:class="@{col-md-8 col-md-offset-4}">
-			<h3 th:text="'Listado de vídeos de ' + ${usuario.nombre}" th:class="@{custom-font}"></h3>
-			<div th:if="${mensaje}">
-				<p th:text="${mensaje}"></p>
-			</div> -->
-			<!-- MAIN CONTENT -->
-			<div th:id="@{content-block}">
-				<div th:class="@{container-fluid custom-container be-detail-container custom-font}">
-					<div th:class="@{isotope-grid row}">
-						<div th:class="@{isotope-item col-ml-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-2}" th:each="video : ${videos}">
-							<div th:class="@{be-post style-5}">
-								<video width="100%" controls th:class="@{be-img-block}">
-									<source th:src="'/videos/' + ${video.nombre}">
-								</video>
-								<div th:class="@{be-rowline}">
-									<img th:class="@{rowline-img}" th:src="@{/img/line_1.jpg}" alt="Título del vídeo">
-									<div th:class="@{rowline-text}" th:text="${video.titulo}"> 
-										<span th:class="@{rowline-icon}" th:text="Título"><i th:class="@{fa fa-thumbs-o-up}"></i></span>
-									</div>
-								</div>
-								<div th:class="@{be-rowline}">
-									<img th:class="@{rowline-img}" th:src="@{/img/line_1.jpg}" alt="Fecha de creación">
-									<div th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"> 
-										<span th:class="@{rowline-icon}" th:text="Fecha Creación"><i th:class="@{fa fa-thumbs-o-up}"></i></span>
-									</div>
-								</div>
-								<div th:class="author-post">
-									<img th:src="@{/img/a10.jpg}" alt="author" th:class="@{ava-author}">
-									<span>by <a th:href="@{#}" th:text="${usuario.nombre}"></a></span>
-									<span th:class="@{pull-right}"><i th:class="@{fa fa-thumbs-o-up}"></i> 225</span>
-								</div>
+	<!-- THE LOADER -->
+	<div th:include="spinner :: body"></div>
+	<!-- THE HEADER -->
+	<header>
+		<div th:class="@{container-fluid custom-container}">
+			<div th:class="@{row no_row row-header}">
+				<div th:class="brand-be">
+					<a th:href="@{/login}"><img th:src="@{/img/logo.png}" alt="logo" th:class="be_logo"></a>
+				</div>
+				<div th:class="header-menu-block">
+					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
+					<ul th:class="header-menu" id="one">
+						<li th:class="active-header"><a th:href="@{/videos/misvideos}">Inicio</a></li>
+						<li><a th:href="@{/videos}">Listas</a></li>
+						<li><a th:href="@{/usuarios/perfil}">Perfil</a></li>
+						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
+						<li><a th:href="@{#}">Suscripción</a></li>
+					</ul>
+				</div>
+				<a th:class="@{login-header-block login_block btn-login btn color-1 size-2 hover-2}" href="/logout">
+				<i th:class="@{fa fa-user}"></i>Log out</a>
+			</div>
+		</div>
+	</header>
+	<!-- MAIN CONTENT -->
+	<div th:id="@{content-block}">
+		<div th:class="@{container-fluid custom-container be-detail-container custom-font}">
+			<div th:class="@{row}">
+				<div th:class="@{col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ml-12 col-xl-4}" th:each="video : ${videos}">
+					<div th:class="@{be-post style-5}">
+						<video width="100%" controls th:class="@{be-img-block}">
+							<source th:src="'/videos/' + ${video.nombre}">
+						</video>
+						<div th:class="@{be-rowline}">
+							<img th:class="@{rowline-img}" th:src="@{/img/line_1.jpg}" alt="Título del vídeo">
+							<div th:class="@{rowline-text}" th:text="${video.titulo}"> 
+								<span th:class="@{rowline-icon}"></span>
 							</div>
+						</div>
+						<div th:class="@{be-rowline}">
+							<img th:class="@{rowline-img}" th:src="@{/img/line_1.jpg}" alt="Fecha de creación">
+							<div th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"> 
+								<span th:class="@{rowline-icon}"></span>
+							</div>
+						</div>
+						<div th:class="author-post">
+							<img th:src="@{/img/a10.jpg}" alt="author" th:class="@{ava-author}">
+							<span>by <a th:href="@{#}" th:text="${usuario.nombre}"></a></span>
+							<span th:class="@{pull-right}"><i th:class="@{fa fa-thumbs-o-up}"></i> 225</span>
 						</div>
 					</div>
 				</div>
 			</div>
-	<div th:include="scripts :: div"></div>
+		</div>
+	</div>
+	<div th:include="footer :: div"></div>
 </body>
 </html>

@@ -55,7 +55,10 @@ td {
 	padding: 0; 
 }
 
-.custom-margin { margin-top: 20px; margin-bottom: 20px; }
+.custom-margin { 
+	margin-top: 20px; 
+	margin-bottom: 20px; 
+}
 
 .custom-font { 
 	font-family: 'Conv_helveticaneuecyr-roman'; 

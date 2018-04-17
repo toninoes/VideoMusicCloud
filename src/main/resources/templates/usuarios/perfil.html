@@ -4,8 +4,31 @@
 	<meta charset="utf-8" />
 	<title>Perfil</title>
 </head>
-<body>			
-	<div th:include="header :: body"></div>
+<body>		
+	<!-- THE LOADER -->	
+	<div th:include="spinner :: body"></div>
+	<!-- THE HEADER -->
+	<header>
+		<div th:class="@{container-fluid custom-container}">
+			<div th:class="@{row no_row row-header}">
+				<div th:class="brand-be">
+					<a th:href="@{/login}"><img th:src="@{/img/logo.png}" alt="logo" th:class="be_logo"></a>
+				</div>
+				<div th:class="header-menu-block">
+					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
+					<ul th:class="header-menu" id="one">
+						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
+						<li><a th:href="@{/videos}">Listas</a></li>
+						<li th:class="active-header"><a th:href="@{/usuarios/perfil}">Perfil</a></li>
+						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
+						<li><a th:href="@{#}">Suscripción</a></li>
+					</ul>
+				</div>
+				<a th:class="@{login-header-block login_block btn-login btn color-1 size-2 hover-2}" href="/logout">
+				<i th:class="@{fa fa-user}"></i>Log out</a>
+			</div>
+		</div>
+	</header>
 	<!-- MAIN CONTENT -->
 	<div th:id="@{content-block}">
 		<div th:class="@{container be-detail-container}">
@@ -19,55 +42,43 @@
 							</a>	
 							<form method="POST" enctype="multipart/form-data" action="/usuarios/perfil">
 								<label th:class="@{be-ava-left btn color-1 size-2 hover-1}">
-									<i th:class="@{fa fa-pencil}"></i>Edit
+									<i th:class="@{fa fa-pencil}"></i>Foto
 									<input type="file" name="foto" id="foto" hidden="hidden">
 								</label>
-								<label th:class="@{be-ava-right btn btn-share color-4 size-2 hover-7}">
-									<i th:class="@{fa fa-share-alt}"></i>share
+								<label th:class="@{be-ava-right btn btn-share color-4 size-2 hover-1}">
+									<i th:class="@{fa fa-save}"></i>Guardar
 		    						<input type="submit" value="subirfoto" name="subirfoto" id="subirfoto" hidden="hidden">
 								</label>
-								<div th:class="share-buttons">
-									<a th:class="color-1" th:href="@{#}"><i th:class="@{fa fa-facebook}"></i>225</a>
-									<a th:class="color-2" th:href="@{#}"><i th:class="@{fa fa-twitter}"></i>225</a>
-								</div>
 							</form>
 							<p th:class="be-use-name" th:text="${usuario.nombre}"></p>
-							<div th:class="be-user-info"></div>
-							<div th:class="@{be-text-tags style-2}"></div>
+							<div th:class="@{custom-margin-bottom}"></div>
 							<div th:class="be-user-social">							
 								<a th:class="@{social-btn color-1}" th:href="@{#}"><i th:class="@{fa fa-facebook}"></i></a>
 								<a th:class="@{social-btn color-2}" th:href="@{#}"><i th:class="@{fa fa-twitter}"></i></a>
-								<a th:class="@{social-btn color-3}" th:href="@{#}"><i th:class="@{fa fa-google-plus}"></i></a>
-								<a th:class="@{social-btn color-4}" th:href="@{#}"><i th:class="@{fa fa-pinterest-p}"></i></a>
-								<a th:class="@{social-btn color-5}" th:href="@{#}"><i th:class="@{fa fa-instagram}"></i></a>
-								<a th:class="@{social-btn color-6}" th:href="@{#}"><i th:class="@{fa fa-linkedin}"></i></a>
 							</div>
-							<a th:class="be-user-site" th:href="@{http://www.phoenix.cool}"><i th:class="@{fa fa-link}"></i> www.phoenix.cool</a>
+							<div th:switch="${rol.rol}">
+								<a th:case="'ADMIN'" th:class="be-user-site" th:href="@{/admin/home}">
+									<i th:class="@{fa fa-link}"></i> Portal de Adminitración
+								</a>
+								<a th:case="*" th:class="be-user-site" th:href="@{/videos/misvideos}">
+									<i th:class="@{fa fa-link}"></i> VideoMusicCloud
+								</a>
+							</div>
 						</div>
 						<div th:class="be-user-statistic">
-							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-views-b}"></i> Projects views<span th:class="stat-counter">218098</span></div>
-							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-like-b}"></i>Appreciations<span th:class="stat-counter">14335</span></div>
-							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-followers-b}"></i>Followers<span th:class="stat-counter">2208</span></div>
-							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-following-b}"></i>Following<span th:class="stat-counter">0</span></div>
+							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-views-b}"></i>Visitas<span th:class="stat-counter">225</span></div>
+							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-followers-b}"></i>Seguidores<span th:class="stat-counter">225</span></div>
+							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-following-b}"></i>Siguiendo<span th:class="stat-counter">225</span></div>
 						</div>
 					</div>
 					<div th:class="be-desc-block">
 						<div th:class="be-desc-author">
-							<div th:class="be-desc-label">About Me</div>
+							<div th:class="be-desc-label">Sobre mí</div>
 							<div th:class="clearfix"></div>
-							<div th:class="be-desc-text">
-								Nam sit amet massa commodo, tristique metus at, consequat turpis. In vulputate justo at auctor mollis. Aliquam non sagittis tortor. Duis tristique suscipit risus, quis facilisis nisl congue vitae. Nunc varius pellentesque scelerisque. Etiam quis massa vitae lectus placerat ullamcorper pellentesque vel nisl.
-							</div>
-						</div>
-						<div th:class="be-desc-author">
-							<div th:class="be-desc-label">My Values</div>
-							<div th:class="clearfix"></div>
-							<div th:class="be-desc-text">
-								Sed dignissim scelerisque pretium. Vestibulum vel lacus laoreet nunc fermentum maximus. Proin id sodales sem, at consectetur urna. Proin vestibulum, erat a hendrerit sodales, nulla libero ornare dolor.
-							</div>
+							<div th:class="be-desc-text"></div>
 						</div>					
 					</div>
-					<a th:class="@{btn full color-1 size-1 hover-1}"><i th:class="@{fa fa-plus}"></i>add sections</a>										
+					<a th:class="@{btn full color-1 size-1 hover-1}"><i th:class="@{fa fa-plus}"></i>Añadir Información</a>										
 				</div>
 				<div th:class="@{col-xs-12 col-md-8}">
                     <div th:class="@{tab-wrapper style-1}">
@@ -99,7 +110,6 @@
 			</div>
 		</div>
 	</div>
-
-	<div th:include="scripts :: div"></div>
+	<div th:include="footer :: div"></div>
 </body>
 </html>
