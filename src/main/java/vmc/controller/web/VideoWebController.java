@@ -32,7 +32,10 @@ public class VideoWebController {
     
     @GetMapping
     public String listarTodosVideos(Model model) {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
 		model.addAttribute("videos", videoService.findAll());
+		model.addAttribute("usuario", usuario);
         return "videos/listado";
     }
     
@@ -52,14 +55,20 @@ public class VideoWebController {
     }
     
     @PostMapping
-    public String subirVideo(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, RedirectAttributes ra) {
-    	videoService.subir(t, v);
+    public String subirVideo(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, @RequestParam("descripcion") String d,
+    		                 RedirectAttributes ra) {
+    	videoService.subir(t, v, d);
         ra.addFlashAttribute("mensaje", "Video " + v.getOriginalFilename() + " subido correctamente.");
 
         return "redirect:/videos";
     }
     
     @GetMapping("/subidaVideos")
-    public void subidaVideos() {}
+    public String subidaVideos(Model model) {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		model.addAttribute("usuario", usuario);
+    	return "videos/subidaVideos";
+    }
     
 }

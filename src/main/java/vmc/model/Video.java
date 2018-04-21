@@ -29,6 +29,8 @@ public class Video {
 	@NotBlank
 	private String nombre;
 	
+	private String descripcion;
+	
 	@ManyToOne
 	@JoinColumn(name="usuario_id", nullable = false)
 	private Usuario usuario;
@@ -47,11 +49,12 @@ public class Video {
 		super();
 	}
 
-	public Video(@NotBlank String titulo, @NotBlank String nombre, Usuario usuario) {
+	public Video(@NotBlank String titulo, @NotBlank String nombre, Usuario usuario, String descripcion) {
 		super();
 		this.titulo = titulo;
 		this.nombre = nombre;
 		this.usuario = usuario;
+		this.descripcion = descripcion;
 	}
 
 	public String getTitulo() {
@@ -88,6 +91,14 @@ public class Video {
 
 	public Date getActualizacion() {
 		return actualizacion;
+	}
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+	
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 }

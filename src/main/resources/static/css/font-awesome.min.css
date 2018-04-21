@@ -14,7 +14,11 @@
 .upload {
 	position: relative;
 }
- 
+
+.calendar {
+	font-size: 18px;
+}
+
 /*replace the content value with the
 corresponding value from the list below*/
  

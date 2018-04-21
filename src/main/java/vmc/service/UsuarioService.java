@@ -42,6 +42,9 @@ public class UsuarioService {
 	private UsuarioRepository usuarioRepository;
 	
 	@Autowired
+	private VideoService videoService;
+	
+	@Autowired
     private RolRepository rolRepository;
 	
 	@Autowired
@@ -63,10 +66,10 @@ public class UsuarioService {
 	}
 	
 	public List<Video> findVideosByUsuarioId(@PathVariable long id) {
-		Usuario usuario = usuarioRepository.findById(id)
-	            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
+		usuarioRepository.findById(id)
+	    				 .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
 		
-		return usuarioRepository.findByUsuario(usuario);
+		return videoService.findVideosByUsuarioId(id);
 	}
 	
 	public void create(Usuario user, Boolean esAdmin) {
@@ -113,11 +116,11 @@ public class UsuarioService {
 	}
 	
 	@ResponseBody
-    public ResponseEntity<Resource> descargar(@PathVariable String fotousuario) {
+    public ResponseEntity<Resource> descargar(@PathVariable String nombrefoto) {
 
-        Resource foto = almacenamientoService.loadAsResource(fotousuario, "foto");
+        Resource foto = almacenamientoService.loadAsResource(nombrefoto, "foto");
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; fotousuario=\fotoPerfil\"" + foto.getFilename() + "\"").body(foto);
+                "attachment; nombrefoto=\fotos\"" + foto.getFilename() + "\"").body(foto);
     }
 	
 	public void borrar(@PathVariable String filename) {
@@ -139,6 +142,20 @@ public class UsuarioService {
     	}else {
     		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     	}        
+    }
+	
+	public boolean findBySiguiendo(Usuario logueado, Usuario pinchado) {
+		return logueado.getSiguiendo().contains(pinchado);
+	}
+	
+	public void seguir(Usuario logueado, Usuario pinchado) {
+    	logueado.setSiguiendo(pinchado);
+    	usuarioRepository.save(logueado);
+    }
+	
+	public void dejar(Usuario logueado, Usuario pinchado) {
+    	logueado.removeSiguiendo(pinchado);
+    	usuarioRepository.save(logueado);
     }
 	
 	@ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)

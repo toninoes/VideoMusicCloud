@@ -42,7 +42,7 @@ public class LocationConfig {
 	
 	//o en una partición concreta de un equipo Windows.
 	
-    private String locationFotos = "../usuarios/fotoPerfil";
+    private String locationFotos = "../usuarios/fotos";
 
     public String getLocationFotos() {
         return locationFotos;

@@ -19,7 +19,7 @@
 					<ul th:class="header-menu" id="one">
 						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
 						<li><a th:href="@{/videos}">Listas</a></li>
-						<li th:class="active-header"><a th:href="@{/usuarios/perfil}">Perfil</a></li>
+						<li th:class="active-header"><a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${usuario.id}}">Perfil</a></li>
 						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
 						<li><a th:href="@{#}">Suscripción</a></li>
 					</ul>
@@ -38,9 +38,9 @@
 						<div th:class="@{be-user-detail}">
 							<a th:href="@{#}" th:class="@{be-ava-user style-2}" th:switch="${usuario.foto}">
 								<img th:case="'img/ava_10.jpg'" th:src="@{/img/ava_10.jpg}" alt="">
-								<img th:case="*" th:src="@{'fotoPerfil/' + ${usuario.foto}}" alt="">
+								<img th:case="*" th:src="@{'/usuarios/fotos/' + ${usuario.foto}}" alt="">
 							</a>	
-							<form method="POST" enctype="multipart/form-data" action="/usuarios/perfil">
+							<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${usuario.id}}" th:if="${sigue} == 'hidden'">
 								<label th:class="@{be-ava-left btn color-1 size-2 hover-1}">
 									<i th:class="@{fa fa-pencil}"></i>Foto
 									<input type="file" name="foto" id="foto" hidden="hidden">
@@ -51,12 +51,28 @@
 								</label>
 							</form>
 							<p th:class="be-use-name" th:text="${usuario.nombre}"></p>
+							<div th:if="@{${logueado.id} != ${usuario.id}}" th:switch="${sigue}">
+								<div th:case="seguir">
+									<a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/'+ ${usuario.id} + '/' + ${sigue}}" 
+									   th:class="@{btn btn-share color-4 size-2 hover-1 custom-font}">
+										<i th:class="@{fa fa-share}"></i>Seguir
+									</a>
+								</div>
+								<div th:case="dejar">
+									<a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/'+ ${usuario.id} + '/' + ${sigue}}" 
+									   th:class="@{btn btn-share color-1 size-2 hover-1 custom-font}">
+										<i th:class="@{fa fa-share}"></i>Dejar de Seguir
+									</a>
+								</div>
+								<div th:case="*"></div>
+							</div>
+							<p th:class="be-use-name"></p>
 							<div th:class="@{custom-margin-bottom}"></div>
 							<div th:class="be-user-social">							
-								<a th:class="@{social-btn color-1}" th:href="@{#}"><i th:class="@{fa fa-facebook}"></i></a>
-								<a th:class="@{social-btn color-2}" th:href="@{#}"><i th:class="@{fa fa-twitter}"></i></a>
+								<a th:class="@{social-btn color-1}" th:href="@{'https://es-es.facebook.com'}"><i th:class="@{fa fa-facebook}"></i></a>
+								<a th:class="@{social-btn color-2}" th:href="@{'https://twitter.com'}"><i th:class="@{fa fa-twitter}"></i></a>
 							</div>
-							<div th:switch="${rol.rol}">
+							<div th:switch="${rol}">
 								<a th:case="'ADMIN'" th:class="be-user-site" th:href="@{/admin/home}">
 									<i th:class="@{fa fa-link}"></i> Portal de Adminitración
 								</a>
@@ -66,9 +82,18 @@
 							</div>
 						</div>
 						<div th:class="be-user-statistic">
-							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-views-b}"></i>Visitas<span th:class="stat-counter">225</span></div>
-							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-followers-b}"></i>Seguidores<span th:class="stat-counter">225</span></div>
-							<div th:class="@{stat-row clearfix}"><i th:class="@{stat-icon icon-following-b}"></i>Siguiendo<span th:class="stat-counter">225</span></div>
+							<div th:class="@{stat-row clearfix}">
+								<i th:class="@{stat-icon icon-views-b}">
+								</i>Visitas<span th:class="stat-counter">225</span>
+							</div>
+							<div th:class="@{stat-row clearfix}">
+								<i th:class="@{stat-icon icon-followers-b}">
+								</i>Seguidores<span th:class="stat-counter">225</span>
+							</div>
+							<div th:class="@{stat-row clearfix}">
+								<i th:class="@{stat-icon icon-following-b}">
+								</i>Siguiendo<span th:class="stat-counter">225</span>
+							</div>
 						</div>
 					</div>
 					<div th:class="be-desc-block">
@@ -87,28 +112,48 @@
                             <div th:class="@{tab-info active}"> 
 								<div th:class="@{row}">
 									<div th:class="@{col-ml-12 col-xs-6 col-sm-4}" th:each="video : ${videos}">
-										<div th:class="be-post">
+										<div th:class="@{be-post style-5}">
 											<div align="center" th:class="@{be-img-block custom-video-perfil}">
 												<video controls>
 													<source th:src="'/videos/' + ${video.nombre}">
 												</video>
 											</div>
-											<a th:href="@{#}" th:class="be-post-title" th:text="${video.titulo}"></a>
-											<span th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
-											<div th:class="author-post">
-												<img th:src="@{/img/a1.png}" alt="" th:class="ava-author">
-												<span>by <a th:href="@{#}" th:text="${usuario.nombre}"></a></span>
+											<div th:class="@{be-rowline}">
+												<span th:class="@{rowline-text}" th:text="${video.titulo}"></span>
+												<span th:class="@{rowline-text pull-right}"><i th:text="@{'#Géneros'}"></i></span>
 											</div>
-											<div th:class="info-block">
-												<span><i th:class="@{fa fa-thumbs-o-up}"></i> 225</span>
+											<div th:class="@{be-rowline}">
+												<div th:class="@{rowline-text}" th:text="${video.descripcion}">
+													<span th:class="@{rowline-icon}"></span>
+												</div>
 											</div>
-										</div>									
+											<div th:class="@{be-rowline}">
+												<i th:class="@{fa fa-calendar}">
+													<span th:class="@{custom-td-font}"></span>
+													<span th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
+												</i>
+											</div>
+											<div th:class="@{author-post}" th:switch="${video.usuario.foto}">
+												<a th:case="'img/ava_10.jpg'" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id}}">
+													<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
+													<span>by <i th:text="${video.usuario.nombre}"></i></span>
+												</a>
+												<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id}}">
+													<img th:src="@{'/usuarios/fotos/' + ${video.usuario.foto}}" alt="author" th:class="@{ava-author}">
+													<span>by <i th:text="${video.usuario.nombre}"></i></span>
+												</a>
+												<span th:class="@{pull-right}">
+													<i th:class="@{stat-icon icon-like-b}"></i> 225 
+													<i th:class="@{stat-icon icon-views-b}"></i> 225
+												</span>
+											</div>
+										</div>
 									</div>
-								</div>
-                            </div>                         
-                        </div>
-                    </div> 				
-				</div>				
+	                            </div>                         
+	                        </div>
+	                    </div> 				
+					</div>				
+				</div>
 			</div>
 		</div>
 	</div>

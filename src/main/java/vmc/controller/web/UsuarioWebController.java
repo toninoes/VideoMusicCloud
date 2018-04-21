@@ -50,27 +50,73 @@ public class UsuarioWebController {
 	}
 	
 	@GetMapping("/perfil")
-	public String findVideosByUsuarioId(Model model) {
+	public String findMyVideos(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(usuario.getId()));
 		model.addAttribute("usuario", usuario);
-		model.addAttribute("rol", usuario.getRoles().iterator().next());
 		return "usuarios/perfil";
 	}
 	
-	@GetMapping("/fotoPerfil/{fotousuario:.+}")
+	@GetMapping("/fotos/{nombrefoto:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> servirFoto(@PathVariable String fotousuario) {
-    	return usuarioService.descargar(fotousuario);
+    public ResponseEntity<Resource> servirFoto(@PathVariable String nombrefoto) {
+    	return usuarioService.descargar(nombrefoto);
     }
 	
-	@PostMapping("/perfil")
+	@GetMapping("/perfil/{logueadoId}/{pinchadoId}")
+	public String findPerfil(Model model, @PathVariable long logueadoId,
+										  @PathVariable long pinchadoId) {
+		String sigue = "";		
+		Usuario logueado = usuarioService.findById(logueadoId);
+		Usuario pinchado = usuarioService.findById(pinchadoId);
+		
+		if(logueado.getId() == pinchadoId)
+			sigue = "hidden";
+		else if(usuarioService.findBySiguiendo(logueado, pinchado)) 
+			sigue = "dejar";
+		else
+			sigue = "seguir";
+		
+		model.addAttribute("logueado", logueado);
+		model.addAttribute("usuario", pinchado);
+		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(pinchadoId));
+		model.addAttribute("sigue", sigue);
+		
+		return "usuarios/perfil";
+	}
+	
+	@GetMapping("/perfil/{logueadoId}/{pinchadoId}/{sigue}")
+	public String cambiarBoton(Model model, @PathVariable long logueadoId, 
+			                                @PathVariable long pinchadoId, 
+			                                @PathVariable String sigue, 
+			                                RedirectAttributes ra) {
+		
+		Usuario logueado = usuarioService.findById(logueadoId);
+		Usuario pinchado = usuarioService.findById(pinchadoId);
+		
+		if(!sigue.equals("hidden") && usuarioService.findBySiguiendo(logueado, pinchado)) {
+			usuarioService.dejar(logueado, pinchado);
+			sigue = "seguir";
+		} else if(!sigue.equals("hidden")) {
+			usuarioService.seguir(logueado, pinchado);
+			sigue = "dejar";
+		}
+		
+		model.addAttribute("logueado", logueado);
+		model.addAttribute("usuario", pinchado);
+		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(pinchadoId));
+		model.addAttribute("sigue", sigue);
+		
+		return "usuarios/perfil";
+	}
+	
+	@PostMapping("/perfil/{logueadoId}/{pinchadoId}")
     public String subirFoto(@RequestParam("foto") MultipartFile f, RedirectAttributes ra) {
 		usuarioService.subir(f);
         ra.addFlashAttribute("mensaje", "Foto " + f.getOriginalFilename() + " subida correctamente.");
 
-        return "redirect:/usuarios/perfil";
+        return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}";
     }
 	
 	@PutMapping("/{id}")	

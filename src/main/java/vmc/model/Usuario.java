@@ -49,7 +49,15 @@ public class Usuario  {
 	@NotBlank
 	private String foto;
 	
-	private Boolean activo;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "siguiendo", joinColumns = @JoinColumn(name = "siguiendo_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
+	private Set<Usuario> siguiendo;
+
+	/*@ManyToMany(cascade = CascadeType.MERGE)
+	@JoinTable(name = "seguidores", joinColumns = @JoinColumn(name = "seguido_id"), inverseJoinColumns = @JoinColumn(name = "siguiendo_id")) ????
+	private Set<Usuario> seguidores;*/
+	
+	private boolean activo;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "usuario_rol", 
@@ -72,7 +80,8 @@ public class Usuario  {
 		this.foto = "img/ava_10.jpg";
 	}
 	
-	public Usuario(String nombre, String apellidos, String mail, String password, String foto) {
+	public Usuario(@NotBlank String nombre, @NotBlank String apellidos, @NotBlank String mail, 
+			       @NotBlank String password, @NotBlank String foto) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
@@ -125,11 +134,11 @@ public class Usuario  {
 		return actualizacion;
 	}
 
-	public Boolean getActivo() {
+	public boolean getActivo() {
 		return activo;
 	}
 
-	public void setActivo(Boolean activo) {
+	public void setActivo(boolean activo) {
 		this.activo = activo;
 	}
 
@@ -149,5 +158,19 @@ public class Usuario  {
 		return foto;
 	}
 
+	public void setSiguiendos(Set<Usuario> siguiendo) {
+		this.siguiendo = siguiendo;
+	}
 	
+	public void setSiguiendo(Usuario usuario) {
+		this.siguiendo.add(usuario);
+	}
+	
+	public void removeSiguiendo(Usuario usuario) {
+		this.siguiendo.remove(usuario);
+	}
+	
+	public Set<Usuario> getSiguiendo() {
+		return siguiendo;
+	}
 }

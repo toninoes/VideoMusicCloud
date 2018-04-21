@@ -61,13 +61,13 @@ public class VideoService {
         almacenamientoService.delete(filename, "video");
     }
 	
-	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v) {
+	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, @RequestParam("descripcion") String d) {
 		
     	if(esUnVideo(v)) {
     		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     		Usuario usuario = usuarioService.findByMail(auth.getName());
     		
-    		Video video = new Video(t, v.getOriginalFilename(), usuario);
+    		Video video = new Video(t, v.getOriginalFilename(), usuario, d);
     		videoRepository.save(video);
     		
         	almacenamientoService.store(v, "video");
