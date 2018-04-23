@@ -45,21 +45,18 @@
 						    			</label>
 						    		</div>
 						    		<div th:class="@{subscribe-form}">
-				    					<label for="titulo">
-				    						<input type="text" name="titulo" id="titulo" placeholder="Título del video" required th:class="@{form-control}">
-				    					</label>
+				    					<input type="text" name="titulo" id="titulo" placeholder="Título del video" required th:class="@{form-control input-sm}">
 					    			</div>
 					    			<div th:class="@{subscribe-form}">
-				    					<label for="descripcion">
-				    						<textarea placeholder="Descripción del video" name="descripcion" id="descripcion" th:text="@{''}" th:class="@{form-control form-group-sm}">
-				    						</textarea>
-				    					</label>
+				    					<textarea name="descripcion" id="descripcion" placeholder="Descripción del video" th:text="@{''}" th:class="@{form-control input-sm}">
+				    					</textarea>
 					    			</div>
 					    			<div th:class="@{subscribe-form}">
-				    					<label for="generos" th:class="@{subscribe-form}">
+				    					<label for="generos">
 				    						<i th:class="@{fa fa-music}"></i>
-				    						<select name="generos" id="generos" th:class="@{form-control}" multiple>
-				    							<option value="0"></option>
+				    						<select name="videogeneros" id="videogeneros" th:class="@{form-control input-sm}" multiple required>
+				    							<option th:class="@{input-sm}" th:each="genero : ${generos}" th:value="${genero.nombre}" th:text="${genero.nombre}">
+				    							</option>
 				    						</select>
 				    					</label>
 					    			</div>
@@ -80,6 +77,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- THE FOOTER -->
 	<div th:include="footer :: div"></div>
 </body>
 </html>

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import vmc.exception.RecursoNoEncontradoException;
 import vmc.model.Genero;
+import vmc.model.Video;
 import vmc.repository.GeneroRepository;
 
 @Service
@@ -29,6 +30,11 @@ public class GeneroService {
 	
 	public Genero findByNombre(@PathVariable String nombre) {
 		return generoRepository.findByNombre(nombre);
+	}
+	
+	public List<Genero> findGenerosByVideo(Video video) {
+		List<Genero> generos = findGenerosByVideo(video);
+		return generos;
 	}
 	
 }

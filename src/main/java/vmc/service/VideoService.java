@@ -1,6 +1,7 @@
 package vmc.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import vmc.exception.AlmacenamientoFicheroNoEncontradoException;
 import vmc.exception.RecursoNoEncontradoException;
+import vmc.model.Genero;
 import vmc.model.Usuario;
 import vmc.model.Video;
 import vmc.repository.UsuarioRepository;
@@ -61,15 +63,16 @@ public class VideoService {
         almacenamientoService.delete(filename, "video");
     }
 	
-	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, @RequestParam("descripcion") String d) {
+	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, 
+			                       @RequestParam("descripcion") String d, @RequestParam("videogeneros") Set<Genero> g) {
 		
     	if(esUnVideo(v)) {
     		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     		Usuario usuario = usuarioService.findByMail(auth.getName());
     		
     		Video video = new Video(t, v.getOriginalFilename(), usuario, d);
-    		videoRepository.save(video);
-    		
+    		video.setVideoGeneros(g);
+    		videoRepository.save(video);		
         	almacenamientoService.store(v, "video");
         	
         	return new ResponseEntity<Video>(video, HttpStatus.CREATED);

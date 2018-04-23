@@ -46,24 +46,30 @@ public class Usuario  {
 	@Transient
 	private String password;
 	
-	@NotBlank
-	private String foto;
-	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "siguiendo", joinColumns = @JoinColumn(name = "siguiendo_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
-	private Set<Usuario> siguiendo;
-
-	/*@ManyToMany(cascade = CascadeType.MERGE)
-	@JoinTable(name = "seguidores", joinColumns = @JoinColumn(name = "seguido_id"), inverseJoinColumns = @JoinColumn(name = "siguiendo_id")) ????
-	private Set<Usuario> seguidores;*/
-	
 	private boolean activo;
+	
+	private String intereres;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "usuario_rol", 
 			   joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"), 
 			   inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
 	private Set<Rol> roles;
+	
+	//private Set<Video> videos;  ----> podría ser reduntante aunque es verdad que cada usuario tiene sus videos
+	
+	//private Set<Usuario> usuarios; ---> este atributo se parte en dos --> siguiendo y seguidores
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "siguiendo", joinColumns = @JoinColumn(name = "siguiendo_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
+	private Set<Usuario> siguiendo;
+
+	@ManyToMany(cascade = CascadeType.ALL)  // Intercambio en los atributos respecto a la tabla manytomany anterior
+	@JoinTable(name = "seguidores", joinColumns = @JoinColumn(name = "seguido_id"), inverseJoinColumns = @JoinColumn(name = "siguiendo_id"))
+	private Set<Usuario> seguidores;
+	
+	@NotBlank
+	private String foto;
 	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -172,5 +178,13 @@ public class Usuario  {
 	
 	public Set<Usuario> getSiguiendo() {
 		return siguiendo;
+	}
+
+	public String getIntereres() {
+		return intereres;
+	}
+
+	public void setIntereres(String intereres) {
+		this.intereres = intereres;
 	}
 }

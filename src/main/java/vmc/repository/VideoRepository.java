@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import vmc.model.Usuario;
 import vmc.model.Video;
 
-
 public interface VideoRepository extends JpaRepository<Video, Long> {
 	
 	@Query("SELECT v FROM Video v WHERE v.usuario = :usuario ORDER BY v.creacion DESC")
@@ -17,5 +16,4 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	
 	@Query("SELECT v FROM Video v ORDER BY v.creacion DESC")
 	List<Video> findAll();
-
 }

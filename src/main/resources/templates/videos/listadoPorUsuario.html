@@ -42,7 +42,8 @@
 						</div>
 						<div th:class="@{be-rowline}">
 							<span th:class="@{rowline-text}" th:text="${video.titulo}"></span>
-							<span th:class="@{rowline-text pull-right}"><i th:text="@{'#Géneros'}"></i></span>
+							<span th:class="@{rowline-text pull-right}" th:each="genero : ${video.VideoGeneros}" th:text="@{'#' + ${genero.nombre}}">
+				    		</span>
 						</div>
 						<div th:class="@{be-rowline}">
 							<div th:class="@{rowline-text}" th:text="${video.descripcion}">
@@ -74,6 +75,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- THE FOOTER -->
 	<div th:include="footer :: div"></div>
 </body>
 </html>

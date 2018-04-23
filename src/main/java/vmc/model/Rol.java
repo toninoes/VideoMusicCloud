@@ -13,6 +13,7 @@ public class Rol {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
 	@Column(name="rol")
 	private String rol;
 	
@@ -28,14 +29,12 @@ public class Rol {
 	public long getId() {
 		return id;
 	}
-	public void setId(long id) {
-		this.id = id;
-	}
+	
 	public String getRol() {
 		return rol;
 	}
+	
 	public void setRol(String rol) {
 		this.rol = rol;
-	}
-		
+	}	
 }

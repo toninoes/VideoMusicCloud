@@ -19,7 +19,7 @@
 					<ul th:class="header-menu" id="one">
 						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
 						<li><a th:href="@{/videos}">Listas</a></li>
-						<li th:class="active-header"><a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${usuario.id}}">Perfil</a></li>
+						<li th:class="active-header"><a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${logueado.id}}">Perfil</a></li>
 						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
 						<li><a th:href="@{#}">Suscripción</a></li>
 					</ul>
@@ -120,7 +120,8 @@
 											</div>
 											<div th:class="@{be-rowline}">
 												<span th:class="@{rowline-text}" th:text="${video.titulo}"></span>
-												<span th:class="@{rowline-text pull-right}"><i th:text="@{'#Géneros'}"></i></span>
+												<span th:class="@{rowline-text pull-right}" th:each="genero : ${video.VideoGeneros}" th:text="@{'#' + ${genero.nombre}}">
+				    							</span>
 											</div>
 											<div th:class="@{be-rowline}">
 												<div th:class="@{rowline-text}" th:text="${video.descripcion}">
@@ -157,6 +158,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- THE FOOTER -->
 	<div th:include="footer :: div"></div>
 </body>
 </html>

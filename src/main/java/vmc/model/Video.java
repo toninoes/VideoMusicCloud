@@ -1,12 +1,17 @@
 package vmc.model;
 
 import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,17 +28,29 @@ public class Video {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@NotBlank(message = "*Introduzca un título para el vídeo")
-	private String titulo;
-	
 	@NotBlank
 	private String nombre;
+	
+	@NotBlank(message = "*Introduzca un título para el vídeo")
+	private String titulo;
 	
 	private String descripcion;
 	
 	@ManyToOne
 	@JoinColumn(name="usuario_id", nullable = false)
 	private Usuario usuario;
+	
+	@ManyToMany(targetEntity = Genero.class, cascade = CascadeType.ALL)
+	@JoinTable(name = "video_genero", 
+			   joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "id"), 
+			   inverseJoinColumns = @JoinColumn(name = "genero_id", referencedColumnName = "id"))
+	private Set<Genero> videogeneros;
+	
+	private long visualizaciones;
+	
+	private long likes;
+	
+	private boolean privado;
 
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -80,6 +97,14 @@ public class Video {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	
+	public void setVideoGeneros(Set<Genero> videogeneros) {
+		this.videogeneros = videogeneros;
+	}
+	
+	public Set<Genero> getVideoGeneros() {
+		return videogeneros;
+	}
 
 	public long getId() {
 		return id;
@@ -101,4 +126,27 @@ public class Video {
 		this.descripcion = descripcion;
 	}
 
+	public boolean isPrivado() {
+		return privado;
+	}
+
+	public void setPrivado(boolean privado) {
+		this.privado = privado;
+	}
+
+	public long getVisualizaciones() {
+		return visualizaciones;
+	}
+
+	public void setVisualizaciones(long visualizaciones) {
+		this.visualizaciones = visualizaciones;
+	}
+
+	public long getLikes() {
+		return likes;
+	}
+
+	public void setLikes(long likes) {
+		this.likes = likes;
+	}
 }

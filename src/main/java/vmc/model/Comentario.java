@@ -34,6 +34,8 @@ public class Comentario {
 	@JoinColumn(name="video_id", nullable = false)
 	private Video video;
 	
+	private boolean like;
+	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -51,8 +53,13 @@ public class Comentario {
 		return id;
 	}
 	
-	public String getDescripcion() {return this.descripcion;}
-	public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
+	public String getDescripcion() {
+		return this.descripcion;
+	}
+	
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 	
 	public Usuario getUsuario() {
 		return usuario;
@@ -62,4 +69,11 @@ public class Comentario {
 		this.usuario = usuario;
 	}
 
+	public boolean isLike() {
+		return like;
+	}
+
+	public void setLike(boolean like) {
+		this.like = like;
+	}
 }

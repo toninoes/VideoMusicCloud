@@ -1,5 +1,8 @@
 package vmc.controller.web;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vmc.model.Genero;
 import vmc.model.Usuario;
+import vmc.service.GeneroService;
 import vmc.service.UsuarioService;
 import vmc.service.VideoService;
 
@@ -29,6 +34,9 @@ public class VideoWebController {
 	
 	@Autowired
 	private VideoService videoService;
+	
+	@Autowired
+	private GeneroService generoService;
     
     @GetMapping
     public String listarTodosVideos(Model model) {
@@ -36,6 +44,7 @@ public class VideoWebController {
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		model.addAttribute("videos", videoService.findAll());
 		model.addAttribute("usuario", usuario);
+		model.addAttribute("generos", generoService.findAll());
         return "videos/listado";
     }
     
@@ -55,9 +64,16 @@ public class VideoWebController {
     }
     
     @PostMapping
-    public String subirVideo(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, @RequestParam("descripcion") String d,
+    public String subirVideo(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, 
+    						 @RequestParam("descripcion") String d, @RequestParam("videogeneros") String[] g,
     		                 RedirectAttributes ra) {
-    	videoService.subir(t, v, d);
+    	
+    	Set<Genero> generos = new HashSet<Genero>();
+    	for(String s: g) {
+    		Genero genero = generoService.findByNombre(s);
+    		generos.add(genero);
+    	}
+    	videoService.subir(t, v, d, generos);
         ra.addFlashAttribute("mensaje", "Video " + v.getOriginalFilename() + " subido correctamente.");
 
         return "redirect:/videos";
@@ -68,6 +84,7 @@ public class VideoWebController {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		model.addAttribute("usuario", usuario);
+		model.addAttribute("generos", generoService.findAll());
     	return "videos/subidaVideos";
     }
     

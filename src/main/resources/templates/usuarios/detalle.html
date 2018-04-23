@@ -5,12 +5,15 @@
 	<title th:text="'Detalles ' + ${usuario.nombre} + ' ' + ${usuario.apellidos}"></title>
 </head>
 <body>
-	<div th:include="header :: body"></div>
+	<!-- THE LOADER -->
+	<div th:include="spinner :: body"></div>
+	<!-- MAIN CONTENT -->
 	<div th:id="@{content-block}" th:class="@{custom-container-5}">
 		<h1 th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></h1>
 		<p th:text="${usuario.mail}"></p>
 		<a th:href="'/videos/usuario/' + ${usuario.id}">Vídeos</a>
 	</div>
-	<div th:include="scripts :: div"></div>
+	<!-- THE FOOTER -->
+	<div th:include="footer :: div"></div>
 </body>
 </html>
