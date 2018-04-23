@@ -18,7 +18,7 @@
 					<ul th:class="header-menu" id="one">
 						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
 						<li><a th:href="@{/videos}">Listas</a></li>
-						<li th:class="active-header"><a th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">Perfil</a></li>
+						<li th:class="active-header"><a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${logueado.id}}">Perfil</a></li>
 						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
 						<li><a th:href="@{#}">Suscripción</a></li>
 					</ul>
