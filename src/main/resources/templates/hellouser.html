@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+</head>
+<body th:fragment="hellouser :: body">
+	<div th:class="@{login-header-block}">
+		<div th:class="@{login-block be-drop-down login-user-down}">
+			<div th:switch="${usuario.foto}" th:class="@{login-user}">
+				<img th:case="'img/ava_10.jpg'" th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
+				<img th:case="*" th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${usuario.foto}}">
+				<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${usuario.nombre}}"></span>
+			</div>
+			<div th:each="rol : ${usuario.Roles}">
+				<div th:if="${rol.rol} == 'ADMIN'">	
+					<span th:class="drop-down-list">
+						<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

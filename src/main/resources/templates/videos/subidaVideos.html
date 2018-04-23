@@ -11,9 +11,8 @@
 	<header>
 		<div th:class="@{container-fluid custom-container}">
 			<div th:class="@{row no_row row-header}">
-				<div th:class="brand-be">
-					<a th:href="@{/login}"><img th:src="@{/img/logo.png}" alt="logo" th:class="be_logo"></a>
-				</div>
+				<!-- THE LOGO -->
+				<div th:include="logo :: body"></div>
 				<div th:class="header-menu-block">
 					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
 					<ul th:class="header-menu" id="one">
@@ -24,8 +23,8 @@
 						<li><a th:href="@{#}">Suscripción</a></li>
 					</ul>
 				</div>
-				<a th:class="@{login-header-block login_block btn-login btn color-1 size-2 hover-2}" href="/logout">
-				<i th:class="@{fa fa-user}"></i>Log out</a>
+				<!-- THE HELLO USER -->
+				<div th:include="hellouser :: body"></div>
 			</div>
 		</div>
 	</header>

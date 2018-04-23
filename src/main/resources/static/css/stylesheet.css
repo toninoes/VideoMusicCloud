@@ -55,6 +55,10 @@ td {
 	padding: 0; 
 }
 
+.color-white {
+	color: white;	
+}
+
 .custom-margin { 
 	margin-top: 20px; 
 	margin-bottom: 20px; 
@@ -81,6 +85,11 @@ td {
 
 .custom-cursor {
 	cursor: pointer !important;
+}
+
+.custom-photo-size {
+	width: 32px !important;
+	height: 32px !important;
 }
 
 .custom-video {
