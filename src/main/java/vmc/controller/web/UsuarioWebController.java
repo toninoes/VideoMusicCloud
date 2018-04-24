@@ -39,7 +39,10 @@ public class UsuarioWebController {
 	
 	@GetMapping("/{id}")
 	public String findById(Model model, @PathVariable long id) {
-		model.addAttribute("usuario", usuarioService.findById(id));
+		Usuario usuario = usuarioService.findById(id);
+		model.addAttribute("usuario", usuario);
+		String[] intereses = usuarioService.findInteresesByUsuario(usuario);
+		model.addAttribute("intereses", intereses);
 		return "usuarios/detalle";
 	}
 	
@@ -83,6 +86,9 @@ public class UsuarioWebController {
 		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(pinchadoId));
 		model.addAttribute("sigue", sigue);
 		
+		String[] intereses = usuarioService.findInteresesByUsuario(pinchado);
+		model.addAttribute("intereses", intereses);
+		
 		return "usuarios/perfil";
 	}
 	
@@ -108,7 +114,27 @@ public class UsuarioWebController {
 		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(pinchadoId));
 		model.addAttribute("sigue", sigue);
 		
+		String[] intereses = usuarioService.findInteresesByUsuario(pinchado);
+		model.addAttribute("intereses", intereses);
+		
 		return "usuarios/perfil";
+	}
+	
+	@PostMapping("/detalle/{id}")
+	public String savePerfilById(@PathVariable long id, @RequestParam("foto") MultipartFile f,
+														@RequestParam("nombre") String nombre,
+														@RequestParam("apellidos") String apellidos,
+														@RequestParam("mail") String mail,
+														@RequestParam(required = false) boolean chksalir,
+														@RequestParam(required = false) boolean chkmusica,
+														@RequestParam(required = false) boolean chkdinero,
+														@RequestParam(required = false) boolean chkdeporte) {
+		
+		String[] interesesChk = usuarioService.viewIntereses(chksalir, chkmusica, chkdinero, chkdeporte);
+		usuarioService.subir(f);
+		usuarioService.update(id, nombre, apellidos, mail, interesesChk);
+		
+		return "redirect:/usuarios/{id}";
 	}
 	
 	@PostMapping("/perfil/{logueadoId}/{pinchadoId}")

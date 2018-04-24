@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -87,13 +87,36 @@ public class UsuarioService {
 	}
 	
 	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Usuario u) {
-
 		Usuario usuario = usuarioRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
 
 		try {
 			usuario.setNombre(u.getNombre());
 			usuario.setApellidos(u.getApellidos());
+			usuarioRepository.save(usuario);
+		} catch (Exception e) {
+			throw new ErrorInternoServidorException("actualizar", "Usuario", id, e.getMessage());
+		}
+		
+		return new ResponseEntity<Usuario>(HttpStatus.OK);
+	}
+	
+	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @RequestParam("nombre") String nombre,
+																			   @RequestParam("apellidos") String apellidos,
+																			   @RequestParam("mail") String mail,
+																			   String[] interesesChk) {
+
+		Usuario usuario = usuarioRepository.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
+
+		try {
+			usuario.setNombre(nombre);
+			usuario.setApellidos(apellidos);
+			usuario.setMail(mail);
+			StringBuilder sb = new StringBuilder();
+			for(int i = 0; i < 4; i++)
+				sb.append(interesesChk[i]);
+			usuario.setIntereses(sb.toString());
 			usuarioRepository.save(usuario);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Usuario", id, e.getMessage());
@@ -157,6 +180,36 @@ public class UsuarioService {
     	logueado.removeSiguiendo(pinchado);
     	usuarioRepository.save(logueado);
     }
+	
+	public String[] findInteresesByUsuario(Usuario usuario) {
+		String[] intereses = usuario.getIntereses().split("/");
+		return intereses;
+	}
+	
+	public String[] viewIntereses(@RequestParam(required = false) boolean chksalir,
+								  @RequestParam(required = false) boolean chkmusica,
+								  @RequestParam(required = false) boolean chkdinero,
+								  @RequestParam(required = false) boolean chkdeporte) {
+		String[] interesesChk = new String[4];
+		if(chksalir)
+			interesesChk[0] = "salir0/";
+		else
+			interesesChk[0] = "salir1/";
+		if(chkmusica)
+			interesesChk[1] = "musica0/";
+		else
+			interesesChk[1] = "musica1/";
+		if(chkdinero)
+			interesesChk[2] = "dinero0/";
+		else
+			interesesChk[2] = "dinero1/";
+		if(chkdeporte)
+			interesesChk[3] = "deporte0/";
+		else
+			interesesChk[3] = "deporte1/";
+		
+		return interesesChk;
+	}
 	
 	@ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)
     public ResponseEntity<?> manejarAlmacenamientoFicheroNoEncontrado(AlmacenamientoFicheroNoEncontradoException exc) {

@@ -48,7 +48,7 @@ public class Usuario  {
 	
 	private boolean activo;
 	
-	private String intereres;
+	private String intereses;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "usuario_rol", 
@@ -84,16 +84,18 @@ public class Usuario  {
 	public Usuario() {
 		super();
 		this.foto = "img/ava_10.jpg";
+		this.intereses = "salir1/musica1/dinero1/deporte1/";
 	}
 	
 	public Usuario(@NotBlank String nombre, @NotBlank String apellidos, @NotBlank String mail, 
-			       @NotBlank String password, @NotBlank String foto) {
+			       @NotBlank String password, @NotBlank String foto, String intereses) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.mail = mail;
 		this.password = password;
 		this.foto = foto;
+		this.intereses = intereses;
 	}
 
 	public String getNombre() {
@@ -180,11 +182,11 @@ public class Usuario  {
 		return siguiendo;
 	}
 
-	public String getIntereres() {
-		return intereres;
+	public String getIntereses() {
+		return intereses;
 	}
 
-	public void setIntereres(String intereres) {
-		this.intereres = intereres;
+	public void setIntereses(String intereses) {
+		this.intereses = intereses;
 	}
 }

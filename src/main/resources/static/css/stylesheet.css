@@ -59,13 +59,39 @@ td {
 	color: white;	
 }
 
+.background-custom {
+	background-color: #f6f6f7 !important;
+}
+
+.custom-float-right {
+	float: right !important;
+}
+
+.custom-float-left {
+	float: left !important;
+}
+
 .custom-margin { 
 	margin-top: 20px; 
 	margin-bottom: 20px; 
 }
 
+.custom-margin-head { 
+	margin-top: 20px;  
+}
+
+.custom-margin-icon {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
 .custom-font { 
 	font-family: 'Conv_helveticaneuecyr-roman'; 
+}
+
+.custom-icon-size-font {
+	font-size: 22px;
+	color: blue;
 }
 
 .custom-td {
@@ -196,9 +222,9 @@ img.be_logo { text-align: left; }
 
 .login_block { text-align: right; }
 
-.login_block .btn-login { margin-right: 0px; margin-bottom: 0px; }
+.login_block .btn-login { margin-right: 0px; margin-bottom: 0px; padding: 0; }
 
-.login_block a:hover { color: #262626; }
+.login_block a:hover { margin: 0; padding: 0; color: #262626; }
 
 /*login user page*/
 .page-login .login-header-block { margin-top: 15px; }

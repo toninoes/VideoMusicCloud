@@ -21,7 +21,7 @@
 
 /*replace the content value with the
 corresponding value from the list below*/
- 
+
 .folder:before {
     content: "\f07c";
     font-family: FontAwesome;

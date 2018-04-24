@@ -6,9 +6,7 @@
 <body th:fragment="logo :: body">
 	<div th:class="brand-be">
 		<a th:href="@{/login}"><img th:src="@{/img/logo.png}" alt="logo" th:class="be_logo"></a>
-	</div>
-	<div th:class="@{login-header-block btn-login btn color-1 size-2 hover-2}"> 
-		<a href="/logout" th:class="@{color-white}"><i th:class="@{fa fa-user color-white}"></i>Log out</a>
-	</div>
+	</div> 
+	<a href="/logout" th:class="@{login-header-block btn color-1 size-2 hover-1 color-white}"><i th:class="@{fa fa-user color-white}"></i>Log out</a>
 </body>
 </html>

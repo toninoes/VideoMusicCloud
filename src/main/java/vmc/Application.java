@@ -41,7 +41,7 @@ public class Application extends SpringBootServletInitializer {
 	public CommandLineRunner loadData(UsuarioService usrSrv) {
 		return (args) -> {
 			if (usrRep.findAll().size() == 0) {		
-				Usuario administrador = new Usuario("admin", "admin", "admin@admin.com", "123456", "img/ava_10.jpg");
+				Usuario administrador = new Usuario("admin", "admin", "admin@admin.com", "123456", "img/ava_10.jpg", "salir1/musica1/dinero1/deporte1/");
 				usrRep.save(administrador);
 				
 				rolRep.save(new Rol("ADMIN"));
