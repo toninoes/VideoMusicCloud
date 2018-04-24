@@ -87,9 +87,7 @@ public class VideoService {
     }
 	
 	private Boolean esUnVideo(MultipartFile f) {
-		Boolean res = false;
-		
-		if(
+		return(
 				f.getContentType().equals("video/mp4")		||	// .mp4	MP4 video
 				f.getContentType().equals("video/webm")		||	// .webm	WEBM video
 				f.getContentType().equals("video/ogg")		||	// .ogv	OGG video
@@ -97,10 +95,7 @@ public class VideoService {
 				f.getContentType().equals("video/mpeg")		||	// .mpeg	MPEG Video
 				f.getContentType().equals("video/3gpp")		||	// .3gp	3GPP audio/video container
 				f.getContentType().equals("video/3gpp2")		// .3g2	3GPP2 audio/video container
-			)		
-			res = true;
-		
-		return res;
+				);		
 	}
 
 }
