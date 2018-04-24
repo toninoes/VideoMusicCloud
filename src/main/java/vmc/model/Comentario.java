@@ -34,7 +34,7 @@ public class Comentario {
 	@JoinColumn(name="video_id", nullable = false)
 	private Video video;
 	
-	private boolean like;
+	private boolean gusta;
 	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -69,11 +69,15 @@ public class Comentario {
 		this.usuario = usuario;
 	}
 
-	public boolean isLike() {
-		return like;
+	public boolean isGusta() {
+		return gusta;
 	}
 
-	public void setLike(boolean like) {
-		this.like = like;
+	public void setGusta(boolean gusta) {
+		this.gusta = gusta;
 	}
+
+	
+
+	
 }

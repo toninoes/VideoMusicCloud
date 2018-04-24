@@ -62,7 +62,7 @@ public class Application extends SpringBootServletInitializer {
 				genRep.save(new Genero("country"));			genRep.save(new Genero("trap"));
 				genRep.save(new Genero("disco"));			genRep.save(new Genero("pop"));
 				genRep.save(new Genero("drum"));			genRep.save(new Genero("piano"));
-				genRep.save(new Genero("electronica"));		genRep.save(new Genero("metal"));
+				genRep.save(new Genero("electrónica"));		genRep.save(new Genero("metal"));
 				genRep.save(new Genero("folk"));			genRep.save(new Genero("latina"));
 				genRep.save(new Genero("flamenco"));		genRep.save(new Genero("hip-hop"));
 				genRep.save(new Genero("jazz"));			genRep.save(new Genero("house"));
