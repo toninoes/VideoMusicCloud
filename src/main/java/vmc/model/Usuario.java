@@ -189,4 +189,5 @@ public class Usuario  {
 	public void setIntereses(String intereses) {
 		this.intereses = intereses;
 	}
+	
 }
