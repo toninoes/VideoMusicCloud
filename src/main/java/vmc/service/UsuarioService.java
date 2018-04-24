@@ -164,18 +164,12 @@ public class UsuarioService {
     }
 	
 	private Boolean esUnaFoto(MultipartFile f) {
-		Boolean res = false;
-		
-		if(
+		return(
 				f.getContentType().equals("image/gif")		||	// .gif	GIF images (lossless compression, superseded by PNG)
 				f.getContentType().equals("image/jpeg")		||	// .jpeg JPEG images
 				f.getContentType().equals("image/png")		||	// .png	PNG images
 				f.getContentType().equals("image/svg+xml")	    // .svg	SVG images (vector images)
-
-			)		
-			res = true;
-		
-		return res;
+				);
 	}
 
 }
