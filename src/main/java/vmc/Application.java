@@ -69,5 +69,4 @@ public class Application extends SpringBootServletInitializer {
 			}
 		};
 	}
-
 }
