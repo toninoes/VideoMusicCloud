@@ -9,8 +9,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 
 import vmc.config.LocationConfig;
+import vmc.model.Genero;
 import vmc.model.Rol;
 import vmc.model.Usuario;
+import vmc.repository.GeneroRepository;
 import vmc.repository.RolRepository;
 import vmc.repository.UsuarioRepository;
 import vmc.service.AlmacenamientoService;
@@ -26,6 +28,9 @@ public class Application extends SpringBootServletInitializer {
 	@Autowired
 	private UsuarioRepository usrRep;	
 	
+	@Autowired
+	private GeneroRepository genRep;
+	
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Application.class, args);
 	}
@@ -40,7 +45,7 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
 	public CommandLineRunner loadData(UsuarioService usrSrv) {
 		return (args) -> {
-			if (usrRep.findAll().size() == 0) {		
+			if (usrRep.findAll().isEmpty()) {		
 				Usuario administrador = new Usuario("admin", "admin", "admin@admin.com", "123456", "img/ava_10.jpg");
 				usrRep.save(administrador);
 				
@@ -48,6 +53,19 @@ public class Application extends SpringBootServletInitializer {
 				rolRep.save(new Rol("USER"));
 				
 				usrSrv.create(administrador, true);
+			}
+			
+			if(genRep.findAll().isEmpty()) {
+				genRep.save(new Genero("rock "));			genRep.save(new Genero("blues"));
+				genRep.save(new Genero("ambiente"));		genRep.save(new Genero("regueton"));
+				genRep.save(new Genero("clasica"));			genRep.save(new Genero("techno"));
+				genRep.save(new Genero("country"));			genRep.save(new Genero("trap"));
+				genRep.save(new Genero("disco"));			genRep.save(new Genero("pop"));
+				genRep.save(new Genero("drum"));			genRep.save(new Genero("piano"));
+				genRep.save(new Genero("electronica"));		genRep.save(new Genero("metal"));
+				genRep.save(new Genero("folk"));			genRep.save(new Genero("latina"));
+				genRep.save(new Genero("flamenco"));		genRep.save(new Genero("hip-hop"));
+				genRep.save(new Genero("jazz"));			genRep.save(new Genero("house"));
 			}
 		};
 	}
