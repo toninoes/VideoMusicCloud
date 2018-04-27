@@ -1,6 +1,9 @@
 package vmc.service;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,9 @@ public class VideoService {
 	@Autowired
 	private VideoRepository videoRepository;
 	
+	@Autowired
+	private GeneroService generoService;
+	
 	public List<Video> findAll() {   	
 		return videoRepository.findAll();
     }
@@ -63,15 +69,62 @@ public class VideoService {
         almacenamientoService.delete(filename, "video");
     }
 	
+	public Map<Video, Set<String>> findVideoGeneros(List<Video> videos) {
+		
+		Map<Video, Set<String>> videoGeneros = new HashMap<Video, Set<String>>();
+		
+		for(Video v : videos) {
+			Set<Genero> generos = v.getVideoGeneros();
+			Set<String> strings = new HashSet<String>();
+			for(Genero g: generos)
+				strings.add('#' + g.getNombre());
+			videoGeneros.put(v, strings);
+		}
+		
+		return videoGeneros;
+	}
+	
+	/*public String[] findGenerosByVideos(List<Video> videos) {
+		
+		Map<Video, Set<Genero>> videogeneros = new HashMap<Video, Set<Genero>>();
+		
+		for(Video v : videos)
+			videogeneros.put(v, v.getVideoGeneros());
+		
+		StringBuilder[] sb = new StringBuilder[videogeneros.size()];
+		
+		int i = 0;
+		
+		for(Video v : videogeneros.keySet()) {
+			sb[i] = new StringBuilder();
+			for(Genero g : videogeneros.get(v))
+				sb[i].append("#").append(g.getNombre()).append("\n");
+			i++;
+		}
+		
+		String[] generos = new String[sb.length];
+		for(i = 0; i < sb.length; i++)
+			generos[i] = sb[i].toString();
+		
+		return generos;
+	}*/
+	
 	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, 
-			                       @RequestParam("descripcion") String d, @RequestParam("videogeneros") Set<Genero> g) {
+			                       @RequestParam("descripcion") String d, @RequestParam("videogeneros") String[] g) {
 		
     	if(esUnVideo(v)) {
     		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     		Usuario usuario = usuarioService.findByMail(auth.getName());
     		
+    		Set<Genero> generos = new HashSet<Genero>();
+        	for(String s: g) {
+        		Genero genero = generoService.findByNombre(s);
+        		generos.add(genero);
+        	}
+    		
     		Video video = new Video(t, v.getOriginalFilename(), usuario, d);
-    		video.setVideoGeneros(g);
+    		
+    		video.setVideoGeneros(generos);
     		videoRepository.save(video);		
         	almacenamientoService.store(v, "video");
         	

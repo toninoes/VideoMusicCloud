@@ -7,7 +7,7 @@
 	<div th:class="@{login-header-block}">
 		<div th:class="@{login-block be-drop-down login-user-down}">
 			<div th:switch="${usuario.foto}" th:class="@{login-user}">
-				<img th:case="'img/ava_10.jpg'" th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
+				<img th:case="''" th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
 				<img th:case="*" th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${usuario.foto}}">
 				<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${usuario.nombre}}"></span>
 			</div>

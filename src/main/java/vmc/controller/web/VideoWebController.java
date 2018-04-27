@@ -1,7 +1,6 @@
 package vmc.controller.web;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -19,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import vmc.model.Genero;
 import vmc.model.Usuario;
+import vmc.model.Video;
 import vmc.service.GeneroService;
 import vmc.service.UsuarioService;
 import vmc.service.VideoService;
@@ -42,9 +41,11 @@ public class VideoWebController {
     public String listarTodosVideos(Model model) {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
-		model.addAttribute("videos", videoService.findAll());
+		List<Video> videos = videoService.findAll();
+		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
-		model.addAttribute("generos", generoService.findAll());
+		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
+		
         return "videos/listado";
     }
     
@@ -52,8 +53,11 @@ public class VideoWebController {
 	public String findVideosByUsuarioId(Model model) {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
-		model.addAttribute("videos", videoService.findVideosByUsuarioId(usuario.getId()));
+		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
+		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
+		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
+		
 		return "videos/listadoPorUsuario";
 	}
 	
@@ -67,13 +71,8 @@ public class VideoWebController {
     public String subirVideo(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, 
     						 @RequestParam("descripcion") String d, @RequestParam("videogeneros") String[] g,
     		                 RedirectAttributes ra) {
-    	
-    	Set<Genero> generos = new HashSet<Genero>();
-    	for(String s: g) {
-    		Genero genero = generoService.findByNombre(s);
-    		generos.add(genero);
-    	}
-    	videoService.subir(t, v, d, generos);
+    
+    	videoService.subir(t, v, d, g);
         ra.addFlashAttribute("mensaje", "Video " + v.getOriginalFilename() + " subido correctamente.");
 
         return "redirect:/videos";

@@ -43,15 +43,26 @@
 						<div th:class="@{be-large-post-align}">
 							<div th:class="@{be-change-ava}">
 								<input type="submit" th:href="@{'/usuarios/detalle/' + ${usuario.id}}" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Guardar Cambios'}">
-								<a th:switch="${usuario.foto}" th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
-									<img th:case="'img/ava_10.jpg'" th:src="@{'/img/ava_10.jpg'}" th:alt="@{''}"> 
-									<img th:case="*" th:src="@{'/usuarios/fotos/' + ${usuario.foto}}" th:alt="@{''}"> 
-								</a>
-								<div>
-									<label th:class="@{btn color-4 size-2 hover-7 pull-left}">
-										<i th:class="@{fa fa-pencil}"></i>Foto
-										<input type="file" name="foto" id="foto" hidden="hidden">
-									</label>
+								<div th:switch="${usuario.foto}">
+									<div th:case="''">
+										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
+											<img th:src="@{'/img/ava_10.jpg'}" th:alt="@{''}"> 
+										</a>
+										<label th:class="@{btn color-1 size-2 hover-7}" for="foto">
+											<i th:class="@{fa fa-pencil}"></i>Foto
+											<input type="file" name="foto" id="foto" hidden="hidden">
+										</label>
+									</div>
+									<div th:case="*">
+										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
+											<img th:src="@{'/usuarios/fotos/' + ${usuario.foto}}" th:alt="@{''}">
+										</a>
+										<label th:class="@{btn color-4 size-2 hover-7}" for="quitarFoto">
+											<i th:class="@{fa fa-pencil}"></i>Quitar Foto
+											<input type="checkbox" th:class="@{btn color-4 size-2 hover-7}" name="quitarFoto" id="quitarFoto">
+											<input type="file" name="foto" id="foto" hidden="hidden">
+										</label> 
+									</div>
 								</div>
 							</div>
 						</div>
@@ -69,51 +80,17 @@
 										<input th:class="@{form-input}" type="text" name="apellidos" id="apellidos" th:value="${usuario.apellidos}">
 									</div>								
 								</div>
-								<div th:class="@{input-col col-xs-12 col-sm-12}">
+								<!--<div th:class="@{input-col col-xs-12 col-sm-12}">
 									<div th:class="@{form-group focus-2}">
 										<div th:class="@{form-label}">Email</div>									
 										<input th:class="@{form-input}" type="text" name="mail" id="mail" th:value="${usuario.mail}">
 									</div>								
-								</div>
+								</div>-->
 								<div th:class="@{input-col col-xs-12 col-sm-12}">
 									<div th:class="@{form-group focus-2}">
-										<div th:class="@{form-label}">Intereses</div>
-										<div th:each="interes : ${intereses}">
-											<div th:switch="${interes}">
-												<i th:case="'salir0'" th:class="@{form-control custom-margin background-custom}">
-													<input th:class="@{custom-margin-icon form-checkbox}" type="checkbox"  name="chksalir" id="chksalir" th:checked="checked">
-													<i th:class="@{custom-margin-icon fa fa-glass}"></i>Fiesta
-												</i>
-												<i th:case="'salir1'" th:class="@{form-control custom-margin background-custom}">
-													<input th:class="@{custom-margin-icon form-checkbox}" type="checkbox"  name="chksalir" id="chksalir">
-													<i th:class="@{custom-margin-icon fa fa-glass}"></i>Fiesta
-												</i>
-												<i th:case="'musica0'" th:class="@{form-control custom-margin background-custom}">
-													<input th:class="@{custom-margin-icon form-checkbox}" type="checkbox"  name="chkmusica" id="chkmusica" th:checked="checked">
-													<i th:class="@{custom-margin-icon fa fa-music}"></i>Música
-												</i>
-												<i th:case="'musica1'" th:class="@{form-control custom-margin background-custom}">
-													<input th:class="@{custom-margin-icon form-checkbox}" type="checkbox"  name="chkmusica" id="chkmusica">
-													<i th:class="@{custom-margin-icon fa fa-music}"></i>Música
-												</i>
-												<i th:case="'dinero0'" th:class="@{form-control custom-margin background-custom}">
-													<input th:class="@{custom-margin-icon form-checkbox}" type="checkbox"  name="chkdinero" id="chkdinero" th:checked="checked">
-													<i th:class="@{custom-margin-icon fa fa-eur}"></i>Dinero
-												</i>
-												<i th:case="'dinero1'" th:class="@{form-control custom-margin background-custom}">
-													<input th:class="@{custom-margin-icon form-checkbox}" type="checkbox"  name="chkdinero" id="chkdinero">
-													<i th:class="@{custom-margin-icon fa fa-eur}"></i>Dinero
-												</i>
-												<i th:case="'deporte0'" th:class="@{form-control custom-margin background-custom}">
-													<input th:class="@{custom-margin-icon form-checkbox}" type="checkbox"  name="chkdeporte" id="chkdeporte" th:checked="checked">
-													<i th:class="@{custom-margin-icon fa fa-dribbble}"></i>Deporte
-												</i>
-												<i th:case="'deporte1'" th:class="@{form-control custom-margin background-custom}">
-													<input th:class="@{custom-margin-icon form-checkbox}" type="checkbox"  name="chkdeporte" id="chkdeporte">
-													<i th:class="@{custom-margin-icon fa fa-dribbble}"></i>Deporte
-												</i>
-											</div>
-										</div>
+										<div th:class="@{form-label}">Intereses</div>									
+										<textarea maxlength="255" th:class="@{form-input}" name="intereses" id="intereses" th:placeholder="@{''}" th:text="${usuario.intereses}">
+										</textarea>
 									</div>								
 								</div>								
 							</div>
@@ -130,27 +107,29 @@
 						</div>
 						<div th:class="@{be-large-post-align}">
 							<div th:class="@{row}">
-								<div th:class="@{input-col col-xs-12 col-sm-4}">
-									<div th:class="@{form-group focus-2}">
-										<div th:class="@{form-label}">Antigua Clave</div>									
-										<input th:class="@{form-input}" type="password" th:placeholder="@{''}">
-									</div>								
-								</div>
-								<div th:class="@{input-col col-xs-12 col-sm-4}">
-									<div th:class="@{form-group focus-2}">
-										<div th:class="@{form-label}">Nueva Clave</div>									
-										<input th:class="@{form-input}" type="password" th:placeholder="@{''}">
-									</div>								
-								</div>
-								<div th:class="@{input-col col-xs-12 col-sm-4}">
-									<div th:class="@{form-group focus-2}">
-										<div th:class="@{form-label}">Repetir Clave</div>									
-										<input th:class="@{form-input}" type="password" th:placeholder="@{''}">
-									</div>								
-								</div>
-								<div th:class="@{col-xs-12}">
-									<a th:class="@{btn color-1 size-2 hover-1 btn-right}">Cambiar Clave</a>
-								</div>																
+								<form method="POST" th:action="@{'/usuarios/detalle'}">
+									<div th:class="@{input-col col-xs-12 col-sm-4}">
+										<div th:class="@{form-group focus-2}">
+											<div th:class="@{form-label}">Antigua Clave</div>									
+											<input th:class="@{form-input}" name="oldpassword" id="oldpassword" type="password" th:placeholder="@{''}" required maxlength="50">
+										</div>								
+									</div>
+									<div th:class="@{input-col col-xs-12 col-sm-4}">
+										<div th:class="@{form-group focus-2}">
+											<div th:class="@{form-label}">Nueva Clave</div>									
+											<input th:class="@{form-input}" type="password" name="newpassword" id="newpassword" th:placeholder="@{''}" required maxlength="50">
+										</div>								
+									</div>
+									<div th:class="@{input-col col-xs-12 col-sm-4}">
+										<div th:class="@{form-group focus-2}">
+											<div th:class="@{form-label}">Repetir Clave</div>									
+											<input th:class="@{form-input}" type="password" name="rnewpassword" id="rnewpassword" th:placeholder="@{''}" required maxlength="50">
+										</div>								
+									</div>
+									<div th:class="@{input-col col-xs-12 col-sm-12}">
+										<input type="submit" th:class="@{btn color-1 size-2 hover-1 btn-right}" th:value="@{Cambiar Clave}">
+									</div>
+								</form>																
 							</div>
 						</div>
 					</div>

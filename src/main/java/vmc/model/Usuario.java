@@ -68,7 +68,7 @@ public class Usuario  {
 	@JoinTable(name = "seguidores", joinColumns = @JoinColumn(name = "seguido_id"), inverseJoinColumns = @JoinColumn(name = "siguiendo_id"))
 	private Set<Usuario> seguidores;
 	
-	@NotBlank
+	@Column(nullable = false, updatable = true)
 	private String foto;
 	
 	@Column(nullable = false, updatable = false)
@@ -83,19 +83,17 @@ public class Usuario  {
 
 	public Usuario() {
 		super();
-		this.foto = "img/ava_10.jpg";
-		this.intereses = "salir1/musica1/dinero1/deporte1/";
+		this.foto = "";
 	}
 	
 	public Usuario(@NotBlank String nombre, @NotBlank String apellidos, @NotBlank String mail, 
-			       @NotBlank String password, @NotBlank String foto, String intereses) {
+			       @NotBlank String password) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.mail = mail;
 		this.password = password;
-		this.foto = foto;
-		this.intereses = intereses;
+		this.foto = "";
 	}
 
 	public String getNombre() {
@@ -180,6 +178,30 @@ public class Usuario  {
 	
 	public Set<Usuario> getSiguiendo() {
 		return siguiendo;
+	}
+	
+	public long getSiguiendoSize() {
+		return siguiendo.size();
+	}
+	
+	public void setSeguidores(Set<Usuario> seguidores) {
+		this.seguidores = seguidores;
+	}
+	
+	public void setSeguidor(Usuario usuario) {
+		this.seguidores.add(usuario);
+	}
+	
+	public void removeSeguidor(Usuario usuario) {
+		this.seguidores.remove(usuario);
+	}
+	
+	public Set<Usuario> getSeguidores() {
+		return seguidores;
+	}
+	
+	public long getSeguidoresSize() {
+		return seguidores.size();
 	}
 
 	public String getIntereses() {

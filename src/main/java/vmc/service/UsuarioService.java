@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -86,6 +85,7 @@ public class UsuarioService {
 		usuarioRepository.save(user);
 	}
 	
+	/* No funciona con multipart/form-data */
 	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Usuario u) {
 		Usuario usuario = usuarioRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
@@ -93,6 +93,7 @@ public class UsuarioService {
 		try {
 			usuario.setNombre(u.getNombre());
 			usuario.setApellidos(u.getApellidos());
+			usuario.setIntereses(u.getIntereses());
 			usuarioRepository.save(usuario);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Usuario", id, e.getMessage());
@@ -101,10 +102,10 @@ public class UsuarioService {
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
 	
-	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @RequestParam("nombre") String nombre,
+	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @RequestParam(required = false) boolean quitarFoto,
+																			   @RequestParam("nombre") String nombre,
 																			   @RequestParam("apellidos") String apellidos,
-																			   @RequestParam("mail") String mail,
-																			   String[] interesesChk) {
+																			   @RequestParam("intereses") String intereses) {
 
 		Usuario usuario = usuarioRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
@@ -112,11 +113,8 @@ public class UsuarioService {
 		try {
 			usuario.setNombre(nombre);
 			usuario.setApellidos(apellidos);
-			usuario.setMail(mail);
-			StringBuilder sb = new StringBuilder();
-			for(int i = 0; i < 4; i++)
-				sb.append(interesesChk[i]);
-			usuario.setIntereses(sb.toString());
+			usuario.setIntereses(intereses);
+			if(quitarFoto) usuario.setFoto("");
 			usuarioRepository.save(usuario);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Usuario", id, e.getMessage());
@@ -150,6 +148,32 @@ public class UsuarioService {
         almacenamientoService.delete(filename, "foto");
     }
 	
+	public long cambiarClave(@RequestParam("oldpassword") String o,
+							 @RequestParam("newpassword") String n,
+			  				 @RequestParam("rnewpassword") String r,
+			  				 int passwordlength) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = findByMail(auth.getName());
+		BCryptPasswordEncoder old = bCryptPasswordEncoder;
+		
+		if(old.matches(o, usuario.getPassword()) && n.equals(r) && passwordlength >= 6) {
+			BCryptPasswordEncoder nueva = bCryptPasswordEncoder;
+			usuario.setPassword(nueva.encode(n));
+			usuarioRepository.save(usuario);
+		} else
+			throw new ErrorInternoServidorException("Passwords", "Usuario", usuario.getId(), "Algunas de las contraseñas no coinciden");
+		
+		return usuario.getId();
+	}
+	
+	/*public Set<Usuario> findUsuariosByVideos(List<Video> videos) {
+		Set<Usuario> usuarios = new HashSet<Usuario>();
+		for(Video v : videos)
+			usuarios.add(v.getUsuario());
+		return usuarios;
+	}*/
+	
 	public ResponseEntity<?> subir(@RequestParam("foto") MultipartFile f) {
 		
     	if(esUnaFoto(f)) {
@@ -173,43 +197,17 @@ public class UsuarioService {
 	
 	public void seguir(Usuario logueado, Usuario pinchado) {
     	logueado.setSiguiendo(pinchado);
+    	pinchado.setSeguidor(logueado);
     	usuarioRepository.save(logueado);
+    	usuarioRepository.save(pinchado);
     }
 	
 	public void dejar(Usuario logueado, Usuario pinchado) {
     	logueado.removeSiguiendo(pinchado);
+    	pinchado.removeSeguidor(logueado);
     	usuarioRepository.save(logueado);
+    	usuarioRepository.save(pinchado);
     }
-	
-	public String[] findInteresesByUsuario(Usuario usuario) {
-		String[] intereses = usuario.getIntereses().split("/");
-		return intereses;
-	}
-	
-	public String[] viewIntereses(@RequestParam(required = false) boolean chksalir,
-								  @RequestParam(required = false) boolean chkmusica,
-								  @RequestParam(required = false) boolean chkdinero,
-								  @RequestParam(required = false) boolean chkdeporte) {
-		String[] interesesChk = new String[4];
-		if(chksalir)
-			interesesChk[0] = "salir0/";
-		else
-			interesesChk[0] = "salir1/";
-		if(chkmusica)
-			interesesChk[1] = "musica0/";
-		else
-			interesesChk[1] = "musica1/";
-		if(chkdinero)
-			interesesChk[2] = "dinero0/";
-		else
-			interesesChk[2] = "dinero1/";
-		if(chkdeporte)
-			interesesChk[3] = "deporte0/";
-		else
-			interesesChk[3] = "deporte1/";
-		
-		return interesesChk;
-	}
 	
 	@ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)
     public ResponseEntity<?> manejarAlmacenamientoFicheroNoEncontrado(AlmacenamientoFicheroNoEncontradoException exc) {

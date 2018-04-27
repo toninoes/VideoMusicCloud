@@ -33,7 +33,7 @@ body { margin: 0; padding: 0; font-family: 'Conv_helveticaneuecyr-roman', sans-s
 
 h1, h2, h3, h4, h5, p { margin: 0; padding: 0; }
 
-textarea{   resize: none;}
+textarea{ resize: none; }
 
 .no_row { margin: 0; }
 
@@ -57,6 +57,10 @@ td {
 
 .color-white {
 	color: white;	
+}
+
+.custom-textarea {
+	font-size: 10px !important;
 }
 
 .background-custom {
@@ -148,6 +152,45 @@ video {
 
 [hidden] {
 	display: none !important;
+}
+
+.tooltip2 {
+    position: relative !important;
+    display: inline-block !important;
+    /*border-bottom: 1px dotted black !important;*/
+}
+
+.tooltip2 .tooltiptext {
+    visibility: hidden !important;
+    width: 120px !important;
+    background-color: #555 !important;
+    color: #fff !important;
+    text-align: center !important;
+    border-radius: 6px !important;
+    padding: 5px 0 !important;
+    position: absolute !important;
+    z-index: 1 !important;
+    bottom: 125% !important;
+    left: 50% !important;
+    margin-left: -60px !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s !important;
+}
+
+.tooltip2 .tooltiptext::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 50% !important;
+    margin-left: -5px !important;
+    border-width: 5px !important;
+    border-style: solid !important;
+    border-color: #555 transparent transparent transparent !important;
+}
+
+.tooltip2:hover .tooltiptext {
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1319,6 +1362,8 @@ a.social-btn:hover { opacity: 0.6; color: #fff; }
 .icon-features { display: inline-block; background: url("../img/icon-features.png") no-repeat; text-indent: -9999px; text-align: left; width: 16px; height: 16px; }
 
 .icon-worldwide { display: inline-block; background: url("../img/icon-worldwide.png") no-repeat; text-indent: -9999px; text-align: left; width: 16px; height: 16px; }
+
+.icon-worldwide-b { display: inline-block; background: url("../img/icon-worldwide-b.png") no-repeat; text-indent: -9999px; text-align: left; width: 16px; height: 16px; }
 
 .be-user-block.style-2, .be-user-block.style-3 { padding: 30px 15px 15px 15px; text-align: center; }
 

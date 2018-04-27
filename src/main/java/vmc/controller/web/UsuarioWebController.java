@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import vmc.model.Usuario;
+import vmc.service.GeneroService;
 import vmc.service.UsuarioService;
 
 @Controller
@@ -30,6 +31,9 @@ public class UsuarioWebController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private GeneroService generoService;
 	
 	@GetMapping
 	public String findAll(Model model) {
@@ -41,8 +45,6 @@ public class UsuarioWebController {
 	public String findById(Model model, @PathVariable long id) {
 		Usuario usuario = usuarioService.findById(id);
 		model.addAttribute("usuario", usuario);
-		String[] intereses = usuarioService.findInteresesByUsuario(usuario);
-		model.addAttribute("intereses", intereses);
 		return "usuarios/detalle";
 	}
 	
@@ -57,6 +59,7 @@ public class UsuarioWebController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(usuario.getId()));
+		model.addAttribute("generos", generoService.findGenerosString(usuarioService.findVideosByUsuarioId(usuario.getId())));
 		model.addAttribute("usuario", usuario);
 		return "usuarios/perfil";
 	}
@@ -84,10 +87,8 @@ public class UsuarioWebController {
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
 		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(pinchadoId));
+		model.addAttribute("generos", generoService.findGenerosString(usuarioService.findVideosByUsuarioId(pinchadoId)));
 		model.addAttribute("sigue", sigue);
-		
-		String[] intereses = usuarioService.findInteresesByUsuario(pinchado);
-		model.addAttribute("intereses", intereses);
 		
 		return "usuarios/perfil";
 	}
@@ -112,27 +113,30 @@ public class UsuarioWebController {
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
 		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(pinchadoId));
+		model.addAttribute("generos", generoService.findGenerosString(usuarioService.findVideosByUsuarioId(pinchadoId)));
 		model.addAttribute("sigue", sigue);
-		
-		String[] intereses = usuarioService.findInteresesByUsuario(pinchado);
-		model.addAttribute("intereses", intereses);
 		
 		return "usuarios/perfil";
 	}
 	
+	@PostMapping("/detalle")
+	public String cambiarClave(@RequestParam("oldpassword") String o,
+							   @RequestParam("newpassword") String n, 
+							   @RequestParam("rnewpassword") String r, 
+			                    RedirectAttributes ra) {
+		ra.addAttribute("id", usuarioService.cambiarClave(o, n, r, n.length()));
+		return "redirect:/usuarios/{id}";
+	}
+	
 	@PostMapping("/detalle/{id}")
-	public String savePerfilById(@PathVariable long id, @RequestParam("foto") MultipartFile f,
+	public String savePerfilById(@PathVariable long id, @RequestParam("foto") MultipartFile f, 
+														@RequestParam(required = false) boolean quitarFoto,
 														@RequestParam("nombre") String nombre,
 														@RequestParam("apellidos") String apellidos,
-														@RequestParam("mail") String mail,
-														@RequestParam(required = false) boolean chksalir,
-														@RequestParam(required = false) boolean chkmusica,
-														@RequestParam(required = false) boolean chkdinero,
-														@RequestParam(required = false) boolean chkdeporte) {
+														@RequestParam("intereses") String intereses) {
 		
-		String[] interesesChk = usuarioService.viewIntereses(chksalir, chkmusica, chkdinero, chkdeporte);
 		usuarioService.subir(f);
-		usuarioService.update(id, nombre, apellidos, mail, interesesChk);
+		usuarioService.update(id, quitarFoto, nombre, apellidos, intereses);
 		
 		return "redirect:/usuarios/{id}";
 	}
