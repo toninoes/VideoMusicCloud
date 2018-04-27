@@ -1,12 +1,11 @@
 package vmc.controller.web;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
-
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -62,7 +61,7 @@ public class UsuarioWebController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
-		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
+		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
 		return "usuarios/perfil";
 	}
@@ -91,7 +90,7 @@ public class UsuarioWebController {
 		
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);		
-		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
+		model.addAttribute("videos", videos);
 		model.addAttribute("sigue", sigue);
 		
 		return "usuarios/perfil";
@@ -118,7 +117,7 @@ public class UsuarioWebController {
 		
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
-		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
+		model.addAttribute("videos", videos);
 		model.addAttribute("sigue", sigue);
 		
 		return "usuarios/perfil";

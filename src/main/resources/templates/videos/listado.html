@@ -32,42 +32,42 @@
 	<div th:id="@{content-block}">
 		<div th:class="@{container-fluid custom-container be-detail-container custom-font}">
 			<div th:class="@{row}">
-				<div th:class="@{col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ml-12 col-xl-4}" th:each="videogeneros : ${videosgeneros}">
+				<div th:class="@{col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ml-12 col-xl-4}" th:each="video : ${videos}">
 					<div th:class="@{be-post style-5}">
 						<div align="center" th:class="@{custom-video}">
 							<video controls th:class="@{be-img-block}">
-								<source th:src="'/videos/' + ${videogeneros.key.nombre}">
+								<source th:src="'/videos/' + ${video.nombre}">
 							</video>
 						</div>
 						<div th:class="@{be-rowline}">
 							<ul>
-	    						<li><a th:class="@{list-inline rowline-text}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${videogeneros.key.titulo}" th:text="'#Título'"></a>
-	    							<a th:class="@{list-inline rowline-text pull-right}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${videogeneros.value}" th:text="'#Géneros'"></a></li>
+	    						<li><a th:class="@{list-inline rowline-text}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${video.titulo}" th:text="'#Título'"></a>
+	    							<a th:class="@{list-inline rowline-text pull-right}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${video.VideoGeneros.value[0].nombre}" th:text="'#Géneros'"></a></li>
 	    					</ul>
 	    				</div>
 	    				<div th:class="@{be-rowline}">
 	    					<ul>
-								<li><a th:class="@{list-inline rowline-text}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${videogeneros.key.descripcion}" th:text="'#Descripción'"></a></li>
+								<li><a th:class="@{list-inline rowline-text}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${video.descripcion}" th:text="'#Descripción'"></a></li>
 							</ul>
 						</div>
 						<div th:class="@{be-rowline}">
 							<i th:class="@{fa fa-calendar}">
 								<span th:class="@{custom-td-font}"></span>
-								<span th:class="@{rowline-text}" th:text="${#dates.format(videogeneros.key.creacion, 'dd-MM-yyyy HH:mm')}"></span>
+								<span th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 							</i>
 						</div>
-						<div th:class="@{author-post}" th:switch="${videogeneros.key.usuario.foto}"> 
-							<a th:case="'img/ava_10.jpg'" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${videogeneros.key.usuario.id}}">
+						<div th:class="@{author-post}" th:switch="${video.usuario.foto}"> 
+							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id}}">
 								<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
-								<span>by <i th:text="${videogeneros.key.usuario.nombre}"></i></span>
+								<span>by <i th:text="${video.usuario.nombre}"></i></span>
 							</a>
-							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${videogeneros.key.usuario.id}}">
-								<img th:src="@{'/usuarios/fotos/' + ${videogeneros.key.usuario.foto}}" alt="author" th:class="@{ava-author}">
-								<span>by <i th:text="${videogeneros.key.usuario.nombre}"></i></span>
+							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id}}">
+								<img th:src="@{'/usuarios/fotos/' + ${video.usuario.foto}}" alt="author" th:class="@{ava-author}">
+								<span>by <i th:text="${video.usuario.nombre}"></i></span>
 							</a>
 							<span th:class="@{pull-right}">
-								<i th:class="@{stat-icon icon-like-b}"></i>&nbsp;<span th:text="${videogeneros.key.likes}"></span> 
-								<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<span th:text="${videogeneros.key.visualizaciones}"></span>
+								<i th:class="@{stat-icon icon-like-b}"></i>&nbsp;<span th:text="${video.likes}"></span> 
+								<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<span th:text="${video.visualizaciones}"></span>
 							</span>
 						</div>
 					</div>

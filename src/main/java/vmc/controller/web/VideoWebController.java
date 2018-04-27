@@ -44,7 +44,7 @@ public class VideoWebController {
 		List<Video> videos = videoService.findAll();
 		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
-		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
+		//model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
 		
         return "videos/listado";
     }
@@ -56,7 +56,7 @@ public class VideoWebController {
 		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
 		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
-		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
+		//model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
 		
 		return "videos/listadoPorUsuario";
 	}
