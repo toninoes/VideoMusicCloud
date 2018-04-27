@@ -67,21 +67,6 @@ public class VideoService {
         almacenamientoService.delete(filename, "video");
     }
 	
-//	public Map<Video, Set<String>> findVideoGeneros(List<Video> videos) {
-//		
-//		Map<Video, Set<String>> videoGeneros = new HashMap<Video, Set<String>>();
-//		
-//		for(Video v : videos) {
-//			Set<Genero> generos = v.getVideoGeneros();
-//			Set<String> strings = new HashSet<String>();
-//			for(Genero g: generos)
-//				strings.add('#' + g.getNombre());
-//			videoGeneros.put(v, strings);
-//		}
-//		
-//		return videoGeneros;
-//	}
-	
 	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, 
 			                       @RequestParam("descripcion") String d, @RequestParam("videogeneros") String[] g) {
 		

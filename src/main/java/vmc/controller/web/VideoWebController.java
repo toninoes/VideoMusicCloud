@@ -72,10 +72,17 @@ public class VideoWebController {
     						 @RequestParam("descripcion") String d, @RequestParam("videogeneros") String[] g,
     		                 RedirectAttributes ra) {
     
-    	videoService.subir(t, v, d, g);
-        ra.addFlashAttribute("mensaje", "Video " + v.getOriginalFilename() + " subido correctamente.");
+    	if(v.getSize() < 32000000) {
+    		videoService.subir(t, v, d, g);
+        	ra.addFlashAttribute("mensaje", "Video " + v.getOriginalFilename() + " subido correctamente.");
+        	return "redirect:/videos";
+    	}else {
+    		ra.addFlashAttribute("mensaje", "Error, es mu grande carajote");
+    		return "redirect:/videos/subidaVideos";
+    	}
+    		
 
-        return "redirect:/videos";
+        
     }
     
     @GetMapping("/subidaVideos")
