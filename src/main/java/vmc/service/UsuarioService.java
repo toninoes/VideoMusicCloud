@@ -102,6 +102,7 @@ public class UsuarioService {
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
 	
+	/* Aquí sí funciona y no sé si el de arriba se utilizará en un futuro - método sobrecargado update */
 	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @RequestParam(required = false) boolean quitarFoto,
 																			   @RequestParam("nombre") String nombre,
 																			   @RequestParam("apellidos") String apellidos,
@@ -166,13 +167,6 @@ public class UsuarioService {
 		
 		return usuario.getId();
 	}
-	
-	/*public Set<Usuario> findUsuariosByVideos(List<Video> videos) {
-		Set<Usuario> usuarios = new HashSet<Usuario>();
-		for(Video v : videos)
-			usuarios.add(v.getUsuario());
-		return usuarios;
-	}*/
 	
 	public ResponseEntity<?> subir(@RequestParam("foto") MultipartFile f) {
 		

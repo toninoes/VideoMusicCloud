@@ -3,6 +3,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.security.core.Authentication;
@@ -22,8 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import vmc.model.Usuario;
-import vmc.service.GeneroService;
+import vmc.model.Video;
 import vmc.service.UsuarioService;
+import vmc.service.VideoService;
 
 @Controller
 @RequestMapping("/usuarios")
@@ -33,7 +36,7 @@ public class UsuarioWebController {
 	private UsuarioService usuarioService;
 	
 	@Autowired
-	private GeneroService generoService;
+	private VideoService videoService;
 	
 	@GetMapping
 	public String findAll(Model model) {
@@ -58,8 +61,8 @@ public class UsuarioWebController {
 	public String findMyVideos(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
-		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(usuario.getId()));
-		model.addAttribute("generos", generoService.findGenerosString(usuarioService.findVideosByUsuarioId(usuario.getId())));
+		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
+		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
 		model.addAttribute("usuario", usuario);
 		return "usuarios/perfil";
 	}
@@ -84,10 +87,11 @@ public class UsuarioWebController {
 		else
 			sigue = "seguir";
 		
+		List<Video> videos = videoService.findVideosByUsuarioId(pinchado.getId());
+		
 		model.addAttribute("logueado", logueado);
-		model.addAttribute("usuario", pinchado);
-		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(pinchadoId));
-		model.addAttribute("generos", generoService.findGenerosString(usuarioService.findVideosByUsuarioId(pinchadoId)));
+		model.addAttribute("usuario", pinchado);		
+		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
 		model.addAttribute("sigue", sigue);
 		
 		return "usuarios/perfil";
@@ -110,10 +114,11 @@ public class UsuarioWebController {
 			sigue = "dejar";
 		}
 		
+		List<Video> videos = videoService.findVideosByUsuarioId(pinchado.getId());
+		
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
-		model.addAttribute("videos", usuarioService.findVideosByUsuarioId(pinchadoId));
-		model.addAttribute("generos", generoService.findGenerosString(usuarioService.findVideosByUsuarioId(pinchadoId)));
+		model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
 		model.addAttribute("sigue", sigue);
 		
 		return "usuarios/perfil";
@@ -160,5 +165,4 @@ public class UsuarioWebController {
 		model.addAttribute("usuario", usuarioService.delete(id));
         return "usuarios/listado";
 	}
-
 }

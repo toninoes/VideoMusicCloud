@@ -84,31 +84,6 @@ public class VideoService {
 		return videoGeneros;
 	}
 	
-	/*public String[] findGenerosByVideos(List<Video> videos) {
-		
-		Map<Video, Set<Genero>> videogeneros = new HashMap<Video, Set<Genero>>();
-		
-		for(Video v : videos)
-			videogeneros.put(v, v.getVideoGeneros());
-		
-		StringBuilder[] sb = new StringBuilder[videogeneros.size()];
-		
-		int i = 0;
-		
-		for(Video v : videogeneros.keySet()) {
-			sb[i] = new StringBuilder();
-			for(Genero g : videogeneros.get(v))
-				sb[i].append("#").append(g.getNombre()).append("\n");
-			i++;
-		}
-		
-		String[] generos = new String[sb.length];
-		for(i = 0; i < sb.length; i++)
-			generos[i] = sb[i].toString();
-		
-		return generos;
-	}*/
-	
 	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, 
 			                       @RequestParam("descripcion") String d, @RequestParam("videogeneros") String[] g) {
 		

@@ -16,12 +16,6 @@ public class Genero {
 	
 	@NotBlank(message = "*Introduzca un nombre de género")
 	private String nombre;
-	
-	/*@ManyToMany(targetEntity = Video.class, cascade = CascadeType.MERGE)
-	@JoinTable(name = "genero_video", 
-			   joinColumns = @JoinColumn(name = "genero_id", referencedColumnName = "id"), 
-			   inverseJoinColumns = @JoinColumn(name = "video_id", referencedColumnName = "id"))
-	private Set<Video> genero_videos;*/
  	
 	public Genero() {
 		super();
@@ -43,12 +37,4 @@ public class Genero {
 	public void setNombre(String nombre) { 
 		this.nombre = nombre;
 	}	
-	
-	/*public void setVideos(Set<Video> videos) {
-		this.videos = videos;
-	}
-	
-	public Set<Video> getVideos() {
-		return videos;
-	}*/
 }

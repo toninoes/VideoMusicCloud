@@ -56,10 +56,6 @@ public class Usuario  {
 			   inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
 	private Set<Rol> roles;
 	
-	//private Set<Video> videos;  ----> podría ser reduntante aunque es verdad que cada usuario tiene sus videos
-	
-	//private Set<Usuario> usuarios; ---> este atributo se parte en dos --> siguiendo y seguidores
-	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "siguiendo", joinColumns = @JoinColumn(name = "siguiendo_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
 	private Set<Usuario> siguiendo;
