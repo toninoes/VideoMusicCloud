@@ -129,7 +129,7 @@ public class UsuarioWebController {
 							   @RequestParam("newpassword") String n, 
 							   @RequestParam("rnewpassword") String r, 
 			                    RedirectAttributes ra) {
-		ra.addAttribute("id", usuarioService.cambiarClave(o, n, r, n.length()));
+		ra.addAttribute("id", usuarioService.cambiarClave(o, n, r));
 		return "redirect:/usuarios/{id}";
 	}
 	

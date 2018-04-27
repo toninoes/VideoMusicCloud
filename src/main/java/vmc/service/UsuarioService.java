@@ -151,14 +151,13 @@ public class UsuarioService {
 	
 	public long cambiarClave(@RequestParam("oldpassword") String o,
 							 @RequestParam("newpassword") String n,
-			  				 @RequestParam("rnewpassword") String r,
-			  				 int passwordlength) {
+			  				 @RequestParam("rnewpassword") String r) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = findByMail(auth.getName());
 		BCryptPasswordEncoder old = bCryptPasswordEncoder;
 		
-		if(old.matches(o, usuario.getPassword()) && n.equals(r) && passwordlength >= 6) {
+		if(old.matches(o, usuario.getPassword()) && n.equals(r) && n.length() >= 6) {
 			BCryptPasswordEncoder nueva = bCryptPasswordEncoder;
 			usuario.setPassword(nueva.encode(n));
 			usuarioRepository.save(usuario);
