@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:include="bootstrap :: head">
+	<meta charset="utf-8" />
+	<title>Subida de vídeos</title>
+</head>
+<body>
+	<!-- THE LOADER -->			
+	<div th:include="spinner :: body"></div>
+	<!-- THE HEADER -->
+	<header>
+		<div th:class="@{container-fluid custom-container}">
+			<div th:class="@{row no_row row-header}">
+				<!-- THE LOGO -->
+				<div th:include="logo :: body"></div>
+				<div th:class="header-menu-block">
+					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
+					<ul th:class="header-menu" id="one">
+						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
+						<li><a th:href="@{/videos}">Listas</a></li>
+						<li><a th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">Perfil</a></li>
+						<li th:class="active-header"><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
+						<li><a th:href="@{#}">Suscripción</a></li>
+					</ul>
+				</div>
+				<!-- THE HELLO USER -->
+				<div th:include="hellouser :: body"></div>
+			</div>
+		</div>
+	</header>
+	<!-- MAIN CONTENT -->
+	<div th:id="@{content-block}">
+		<div th:class="@{container be-detail-container}">
+			<div th:class="@{row}">
+				<div th:class="@{col-xs-12 col-md-4 left-feild}">
+					<div th:class="@{be-user-block style-3}">
+						<div th:class="@{be-user-detail}">
+							<form method="POST" enctype="multipart/form-data" action="/videos" th:class="@{custom-margin custom-font}" id="subidavideos">
+								<div th:class="@{custom-font}">
+					    			<div th:class="@{subscribe-form}">
+					    				<label th:class="@{btn btn-share color-4 size-2 hover-1}">
+					    					<i th:class="@{fa fa-folder}"></i>Seleccionar vídeo
+											<input type="file" name="video" id="video" hidden="hidden">
+						    			</label>
+						    		</div>
+						    		<div th:class="@{subscribe-form}">
+				    					<input type="text" name="titulo" id="titulo" placeholder="Título del video" required th:class="@{form-control input-sm}" maxlength="250">
+					    			</div>
+					    			<div th:class="@{subscribe-form}">
+				    					<textarea name="descripcion" id="descripcion" placeholder="Descripción del video" th:text="@{''}" th:class="@{form-control input-sm}" maxlength="250">
+				    					</textarea>
+					    			</div>
+					    			<div th:class="@{subscribe-form}">
+				    					<label for="generos">
+				    						<i th:class="@{fa fa-music}"></i>
+				    						<select name="videogeneros" id="videogeneros" th:class="@{form-control input-sm}" multiple required>
+				    							<option th:class="@{input-sm}" th:each="genero : ${generos}" th:value="${genero.nombre}" th:text="${genero.nombre}">
+				    							</option>
+				    						</select>
+				    					</label>
+					    			</div>
+					    			<div th:class="@{subscribe-form}">
+						    			<label th:class="@{btn btn-share color-1 size-2 hover-1}">
+						    				<i th:class="@{fa fa-upload}"></i>Subir Video
+						    				<input type="submit" value="subirvideo" name="subirvideo" id="subirvideo" hidden="hidden">
+						    			</label>
+						    		</div>
+						    	</div>
+							</form>
+						</div>
+						<div th:class="be-user-statistic">
+							<div th:class="@{stat-row clearfix}"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- THE FOOTER -->
+	<div th:include="footer :: div"></div>
+</body>
+</html>

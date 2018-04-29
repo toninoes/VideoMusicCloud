@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:include="bootstrap :: head">
+	<meta charset="utf-8" />
+	<title>Perfil</title>
+</head>
+<body>		
+	<!-- THE LOADER -->	
+	<div th:include="spinner :: body"></div>
+	<!-- THE HEADER -->
+	<header>
+		<div th:class="@{container-fluid custom-container}">
+			<div th:class="@{row no_row row-header}">
+				<!-- THE LOGO -->
+				<div th:include="logo :: body"></div>
+				<div th:class="header-menu-block">
+					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
+					<ul th:class="header-menu" id="one">
+						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
+						<li><a th:href="@{/videos}">Listas</a></li>
+						<li th:class="active-header"><a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${logueado.id}}">Perfil</a></li>
+						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
+						<li><a th:href="@{#}">Suscripción</a></li>
+					</ul>
+				</div>
+				<!-- THE HELLO USER -->
+				<div th:class="@{login-header-block}">
+					<div th:class="@{login-block be-drop-down login-user-down}">
+						<div th:switch="${logueado.foto}" th:class="@{login-user}">
+							<img th:case="''" th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
+							<img th:case="*" th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${logueado.foto}}">
+							<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
+						</div>
+						<div th:each="rol : ${logueado.Roles}">
+							<div th:if="${rol.rol} == 'ADMIN'">	
+								<span th:class="drop-down-list">
+									<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
+									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
+								</span>
+							</div>
+							<div th:if="${rol.rol} != 'ADMIN'">	
+								<span th:class="drop-down-list">
+									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- MAIN CONTENT -->
+	<div th:id="@{content-block}">
+		<div th:class="@{container be-detail-container}">
+			<div th:class="@{row}">
+				<div th:class="@{col-xs-12 col-md-4 left-feild}">
+					<div th:class="@{be-user-block style-3}">
+						<div th:class="@{be-user-detail}">
+							<a th:href="@{#}" th:class="@{be-ava-user style-2}" th:switch="${usuario.foto}">
+								<img th:case="''" th:src="@{/img/ava_10.jpg}" alt="">
+								<img th:case="*" th:src="@{'/usuarios/fotos/' + ${usuario.foto}}" alt="">
+							</a>	
+							<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${usuario.id}}" th:if="${sigue} == 'hidden'">
+								<label th:class="@{be-ava-left btn color-1 size-2 hover-1}">
+									<i th:class="@{fa fa-pencil}"></i>Foto
+									<input type="file" name="foto" id="foto" hidden="hidden">
+								</label>
+								<label th:class="@{be-ava-right btn btn-share color-4 size-2 hover-1}">
+									<i th:class="@{fa fa-save}"></i>Guardar
+		    						<input type="submit" value="subirfoto" name="subirfoto" id="subirfoto" hidden="hidden">
+								</label>
+							</form>
+							<p th:class="be-use-name" th:text="${usuario.nombre}"></p>
+							<div th:if="@{${logueado.id} != ${usuario.id}}" th:switch="${sigue}">
+								<div th:case="seguir">
+									<a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/'+ ${usuario.id} + '/' + ${sigue}}" 
+									   th:class="@{btn btn-share color-4 size-2 hover-1 custom-font}">
+										<i th:class="@{fa fa-share}"></i>Seguir
+									</a>
+								</div>
+								<div th:case="dejar">
+									<a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/'+ ${usuario.id} + '/' + ${sigue}}" 
+									   th:class="@{btn btn-share color-1 size-2 hover-1 custom-font}">
+										<i th:class="@{fa fa-share}"></i>Dejar de Seguir
+									</a>
+								</div>
+								<div th:case="*"></div>
+							</div>
+							<p th:class="be-use-name"></p>
+							<div th:class="be-user-social">							
+								<a th:class="@{social-btn color-1}" th:href="@{'https://es-es.facebook.com'}"><i th:class="@{fa fa-facebook}"></i></a>
+								<a th:class="@{social-btn color-2}" th:href="@{'https://twitter.com'}"><i th:class="@{fa fa-twitter}"></i></a>
+							</div>
+							<div th:class="be-desc-block">
+								<i th:class="@{icon-worldwide}"></i>
+								<i th:class="be-use-name">Intereses</i>
+								<textarea th:class="@{be-desc-author be-desc-text}" th:text="${usuario.intereses}" readonly="readonly">
+								</textarea>				
+							</div>
+							<div th:class="be-user-statistic">
+								<div th:class="@{stat-row clearfix}">
+									<i th:class="@{stat-icon icon-followers-b}">
+									</i>Seguidores<span th:class="stat-counter" th:text="${usuario.SeguidoresSize}"></span>
+								</div>
+								<div th:class="@{stat-row clearfix}">
+									<i th:class="@{stat-icon icon-following-b}">
+									</i>Siguiendo<span th:class="stat-counter" th:text="${usuario.SiguiendoSize}"></span>
+								</div>
+							</div>
+						</div>
+					</div>										
+				</div>
+				<div th:class="@{col-xs-12 col-md-8}">
+                    <div th:class="@{tab-wrapper style-1}">
+                        <div th:class="@{tabs-content clearfix}">
+                            <div th:class="@{tab-info active}"> 
+								<div th:class="@{row}">
+									<div th:class="@{col-ml-12 col-xs-6 col-sm-4}" th:each="videogeneros : ${videosgeneros}">
+										<div th:class="@{be-post style-5}">
+											<div align="center" th:class="@{be-img-block custom-video-perfil}">
+												<video controls>
+													<source th:src="'/videos/' + ${videogeneros.key.nombre}">
+												</video>
+											</div>
+											<div th:class="@{be-rowline}">
+												<ul>
+						    						<li><a th:class="@{list-inline rowline-text}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${videogeneros.key.titulo}" th:text="'#Título'"></a>
+						    							<a th:class="@{list-inline rowline-text pull-right}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${videogeneros.value}" th:text="'#Géneros'"></a></li>
+						    					</ul>
+						    				</div>
+						    				<div th:class="@{be-rowline}">
+						    					<ul>
+													<li><a th:class="@{list-inline rowline-text}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${videogeneros.key.descripcion}" th:text="'#Descripción'"></a></li>
+												</ul>
+											</div>
+											<div th:class="@{be-rowline}">
+												<i th:class="@{fa fa-calendar}">
+													<span th:class="@{custom-td-font}"></span>
+													<span th:class="@{rowline-text}" th:text="${#dates.format(videogeneros.key.creacion, 'dd-MM-yyyy HH:mm')}"></span>
+												</i>
+											</div>
+											<div th:class="@{author-post}">
+												<div th:switch="${videogeneros.key.usuario.foto}">
+													<a th:case="''" th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${videogeneros.key.usuario.id}}">
+														<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
+														<span>by <i th:text="${videogeneros.key.usuario.nombre}"></i></span>
+													</a>
+													<a th:case="*" th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${videogeneros.key.usuario.id}}">
+														<img th:src="@{'/usuarios/fotos/' + ${videogeneros.key.usuario.foto}}" alt="author" th:class="@{ava-author}">
+														<span>by <i th:text="${videogeneros.key.usuario.nombre}"></i></span>
+													</a>
+													<span th:class="@{pull-right}">
+														<i th:class="@{stat-icon icon-like-b}"></i>&nbsp;<span th:text="${videogeneros.key.likes}"></span> 
+														<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<span th:text="${videogeneros.key.visualizaciones}"></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+	                            </div>                         
+	                        </div>
+	                    </div> 				
+					</div>				
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- THE FOOTER -->
+	<div th:include="footer :: div"></div>
+</body>
+</html>

@@ -105,7 +105,9 @@ public class VideoService {
 				f.getContentType().equals("video/x-msvideo")||	// .avi	AVI: Audio Video Interleave
 				f.getContentType().equals("video/mpeg")		||	// .mpeg	MPEG Video
 				f.getContentType().equals("video/3gpp")		||	// .3gp	3GPP audio/video container
-				f.getContentType().equals("video/3gpp2")		// .3g2	3GPP2 audio/video container
+				f.getContentType().equals("video/3gpp2")	||	// .3g2	3GPP2 audio/video container
+				f.getContentType().equals("video/x-ms-wmv") ||
+				f.getContentType().equals("video/x-msvideo")
 				);		
 	}
 

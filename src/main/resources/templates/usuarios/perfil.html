@@ -13,6 +13,14 @@
 			<div th:class="@{row no_row row-header}">
 				<!-- THE LOGO -->
 				<div th:include="logo :: body"></div>
+				<!-- THE SEARCH -->
+				<div th:class="@{login-header-block col-md-2 left-feild pull-left}">
+					<form th:class="@{input-search}">
+						<input type="text" required placeholder="Buscar...">
+       					<i class="fa fa-search"></i>
+      					<input type="submit" value="">
+					</form>
+				</div>			
 				<div th:class="header-menu-block">
 					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
 					<ul th:class="header-menu" id="one">

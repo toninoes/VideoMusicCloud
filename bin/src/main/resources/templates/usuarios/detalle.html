@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:include="bootstrap :: head">
+	<meta charset="utf-8" />
+	<title th:text="'Detalles ' + ${usuario.nombre} + ' ' + ${usuario.apellidos}"></title>
+</head>
+<body>
+	<!-- THE LOADER -->
+	<div th:include="spinner :: body"></div>
+	<!-- THE HEADER -->
+	<header>
+		<div th:class="@{container-fluid custom-container}">
+			<div th:class="@{row no_row row-header}">
+				<!-- THE LOGO -->
+				<div th:include="logo :: body"></div>
+				<div th:class="header-menu-block">
+					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
+					<ul th:class="header-menu" id="one">
+						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
+						<li><a th:href="@{/videos}">Listas</a></li>
+						<li><a th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">Perfil</a></li>
+						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
+						<li><a th:href="@{#}">Suscripción</a></li>
+					</ul>
+				</div>
+				<!-- THE HELLO USER -->
+				<div th:include="hellouser :: body"></div>
+			</div>
+		</div>
+	</header>
+	<!-- MAIN CONTENT -->
+	<div th:id="@{content-block}">
+		<div th:class="@{container be-detail-container}">
+			<div th:class="@{col-xs-12 col-md-12 _editor-content_}">
+				<div th:class="@{affix-block}" th:id="@{basic-information}">
+					<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/detalle/' + ${usuario.id}}">
+					<div th:class="@{be-large-post}">
+						<div th:class="@{info-block style-2}">
+							<div th:class="@{be-large-post-align}">
+								<h3 th:class="@{info-block-label}">Editar Perfil</h3>
+							</div>
+						</div>
+						<div th:class="@{be-large-post-align}">
+							<div th:class="@{be-change-ava}">
+								<input type="submit" th:href="@{'/usuarios/detalle/' + ${usuario.id}}" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Guardar Cambios'}">
+								<div th:switch="${usuario.foto}">
+									<div th:case="''">
+										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
+											<img th:src="@{'/img/ava_10.jpg'}" th:alt="@{''}"> 
+										</a>
+										<label th:class="@{btn color-1 size-2 hover-7}" for="foto">
+											<i th:class="@{fa fa-pencil}"></i>Foto
+											<input type="file" name="foto" id="foto" hidden="hidden">
+										</label>
+									</div>
+									<div th:case="*">
+										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
+											<img th:src="@{'/usuarios/fotos/' + ${usuario.foto}}" th:alt="@{''}">
+										</a>
+										<label th:class="@{btn color-4 size-2 hover-7}" for="quitarFoto">
+											<i th:class="@{fa fa-pencil}"></i>Quitar Foto
+											<input type="checkbox" th:class="@{btn color-4 size-2 hover-7}" name="quitarFoto" id="quitarFoto">
+											<input type="file" name="foto" id="foto" hidden="hidden">
+										</label> 
+									</div>
+								</div>
+							</div>
+						</div>
+						<div th:class="@{be-large-post-align}">
+							<div th:class="@{row}">
+								<div th:class="@{input-col col-xs-12 col-sm-12 custom-margin-head}">
+									<div th:class="@{form-group focus-2}">
+										<div th:class="@{form-label}">Nombre</div>
+										<input th:class="@{form-input}" type="text" name="nombre" id="nombre" th:value="${usuario.nombre}">
+									</div>							
+								</div>
+								<div th:class="@{input-col col-xs-12 col-sm-12}">
+									<div th:class="@{form-group focus-2}">
+										<div th:class="@{form-label}">Apellidos</div>									
+										<input th:class="@{form-input}" type="text" name="apellidos" id="apellidos" th:value="${usuario.apellidos}">
+									</div>								
+								</div>
+								<!--<div th:class="@{input-col col-xs-12 col-sm-12}">
+									<div th:class="@{form-group focus-2}">
+										<div th:class="@{form-label}">Email</div>									
+										<input th:class="@{form-input}" type="text" name="mail" id="mail" th:value="${usuario.mail}">
+									</div>								
+								</div>-->
+								<div th:class="@{input-col col-xs-12 col-sm-12}">
+									<div th:class="@{form-group focus-2}">
+										<div th:class="@{form-label}">Intereses</div>									
+										<textarea maxlength="255" th:class="@{form-input}" name="intereses" id="intereses" th:placeholder="@{''}" th:text="${usuario.intereses}">
+										</textarea>
+									</div>								
+								</div>								
+							</div>
+						</div>
+					</div>
+					</form>
+				</div>
+				<div th:class="@{affix-block}" th:id="@{edit-password}">
+					<div th:class="@{be-large-post}">
+						<div th:class="@{info-block style-2}">
+							<div th:class="@{be-large-post-align}">
+								<h3 th:class="@{info-block-label}">Clave</h3>
+							</div>
+						</div>
+						<div th:class="@{be-large-post-align}">
+							<div th:class="@{row}">
+								<form method="POST" th:action="@{'/usuarios/detalle'}">
+									<div th:class="@{input-col col-xs-12 col-sm-4}">
+										<div th:class="@{form-group focus-2}">
+											<div th:class="@{form-label}">Antigua Clave</div>									
+											<input th:class="@{form-input}" name="oldpassword" id="oldpassword" type="password" th:placeholder="@{''}" required maxlength="50">
+										</div>								
+									</div>
+									<div th:class="@{input-col col-xs-12 col-sm-4}">
+										<div th:class="@{form-group focus-2}">
+											<div th:class="@{form-label}">Nueva Clave</div>									
+											<input th:class="@{form-input}" type="password" name="newpassword" id="newpassword" th:placeholder="@{''}" required maxlength="50">
+										</div>								
+									</div>
+									<div th:class="@{input-col col-xs-12 col-sm-4}">
+										<div th:class="@{form-group focus-2}">
+											<div th:class="@{form-label}">Repetir Clave</div>									
+											<input th:class="@{form-input}" type="password" name="rnewpassword" id="rnewpassword" th:placeholder="@{''}" required maxlength="50">
+										</div>								
+									</div>
+									<div th:class="@{input-col col-xs-12 col-sm-12}">
+										<input type="submit" th:class="@{btn color-1 size-2 hover-1 btn-right}" th:value="@{Cambiar Clave}">
+									</div>
+								</form>																
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- THE FOOTER -->
+	<div th:include="footer :: div"></div>
+</body>
+</html>
