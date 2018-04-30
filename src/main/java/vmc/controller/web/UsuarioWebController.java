@@ -161,7 +161,7 @@ public class UsuarioWebController {
 		
 		if(appService.checkFilePhotoSize(f)) {	
 			usuarioService.subir(f);
-			ra.addFlashAttribute("mensaje", "Foto " + f.getOriginalFilename() + " subida correctamente.");
+			ra.addFlashAttribute("mensajeSubir", "Foto " + f.getOriginalFilename() + " subida correctamente.");
 		} else
     		ra.addFlashAttribute("mensaje", "Error, la foto ocupa más de 22 megas");
 

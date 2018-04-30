@@ -77,6 +77,10 @@
 									<i th:class="@{fa fa-save}"></i>Guardar
 		    						<input type="submit" value="subirfoto" name="subirfoto" id="subirfoto" hidden="hidden">
 								</label>
+								<div th:if="${usuario.foto} != ''">
+									<div th:text="${mensajeSubir}"></div>
+									<div th:text="${mensaje}"></div>
+								</div>
 							</form>
 							<p th:class="be-use-name" th:text="${usuario.nombre}"></p>
 							<div th:if="@{${logueado.id} != ${usuario.id}}" th:switch="${sigue}">
