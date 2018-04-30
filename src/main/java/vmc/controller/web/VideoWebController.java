@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import vmc.model.Usuario;
 import vmc.model.Video;
+import vmc.service.ApplicationService;
 import vmc.service.GeneroService;
 import vmc.service.UsuarioService;
 import vmc.service.VideoService;
@@ -36,6 +37,9 @@ public class VideoWebController {
 	
 	@Autowired
 	private GeneroService generoService;
+	
+	@Autowired
+	private ApplicationService appService;
     
     @GetMapping
     public String listarTodosVideos(Model model) {
@@ -44,7 +48,6 @@ public class VideoWebController {
 		List<Video> videos = videoService.findAll();
 		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
-		//model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
 		
         return "videos/listado";
     }
@@ -56,7 +59,6 @@ public class VideoWebController {
 		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
 		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
-		//model.addAttribute("videosgeneros", videoService.findVideoGeneros(videos));
 		
 		return "videos/listadoPorUsuario";
 	}
@@ -70,19 +72,16 @@ public class VideoWebController {
     @PostMapping
     public String subirVideo(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, 
     						 @RequestParam("descripcion") String d, @RequestParam("videogeneros") String[] g,
-    		                 RedirectAttributes ra) {
-    
-    	if(v.getSize() < 32000000) {
+    						 RedirectAttributes ra) {
+   
+    	if(appService.checkFileVideoSize(v)) {	
     		videoService.subir(t, v, d, g);
         	ra.addFlashAttribute("mensaje", "Video " + v.getOriginalFilename() + " subido correctamente.");
         	return "redirect:/videos";
-    	}else {
-    		ra.addFlashAttribute("mensaje", "Error, es mu grande carajote");
+    	} else {
+    		ra.addFlashAttribute("mensaje", "Error, el fichero ocupa más de 32 megas");
     		return "redirect:/videos/subidaVideos";
     	}
-    		
-
-        
     }
     
     @GetMapping("/subidaVideos")
@@ -93,5 +92,4 @@ public class VideoWebController {
 		model.addAttribute("generos", generoService.findAll());
     	return "videos/subidaVideos";
     }
-    
 }

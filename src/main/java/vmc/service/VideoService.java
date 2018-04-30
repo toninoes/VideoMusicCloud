@@ -69,7 +69,7 @@ public class VideoService {
 	
 	public ResponseEntity<?> subir(@RequestParam("titulo") String t, @RequestParam("video") MultipartFile v, 
 			                       @RequestParam("descripcion") String d, @RequestParam("videogeneros") String[] g) {
-		
+	
     	if(esUnVideo(v)) {
     		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     		Usuario usuario = usuarioService.findByMail(auth.getName());
@@ -87,9 +87,8 @@ public class VideoService {
         	almacenamientoService.store(v, "video");
         	
         	return new ResponseEntity<Video>(video, HttpStatus.CREATED);
-    	}else {
-    		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-    	}        
+    	}else
+    		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);    
     }
 	
 	@ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)

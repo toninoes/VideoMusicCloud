@@ -52,6 +52,7 @@
 											<i th:class="@{fa fa-pencil}"></i>Foto
 											<input type="file" name="foto" id="foto" hidden="hidden">
 										</label>
+										<div th:text="${mensajeEliminar}"></div>
 									</div>
 									<div th:case="*">
 										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
@@ -61,7 +62,8 @@
 											<i th:class="@{fa fa-pencil}"></i>Quitar Foto
 											<input type="checkbox" th:class="@{btn color-4 size-2 hover-7}" name="quitarFoto" id="quitarFoto">
 											<input type="file" name="foto" id="foto" hidden="hidden">
-										</label> 
+										</label>
+										<div th:text="${mensajeSubir}"></div> 
 									</div>
 								</div>
 							</div>

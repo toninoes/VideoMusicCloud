@@ -1,4 +1,5 @@
 package vmc.controller.web;
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import vmc.model.Usuario;
 import vmc.model.Video;
+import vmc.service.ApplicationService;
 import vmc.service.UsuarioService;
 import vmc.service.VideoService;
 
@@ -36,6 +38,9 @@ public class UsuarioWebController {
 	
 	@Autowired
 	private VideoService videoService;
+	
+	@Autowired
+	private ApplicationService appService;
 	
 	@GetMapping
 	public String findAll(Model model) {
@@ -137,18 +142,28 @@ public class UsuarioWebController {
 														@RequestParam(required = false) boolean quitarFoto,
 														@RequestParam("nombre") String nombre,
 														@RequestParam("apellidos") String apellidos,
-														@RequestParam("intereses") String intereses) {
+														@RequestParam("intereses") String intereses,
+														RedirectAttributes ra) {
 		
-		usuarioService.subir(f);
-		usuarioService.update(id, quitarFoto, nombre, apellidos, intereses);
-		
-		return "redirect:/usuarios/{id}";
+		if(appService.checkFilePhotoSize(f)) {	
+    		usuarioService.subir(f);
+    		usuarioService.update(id, quitarFoto, nombre, apellidos, intereses);
+    		ra.addFlashAttribute("mensajeSubir", "Foto " + f.getOriginalFilename() + " subida correctamente.");
+        	ra.addFlashAttribute("mensajeEliminar", "Foto " + f.getOriginalFilename() + " eliminada correctamente.");
+    	} else
+    		ra.addFlashAttribute("mensaje", "Error, la foto ocupa más de 22 megas");
+    		
+    	return "redirect:/usuarios/{id}";
 	}
 	
 	@PostMapping("/perfil/{logueadoId}/{pinchadoId}")
     public String subirFoto(@RequestParam("foto") MultipartFile f, RedirectAttributes ra) {
-		usuarioService.subir(f);
-        ra.addFlashAttribute("mensaje", "Foto " + f.getOriginalFilename() + " subida correctamente.");
+		
+		if(appService.checkFilePhotoSize(f)) {	
+			usuarioService.subir(f);
+			ra.addFlashAttribute("mensaje", "Foto " + f.getOriginalFilename() + " subida correctamente.");
+		} else
+    		ra.addFlashAttribute("mensaje", "Error, la foto ocupa más de 22 megas");
 
         return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}";
     }
