@@ -16,7 +16,7 @@ public class Genero {
 	
 	@NotBlank(message = "*Introduzca un nombre de género")
 	private String nombre;
- 	
+
 	public Genero() {
 		super();
 	}
@@ -36,5 +36,5 @@ public class Genero {
 	
 	public void setNombre(String nombre) { 
 		this.nombre = nombre;
-	}	
+	}
 }

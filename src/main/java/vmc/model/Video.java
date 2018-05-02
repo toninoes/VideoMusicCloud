@@ -40,9 +40,8 @@ public class Video {
 	@JoinColumn(name="usuario_id", nullable = false)
 	private Usuario usuario;
 	
-	@ManyToMany(targetEntity = Genero.class, cascade = CascadeType.ALL)
-	@JoinTable(name = "video_genero", 
-			   joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "id"), 
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name="video_genero", joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "id"), 
 			   inverseJoinColumns = @JoinColumn(name = "genero_id", referencedColumnName = "id"))
 	private Set<Genero> videogeneros;
 	
@@ -105,7 +104,7 @@ public class Video {
 	public Set<Genero> getVideoGeneros() {
 		return videogeneros;
 	}
-
+	
 	public long getId() {
 		return id;
 	}

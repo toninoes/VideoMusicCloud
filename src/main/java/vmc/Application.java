@@ -56,7 +56,7 @@ public class Application extends SpringBootServletInitializer {
 			}
 			
 			if(genRep.findAll().isEmpty()) {
-				genRep.save(new Genero("rock "));			genRep.save(new Genero("blues"));
+				genRep.save(new Genero("rock"));			genRep.save(new Genero("blues"));
 				genRep.save(new Genero("ambiente"));		genRep.save(new Genero("regueton"));
 				genRep.save(new Genero("clasica"));			genRep.save(new Genero("techno"));
 				genRep.save(new Genero("country"));			genRep.save(new Genero("trap"));

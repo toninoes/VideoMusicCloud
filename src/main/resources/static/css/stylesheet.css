@@ -56,11 +56,15 @@ td {
 }
 
 .color-white {
-	color: white;	
+	color: white !important;	
 }
 
 .custom-textarea {
 	font-size: 10px !important;
+}
+
+.custom-right {
+	margin-right: 10px;
 }
 
 .background-custom {
@@ -122,27 +126,30 @@ td {
 	height: 32px !important;
 }
 
-/*.search-criteria {
-	margin-top: 65px;
-	margin-left: -15px;
-	padding: 0;
-	display: block;
-	position: absolute !important;
-	max-width: 1800px;
-	width: 100%;
-	background-color: #222835 !important;
-	z-index: 1001 !important;
-}*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-header.search-criteria {
-	height: 70px !important;
-	-webkit-transition: height 1s !important; /* For Safari 3.1 to 6.0 */
-    transition: height 1s !important;
+.dropdown2 {
+    position: relative !important;
+    display: inline-block !important;
 }
 
-header.search-criteria:hover {
-	height: 110px !important;
+.dropdown-content2 {
+    display: none !important;
+    position: absolute !important;
+    background-color: #222835 !important;
+    left: -151px !important;
+    width: 1519px !important;
+    height: 50px !important;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2) !important;
+    padding: 12px 16px !important;
+    z-index: 1 !important;
 }
+
+.dropdown2:hover .dropdown-content2 {
+    display: block !important;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .custom-video {
 	max-width: auto;

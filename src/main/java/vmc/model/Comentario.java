@@ -76,8 +76,12 @@ public class Comentario {
 	public void setGusta(boolean gusta) {
 		this.gusta = gusta;
 	}
-
 	
-
+	public Video getVideo() {
+		return video;
+	}
 	
+	public void setVideo(Video video) {
+		this.video = video;
+	}
 }

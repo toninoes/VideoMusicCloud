@@ -1,8 +1,11 @@
 package vmc.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -20,9 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import vmc.exception.AlmacenamientoFicheroNoEncontradoException;
 import vmc.exception.RecursoNoEncontradoException;
+import vmc.model.Comentario;
 import vmc.model.Genero;
 import vmc.model.Usuario;
 import vmc.model.Video;
+import vmc.repository.GeneroRepository;
 import vmc.repository.UsuarioRepository;
 import vmc.repository.VideoRepository;
 
@@ -33,16 +38,22 @@ public class VideoService {
 	private AlmacenamientoService almacenamientoService;
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UsuarioService usuarioService;
 	
 	@Autowired
-	private UsuarioService usuarioService;
+	private GeneroService generoService;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 	
 	@Autowired
 	private VideoRepository videoRepository;
 	
 	@Autowired
-	private GeneroService generoService;
+	private GeneroRepository generoRepository;
+	
+	@Autowired
+	private EntityManager em;
 	
 	public List<Video> findAll() {   	
 		return videoRepository.findAll();
@@ -53,6 +64,60 @@ public class VideoService {
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
 		
 		return videoRepository.findByUsuario(usuario);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Video> findSearch(boolean nuevos, boolean visitas, boolean gustas, boolean titulo, 
+			                      boolean descripcion, boolean genero, boolean comentario, String busqueda) {
+		
+		Comentario c = new Comentario();
+		c.setDescripcion(busqueda);
+		
+		StringBuilder query = new StringBuilder("SELECT v FROM Video v ");	
+		String str = new String("");
+		
+		if(titulo && descripcion)
+			str = "AND ";
+		
+		if(titulo)
+			query.append("WHERE v.titulo LIKE '%" + busqueda + "%' ").append(str);
+		if(descripcion)
+			query.append("WHERE v.descripcion LIKE '%" + busqueda + "%' ");
+		
+		if(nuevos && visitas && gustas)
+			query.append("ORDER BY v.creacion DESC, v.visualizaciones DESC, v.likes DESC");
+		else if(nuevos && visitas)
+			query.append("ORDER BY v.creacion DESC, v.visualizaciones DESC");
+		else if(nuevos && gustas)
+			query.append("ORDER BY v.creacion DESC, v.likes DESC");
+		else if(visitas && gustas)
+			query.append("ORDER BY v.visualizaciones DESC, v.likes DESC");
+		else if(nuevos)
+			query.append("ORDER BY v.creacion DESC");
+		else if(visitas)
+			query.append("ORDER BY v.visualizaciones DESC");
+		else if(gustas)
+			query.append("ORDER BY v.likes DESC");
+		
+		if(comentario)
+			return videoRepository.findVideoByComentario(c.getVideo());
+		if(genero) {
+			List<Video> videos1 = videoRepository.findAll();
+			List<Video> videos2 = new ArrayList<Video>();
+			Set<Genero> gen;
+			boolean sw;
+			for(Video v : videos1) {
+				gen = generoRepository.findGenerosByVideo(v);
+				sw = false;
+				for(Genero g: gen)
+					if(g.getNombre().contains(busqueda) && !sw) {
+						videos2.add(v);
+						sw = true;
+					}
+			}
+			return videos2;
+		} else
+			return (List<Video>) em.createQuery(query.toString()).getResultList();
 	}
 	
 	@ResponseBody

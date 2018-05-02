@@ -57,7 +57,8 @@ public class VideoWebController {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
-		model.addAttribute("videos", videos);
+		if(videos != null)
+			model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
 		
 		return "videos/listadoPorUsuario";
@@ -67,6 +68,15 @@ public class VideoWebController {
     @ResponseBody
     public ResponseEntity<Resource> servirVideo(@PathVariable String nombrevideo) {
     	return videoService.descargar(nombrevideo);
+    }
+    
+    @GetMapping("/subidaVideos")
+    public String subidaVideos(Model model) {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("generos", generoService.findAll());
+    	return "videos/subidaVideos";
     }
     
     @PostMapping
@@ -84,12 +94,22 @@ public class VideoWebController {
     	}
     }
     
-    @GetMapping("/subidaVideos")
-    public String subidaVideos(Model model) {
+    @PostMapping("/listado")
+    public String buscarVideo(Model model, @RequestParam(value = "Novedades", required = false) boolean nuevos,
+    									   @RequestParam(value = "Visualizaciones", required = false) boolean visitas,
+    									   @RequestParam(value = "Likes", required = false) boolean gustas,
+    									   @RequestParam(value = "Titulo", required = false) boolean titulo,
+    									   @RequestParam(value = "Descripcion", required = false) boolean descripcion,
+    									   @RequestParam(value = "Genero", required = false) boolean genero,
+    									   @RequestParam(value = "Comentario", required = false) boolean comentario,
+    									   @RequestParam(value = "Busqueda", required = false) String busqueda) {
+    	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
+		List<Video> videos = videoService.findSearch(nuevos, visitas, gustas, titulo, descripcion, genero, comentario, busqueda);
+		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
-		model.addAttribute("generos", generoService.findAll());
-    	return "videos/subidaVideos";
+		
+    	return "videos/listado";
     }
 }
