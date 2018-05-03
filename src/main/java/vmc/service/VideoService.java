@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import vmc.exception.AlmacenamientoFicheroNoEncontradoException;
 import vmc.exception.RecursoNoEncontradoException;
-import vmc.model.Comentario;
 import vmc.model.Genero;
 import vmc.model.Usuario;
 import vmc.model.Video;
@@ -52,9 +49,6 @@ public class VideoService {
 	@Autowired
 	private GeneroRepository generoRepository;
 	
-	@Autowired
-	private EntityManager em;
-	
 	public List<Video> findAll() {   	
 		return videoRepository.findAll();
     }
@@ -66,58 +60,64 @@ public class VideoService {
 		return videoRepository.findByUsuario(usuario);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Video> findSearch(boolean nuevos, boolean visitas, boolean gustas, boolean titulo, 
-			                      boolean descripcion, boolean genero, boolean comentario, String busqueda) {
+	public List<Video> findSearch(List<Video> videosAll, boolean visitas, boolean gustas, boolean titulo, 
+			                      boolean descripcion, boolean genero, boolean user, String busqueda) {
 		
-		Comentario c = new Comentario();
-		c.setDescripcion(busqueda);
+		List<Video> videos = null;
+		String option = "", caso = "", ejecutar = "No";
 		
-		StringBuilder query = new StringBuilder("SELECT v FROM Video v ");	
-		String str = new String("");
+		int vi = 0, gu = 0, ti = 0, de = 0, ge = 0;
 		
-		if(titulo && descripcion)
-			str = "AND ";
+		if(visitas) vi = 16; 
+		if(gustas) gu = 8; 
+		if(titulo) ti = 4; 
+		if(descripcion) de = 2; 
+		if(genero) ge = 1;
 		
-		if(titulo)
-			query.append("WHERE v.titulo LIKE '%" + busqueda + "%' ").append(str);
-		if(descripcion)
-			query.append("WHERE v.descripcion LIKE '%" + busqueda + "%' ");
+		int codigo = vi + gu + ti + de + ge;
 		
-		if(nuevos && visitas && gustas)
-			query.append("ORDER BY v.creacion DESC, v.visualizaciones DESC, v.likes DESC");
-		else if(nuevos && visitas)
-			query.append("ORDER BY v.creacion DESC, v.visualizaciones DESC");
-		else if(nuevos && gustas)
-			query.append("ORDER BY v.creacion DESC, v.likes DESC");
-		else if(visitas && gustas)
-			query.append("ORDER BY v.visualizaciones DESC, v.likes DESC");
-		else if(nuevos)
-			query.append("ORDER BY v.creacion DESC");
-		else if(visitas)
-			query.append("ORDER BY v.visualizaciones DESC");
-		else if(gustas)
-			query.append("ORDER BY v.likes DESC");
+		switch(codigo) {	
+			case 0: videos = videoRepository.findAll(); break; // [nuevos] y todos
+			case 1: ejecutar = "Si"; break; //[nuevos] y genero			
+			case 2: videos = videoRepository.findByDescripcion(busqueda.toLowerCase()); break; //[nuevos] y descripcion				
+			case 3: option = "Descripcion"; break; //[nuevos], descripcion y genero			
+			case 4: videos = videoRepository.findByTitulo(busqueda.toLowerCase()); break; //[nuevos] y titulo			
+			case 5: option = "Titulo"; break; //[nuevos], titulo y genero			
+			case 6: videos = videoRepository.findByTituloDescripcion(busqueda.toLowerCase()); break; //[nuevos], titulo y descripcion			
+			case 7: option = "TituloDescripcion"; break; //[nuevos], titulo, descripcion y genero			
+			case 8: videos = videoRepository.findByLikes(); break; //[nuevos] y gustas			
+			case 9: ejecutar = caso = "Likes"; break; //[nuevos], gustas y genero			
+			case 10: videos = videoRepository.findByLikesDescripcion(busqueda.toLowerCase()); break; //[nuevos], gustas y descripcion			
+			case 11: ejecutar = caso = "Likes"; option = "Descripcion"; break; //[nuevos], gustas, descripcion y genero			
+			case 12: videos = videoRepository.findByLikesTitulo(busqueda.toLowerCase()); break; //[nuevos], gustas y titulo			
+			case 13: ejecutar = caso = "Likes"; option = "Titulo"; break; //[nuevos], gustas, titulo y genero			
+			case 14: videos = videoRepository.findByLikesTituloDescripcion(busqueda.toLowerCase()); break; //[nuevos], gustas, titulo y descripcion			
+			case 15: ejecutar = caso = "Likes"; option = "TituloDescripcion"; break; //[nuevos], gustas, titulo, descripcion y genero			
+			case 16: videos = videoRepository.findByVisualizaciones(); break; //[nuevos] y visitas			
+			case 17: ejecutar = caso = "Visitas"; break; //[nuevos], visitas y genero			
+			case 18: videos = videoRepository.findByVisualizacionesDescripcion(busqueda.toLowerCase()); break; //[nuevos], visitas y descripcion			
+			case 19: ejecutar = caso = "Visitas"; option = "Descripcion"; break; //[nuevos], visitas, descripcion y genero			
+			case 20: videos = videoRepository.findByVisualizacionesTitulo(busqueda.toLowerCase()); break; //[nuevos], visitas y titulo			
+			case 21: ejecutar = caso = "Visitas"; option = "Titulo"; break; //[nuevos], visitas, titulo y genero			
+			case 22: videos = videoRepository.findByVisualizacionesTituloDescripcion(busqueda.toLowerCase()); break; //[nuevos], visitas, titulo y descripcion			
+			case 23: ejecutar = caso = "Visitas"; option = "TituloDescripcion"; break; //[nuevos], visitas, titulo, descripcion y genero			
+			case 24: videos = videoRepository.findByVisualizacionesLikes(); break; //[nuevos], visitas y gustas			
+			case 25: ejecutar = caso = "VisitasLikes"; break; //[nuevos], visitas, gustas y genero			
+			case 26: videos = videoRepository.findByVisualizacionesLikesDescripcion(busqueda.toLowerCase()); break; //[nuevos], visitas, gustas y descripcion			
+			case 27: ejecutar = caso = "VisitasLikes"; option = "Descripcion"; break; //[nuevos], visitas, gustas, descripcion y genero			
+			case 28: videos = videoRepository.findByVisualizacionesLikesTitulo(busqueda.toLowerCase()); break; //[nuevos], visitas, gustas y titulo			
+			case 29: ejecutar = caso = "VisitasLikes"; option = "Titulo"; break; //[nuevos], visitas, gustas, titulo y genero			   			
+			case 30: videos = videoRepository.findByVisualizacionesLikesTituloDescripcion(busqueda.toLowerCase()); break; //[nuevos], visitas, gustas, titulo y descripcion			
+			case 31: ejecutar = caso = "VisitasLikes"; option = "TituloDescripcion"; break; //[nuevos], visitas, gustas, titulo, descripcion y genero
+		}
 		
-		if(comentario)
-			return videoRepository.findVideoByComentario(c.getVideo());
-		if(genero) {
-			List<Video> videos1 = videoRepository.findAll();
-			List<Video> videos2 = new ArrayList<Video>();
-			Set<Genero> gen;
-			boolean sw;
-			for(Video v : videos1) {
-				gen = generoRepository.findGenerosByVideo(v);
-				sw = false;
-				for(Genero g: gen)
-					if(g.getNombre().contains(busqueda) && !sw) {
-						videos2.add(v);
-						sw = true;
-					}
-			}
-			return videos2;
-		} else
-			return (List<Video>) em.createQuery(query.toString()).getResultList();
+		if(!ejecutar.equals("No"))
+			videos = getVideosGeneros(videosAll, busqueda.toLowerCase(), option, caso);
+		
+		if(user)
+			videos = getVideosGeneros(videos, busqueda.toLowerCase());
+		
+		return videos;
 	}
 	
 	@ResponseBody
@@ -174,5 +174,58 @@ public class VideoService {
 				f.getContentType().equals("video/x-msvideo")
 				);		
 	}
-
+	
+	private List<Video> getVideosGeneros(List<Video> videosAll, String busqueda, String option, String caso) {
+	
+		switch(caso) {
+			case "Likes": videosAll = videoRepository.findByLikes(); break;
+			case "Visitas": videosAll = videoRepository.findByVisualizaciones(); break;
+			case "VisitasLikes": videosAll = videoRepository.findByVisualizacionesLikes(); break;
+		}
+		
+		List<Video> videosGeneros = new ArrayList<Video>();
+		Set<Genero> gen;
+		boolean sw;
+		for(Video v : videosAll) {
+			gen = generoRepository.findGenerosByVideo(v);
+			sw = false;
+			for(Genero g: gen) {
+				String lowerNombre = g.getNombre().toLowerCase();
+				switch(option) {
+					case "": if((lowerNombre.contains(busqueda) || busqueda.contains(lowerNombre)) && !sw) {
+								videosGeneros.add(v);
+								sw = true;
+							 } break;
+					case "Descripcion": if((lowerNombre.contains(busqueda) || busqueda.contains(lowerNombre)) && 
+					                       (v.getDescripcion().toLowerCase().contains(busqueda) || 
+					                        busqueda.contains(v.getDescripcion().toLowerCase())) && !sw) {
+											videosGeneros.add(v);
+											sw = true;
+										} break;
+					case "Titulo": if((lowerNombre.contains(busqueda) || busqueda.contains(lowerNombre)) && 
+									  (v.getTitulo().toLowerCase().contains(busqueda) || 
+									   busqueda.contains(v.getTitulo().toLowerCase())) && !sw) {
+											videosGeneros.add(v);
+											sw = true;
+									} break;
+					case "TituloDescripcion": if(((lowerNombre.contains(busqueda) || busqueda.contains(lowerNombre)) && 
+												 (v.getTitulo().toLowerCase().contains(busqueda) || 
+												  busqueda.contains(v.getTitulo().toLowerCase())) ||
+												 (v.getDescripcion().toLowerCase().contains(busqueda) || 
+												  busqueda.contains(v.getDescripcion().toLowerCase()))) && !sw) {
+													videosGeneros.add(v);
+													sw = true;
+											  } break;
+			   }
+			}
+		}	
+		return videosGeneros;
+	}
+	
+	private List<Video> getVideosGeneros(List<Video> videos, String busqueda) {
+		List<Usuario> usuario = usuarioRepository.findByUsuarioSearch(busqueda);
+		videos = videoRepository.findByUsuarioSearch(usuario);
+		return videos;
+	}
+	
 }

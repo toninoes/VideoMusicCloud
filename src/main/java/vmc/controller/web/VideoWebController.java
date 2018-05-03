@@ -95,18 +95,18 @@ public class VideoWebController {
     }
     
     @PostMapping("/listado")
-    public String buscarVideo(Model model, @RequestParam(value = "Novedades", required = false) boolean nuevos,
-    									   @RequestParam(value = "Visualizaciones", required = false) boolean visitas,
+    public String buscarVideo(Model model, @RequestParam(value = "Visualizaciones", required = false) boolean visitas,
     									   @RequestParam(value = "Likes", required = false) boolean gustas,
     									   @RequestParam(value = "Titulo", required = false) boolean titulo,
     									   @RequestParam(value = "Descripcion", required = false) boolean descripcion,
     									   @RequestParam(value = "Genero", required = false) boolean genero,
-    									   @RequestParam(value = "Comentario", required = false) boolean comentario,
+    									   @RequestParam(value = "Usuario", required = false) boolean user,
     									   @RequestParam(value = "Busqueda", required = false) String busqueda) {
     	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
-		List<Video> videos = videoService.findSearch(nuevos, visitas, gustas, titulo, descripcion, genero, comentario, busqueda);
+		List<Video> videosAll = videoService.findAll();
+		List<Video> videos = videoService.findSearch(videosAll, visitas, gustas, titulo, descripcion, genero, user, busqueda);
 		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
 		
