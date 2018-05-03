@@ -14,6 +14,9 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	@Query("SELECT v FROM Video v WHERE v.usuario = :usuario ORDER BY v.creacion DESC")
 	List<Video> findByUsuario(@Param("usuario") Usuario usuario);
 	
+	@Query("SELECT v FROM Video v WHERE 1=0")
+	List<Video> createList();
+	
 	/* Consultas para el buscador */
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////

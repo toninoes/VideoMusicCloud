@@ -17,35 +17,7 @@
 				<div th:include="logo :: body"></div>
 	
 				<!-- THE SEARCH -->
-				<div th:class="@{login-header-block col-md-2 left-feild pull-left}">
-					<form th:class="@{input-search}" method="POST" th:action="@{/videos/listado}">
-						<div th:class="dropdown2">
-							<input th:class="@{input-search}" type="text" placeholder="Buscar..." name="Busqueda" id="Busqueda">
-	       					<i class="fa fa-search"></i>
-	       					<div th:class="@{dropdown-content2}">
-	       						<label th:class="custom-right" for="Novedades"> Los + Nuevos
-	       							<input type="checkbox" th:class="@{color-white}" id="Novedades" name="Novedades">
-	       						</label>
-	       						<label th:class="custom-right" for="Visualizaciones"> Los + Vistos
-	       							<input type="checkbox" th:class="@{color-white}" id="Visualizaciones" name="Visualizaciones">
-	       						</label>
-	       						<label th:class="custom-right" for="Likes"> Los que + Gustan
-	       							<input type="checkbox" th:class="@{color-white}" id="Likes" name="Likes">
-	       						</label>
-	       						<label th:class="custom-right" for="Titulo"> Por Título
-	       							<input type="checkbox" th:class="@{color-white}" id="Titulo" name="Titulo">
-	       						</label>
-	       						<label th:class="custom-right" for="Descripcion"> Por Descripción
-	       							<input type="checkbox" th:class="@{color-white}" id="Descripcion" name="Descripcion">
-	       						</label>
-	       						<label th:class="custom-right" for="Genero"> Por Género
-	       							<input type="checkbox" th:class="@{color-white}" id="Genero" name="Genero">
-	       						</label>
-	       					</div>
-	       				</div>		
-	       				<input type="submit" th:value="''" name="submit" id="submit">
-	       			</form>
-				</div>		
+				<div th:include="buscador :: body"></div>		
 				
 				<!-- THE MENU -->	
 				<div th:class="header-menu-block">
