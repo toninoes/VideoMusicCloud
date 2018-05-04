@@ -57,8 +57,7 @@ public class VideoWebController {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
-		if(videos != null)
-			model.addAttribute("videos", videos);
+		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
 		
 		return "videos/listadoPorUsuario";

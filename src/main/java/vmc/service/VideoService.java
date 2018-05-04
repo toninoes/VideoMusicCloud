@@ -86,8 +86,10 @@ public class VideoService {
 		
 		videos = organizeVideos(videosViGu, videosTiDe, videosGe, videosUs);
 		
-		return videos;
-		
+		if(!(visitas && gustas && titulo && descripcion && genero && user))
+			return videosAll;
+		else
+			return videos;
 	}
 	
 	@ResponseBody
