@@ -1,6 +1,8 @@
 package vmc.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,13 +66,17 @@ public class VideoService {
 			                      boolean descripcion, boolean genero, boolean user, String busqueda) {
 		
 		List<Video> videos = null, videosViGu = null, videosTiDe = null, videosGe = null, videosUs = null;
+		String ordenacion = "visitas";
 		
 		if(visitas && gustas)
 			videosViGu = videoRepository.findByVisualizacionesLikes();
 		else if(visitas)
 			videosViGu = videoRepository.findByVisualizaciones();
-		else if(gustas)
+		else if(gustas) {
 			videosViGu = videoRepository.findByLikes();
+			ordenacion = "gustas";
+		} else
+			ordenacion = "fecha";
 		
 		if(titulo && descripcion)
 			videosTiDe = videoRepository.findByTituloDescripcion(busqueda.toLowerCase());
@@ -84,11 +90,15 @@ public class VideoService {
 		if(user)
 			videosUs = getVideosUsuarios(busqueda.toLowerCase());
 		
-		videos = organizeVideos(videosViGu, videosTiDe, videosGe, videosUs);
+		videos = organizeVideos(videosViGu, videosTiDe, videosGe, videosUs, ordenacion);
 		
-		if(!visitas && !gustas && !titulo && !descripcion && !genero && !user)
+		if(!visitas && !gustas && !titulo && !descripcion && !genero && !user && busqueda.equals(""))
 			return videosAll;
-		else
+		else if(!visitas && !gustas && !descripcion && !genero && !user && !busqueda.equals("")) {
+			videos = videoRepository.findByTitulo(busqueda.toLowerCase());
+			videos = ordenarVideos(videos, ordenacion);
+			return videos;
+		} else
 			return videos;
 	}
 	
@@ -172,23 +182,34 @@ public class VideoService {
 		return videos;
 	}
 	
-	private List<Video> organizeVideos(List<Video> videosViGu, List<Video> videosTiDe, List<Video> videosGe, List<Video> videosUs) {
+	private List<Video> organizeVideos(List<Video> videosViGu, List<Video> videosTiDe, List<Video> videosGe, List<Video> videosUs,
+			                           String ordenacion) {
 		
-		List<Video> videos = null, videosTemp = videoRepository.createList();
+		List<Video> videos = null;
+		List<Video> videosTempTiDe = new ArrayList<Video>();
+		List<Video> videosTempGe = new ArrayList<Video>();
+		List<Video> videosTempUs = new ArrayList<Video>();
 		
 		if(videosViGu != null)
 			videos = videosViGu;
 		
-		if(videosTiDe != null)
+		if(videosTiDe != null && videos != null) {
+			for(Video vTD: videosTiDe)
+				for(Video v: videos)
+					if(vTD.getId() == v.getId())
+						videosTempTiDe.add(v);
+			videos.clear();
+			videos = videosTempTiDe;
+		} else if(videosTiDe != null)
 			videos = videosTiDe;
-		
+	
 		if(videosGe != null && videos != null) {
 			for(Video vG: videosGe)
 				for(Video v: videos)
 					if(vG.getId() == v.getId())
-						videosTemp.add(v);
+						videosTempGe.add(v);
 			videos.clear();
-			videos = videosTemp;
+			videos = videosTempGe;
 		} else if(videosGe != null)
 			videos = videosGe;
 		
@@ -196,12 +217,44 @@ public class VideoService {
 			for(Video vU: videosUs)
 				for(Video v: videos)
 					if(vU.getId() == v.getId())
-						videosTemp.add(v);
+						videosTempUs.add(v);
 			videos.clear();
-			videos = videosTemp;
+			videos = videosTempUs;
 		} else if(videosUs != null)
 			videos = videosUs;
-			
+		
+		if(videos != null)
+			videos = ordenarVideos(videos, ordenacion);
+		
+		return videos;
+	}
+	
+	private List<Video> ordenarVideos(List<Video> videos, String ordenacion) {
+		
+		Collections.sort(videos, new Comparator<Video>() {
+			@Override
+			public int compare(Video o1, Video o2) {
+				int resultado = 0;
+				if(ordenacion.equals("visitas"))
+					if(o1.getVisualizaciones() > o2.getVisualizaciones())
+						resultado = -1;
+					else if(o1.getVisualizaciones() < o2.getVisualizaciones())
+						resultado = 1;
+				if(ordenacion.equals("gustas"))
+					if(o1.getLikes() > o2.getLikes())
+						resultado = -1;
+					else if(o1.getLikes() < o2.getLikes())
+						resultado = 1;
+				if(ordenacion.equals("fecha"))
+					if(o1.getCreacion().after(o2.getCreacion()))
+						resultado = -1;
+					else if(o1.getCreacion().before(o2.getCreacion()))
+						resultado = 1;
+				
+				return resultado;
+			}
+		});
+		
 		return videos;
 	}
 }

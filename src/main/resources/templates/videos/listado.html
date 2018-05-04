@@ -43,8 +43,8 @@
 			<div th:class="@{row}">
 				<div th:class="@{col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ml-12 col-xl-4}" th:each="video : ${videos}">
 					<div th:class="@{be-post style-5}">
-						<div align="center" th:class="@{custom-video}">
-							<video controls th:class="@{be-img-block}">
+						<div align="center">
+							<video controls>
 								<source th:src="'/videos/' + ${video.nombre}">
 							</video>
 						</div>
