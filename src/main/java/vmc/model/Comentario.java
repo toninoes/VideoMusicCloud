@@ -84,4 +84,8 @@ public class Comentario {
 	public void setVideo(Video video) {
 		this.video = video;
 	}
+	
+	public Date getCreacion() {
+		return creacion;
+	}
 }

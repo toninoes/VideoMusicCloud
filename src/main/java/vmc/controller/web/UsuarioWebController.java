@@ -68,6 +68,7 @@ public class UsuarioWebController {
 		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
 		model.addAttribute("videos", videos);
 		model.addAttribute("usuario", usuario);
+		
 		return "usuarios/perfil";
 	}
 	

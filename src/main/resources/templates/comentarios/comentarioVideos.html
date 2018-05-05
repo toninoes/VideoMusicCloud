@@ -23,7 +23,7 @@
 				<div th:class="header-menu-block">
 					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
 					<ul th:class="header-menu" id="one">
-						<li th:class="active-header"><a th:href="@{/videos/misvideos}">Inicio</a></li>
+						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
 						<li><a th:href="@{/videos}">Listas</a></li>
 						<li><a th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">Perfil</a></li>
 						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
@@ -41,9 +41,9 @@
 	<div th:id="@{content-block}">
 		<div th:class="@{container-fluid custom-container be-detail-container custom-font}">
 			<div th:class="@{row}">
-				<div th:class="@{col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ml-12 col-xl-4}" th:each="video : ${videos}">
+				<div th:class="@{col-lg-12 col-md-12 col-sm-12 col-xs-12 col-ml-12 col-xl-4}">
 					<div th:class="@{be-post style-5}">
-						<div align="center" th:class="@{custom-video}">
+						<div align="center" th:class="@{custom-video bgcolor-black}">
 							<video controls th:class="@{be-img-block}">
 								<source th:src="'/videos/' + ${video.nombre}">
 							</video>
@@ -68,11 +68,6 @@
 								<span th:class="@{custom-td-font}"></span>
 								<span th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 							</i>
-							<a th:href="@{'/comentarios/comentarioVideos/' + ${usuario.id} + '/' + ${usuario.id} + '/' + ${video.id}}">
-								<span th:class="@{pull-right}">
-									<i th:class="@{stat-icon icon-comment}"></i>
-								</span>
-							</a>
 						</div>
 						<div th:class="@{author-post}" th:switch="${video.usuario.foto}"> 
 							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id}}">
@@ -88,6 +83,53 @@
 								<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<span th:text="${video.visualizaciones}"></span>
 							</span>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<form method="POST" th:action="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${gusta}}">
+			<i th:class="@{input-col col-xs-12 col-sm-12}">
+				<i th:switch="${gusta}">	
+					<a th:case="false" th:href="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${gusta}}" th:class="@{btn color-4 size-2 hover-7}" th:value="@{'Me Gusta'}">
+						<i th:class="@{stat-icon icon-like-b}"></i>
+					</a>
+					<a th:case="true" th:href="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${gusta}}" th:class="@{btn color-1 size-2 hover-7}" th:value="@{'Me Gusta'}">
+						<i th:class="@{stat-icon icon-like}"></i>
+					</a>
+				</i>
+				<input type="submit" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Publicar Comentario'}">
+				<i th:class="@{form-group focus-2}">
+					<i th:class="@{form-label}">Escribe debajo tu comentario...</i>									
+					<textarea maxlength="255" th:class="@{form-input}" name="comentario" id="comentario" th:placeholder="@{''}" th:text="@{''}">										
+					</textarea>
+				</i>								
+			</i>
+		</form>
+		<div th:class="@{input-col col-xs-12 col-sm-12}" th:each="comentario : ${comentarios}">
+			<div th:class="@{be-post style-5}">
+				<div th:class="@{author-post}">
+					<div th:switch="${comentario.gusta}">	
+						<i th:case="false" th:class="@{btn color-4 size-2 hover-7}" th:value="@{'Me Gusta'}">
+							<i th:class="@{stat-icon icon-like-b}"></i>
+						</i>
+						<i th:case="true" th:class="@{btn color-1 size-2 hover-7}" th:value="@{'Me Gusta'}">
+							<i th:class="@{stat-icon icon-like}"></i>
+						</i>
+						<i th:class="@{rowline-text}" th:text="${comentario.descripcion}"></i>
+						<i th:class="@{fa fa-calendar pull-right custom-margin-icon}">
+							<span th:class="@{custom-td-font}"></span>
+							<span th:class="@{rowline-text}" th:text="${#dates.format(comentario.creacion, 'dd-MM-yyyy HH:mm')}"></span>
+						</i>
+						<i th:class="@{rowline-text pull-right custom-margin-icon}" th:switch="${comentario.usuario.foto}"> 
+							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${comentario.usuario.id}}">
+								<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
+								<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
+							</a>
+							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${comentario.usuario.id}}">
+								<img th:src="@{'/usuarios/fotos/' + ${comentario.usuario.foto}}" alt="author" th:class="@{ava-author}">
+								<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
+							</a>
+						</i>
 					</div>
 				</div>
 			</div>

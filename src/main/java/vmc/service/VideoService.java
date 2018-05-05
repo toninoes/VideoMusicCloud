@@ -55,6 +55,10 @@ public class VideoService {
 		return videoRepository.findAll();
     }
 	
+	public Video findById(@PathVariable long videoId) {
+		return videoRepository.findById(videoId);
+	}
+	
 	public List<Video> findVideosByUsuarioId(@PathVariable long id) {
 		Usuario usuario = usuarioRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));

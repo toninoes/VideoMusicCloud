@@ -153,6 +153,11 @@
 													<span th:class="@{custom-td-font}"></span>
 													<span th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 												</i>
+												<a th:href="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id}}">
+													<span th:class="@{pull-right}">
+														<i th:class="@{stat-icon icon-comment}"></i>
+													</span>
+												</a>
 											</div>
 											<div th:class="@{author-post}">
 												<div th:switch="${video.usuario.foto}">
