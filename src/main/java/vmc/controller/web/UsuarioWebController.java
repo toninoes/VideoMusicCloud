@@ -1,5 +1,6 @@
 package vmc.controller.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -23,9 +24,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vmc.model.Comentario;
 import vmc.model.Usuario;
 import vmc.model.Video;
 import vmc.service.ApplicationService;
+import vmc.service.ComentarioService;
 import vmc.service.UsuarioService;
 import vmc.service.VideoService;
 
@@ -38,6 +41,9 @@ public class UsuarioWebController {
 	
 	@Autowired
 	private VideoService videoService;
+	
+	@Autowired
+	private ComentarioService comentarioService;
 	
 	@Autowired
 	private ApplicationService appService;
@@ -66,7 +72,17 @@ public class UsuarioWebController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
+		List<Boolean> likes = new ArrayList<Boolean>();
+		Comentario comentario = null;
+		for(Video v : videos) {
+			comentario = comentarioService.findByVideoUsuario(v, usuario);
+			if(comentario != null)
+				likes.add(comentario.isGusta());
+			else
+				likes.add(false);
+		}
 		model.addAttribute("videos", videos);
+		model.addAttribute("likes", likes);
 		model.addAttribute("usuario", usuario);
 		
 		return "usuarios/perfil";
@@ -84,6 +100,16 @@ public class UsuarioWebController {
 		String sigue = "";		
 		Usuario logueado = usuarioService.findById(logueadoId);
 		Usuario pinchado = usuarioService.findById(pinchadoId);
+		List<Video> videos = videoService.findVideosByUsuarioId(pinchado.getId());
+		List<Boolean> likes = new ArrayList<Boolean>();
+		Comentario comentario = null;
+		for(Video v : videos) {
+			comentario = comentarioService.findByVideoUsuario(v, logueado);
+			if(comentario != null)
+				likes.add(comentario.isGusta());
+			else
+				likes.add(false);
+		}
 		
 		if(logueado.getId() == pinchadoId)
 			sigue = "hidden";
@@ -92,11 +118,10 @@ public class UsuarioWebController {
 		else
 			sigue = "seguir";
 		
-		List<Video> videos = videoService.findVideosByUsuarioId(pinchado.getId());
-		
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);		
 		model.addAttribute("videos", videos);
+		model.addAttribute("likes", likes);
 		model.addAttribute("sigue", sigue);
 		
 		return "usuarios/perfil";
@@ -120,10 +145,20 @@ public class UsuarioWebController {
 		}
 		
 		List<Video> videos = videoService.findVideosByUsuarioId(pinchado.getId());
+		List<Boolean> likes = new ArrayList<Boolean>();
+		Comentario comentario = null;
+		for(Video v : videos) {
+			comentario = comentarioService.findByVideoUsuario(v, logueado);
+			if(comentario != null)
+				likes.add(comentario.isGusta());
+			else
+				likes.add(false);
+		}
 		
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
 		model.addAttribute("videos", videos);
+		model.addAttribute("likes", likes);
 		model.addAttribute("sigue", sigue);
 		
 		return "usuarios/perfil";

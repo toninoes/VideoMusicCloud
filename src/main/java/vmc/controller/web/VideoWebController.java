@@ -1,5 +1,6 @@
 package vmc.controller.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vmc.model.Comentario;
 import vmc.model.Usuario;
 import vmc.model.Video;
 import vmc.service.ApplicationService;
+import vmc.service.ComentarioService;
 import vmc.service.GeneroService;
 import vmc.service.UsuarioService;
 import vmc.service.VideoService;
@@ -39,14 +42,28 @@ public class VideoWebController {
 	private GeneroService generoService;
 	
 	@Autowired
+	private ComentarioService comentarioService;
+	
+	@Autowired
 	private ApplicationService appService;
     
     @GetMapping
     public String listarTodosVideos(Model model) {
+    	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		List<Video> videos = videoService.findAll();
+		List<Boolean> likes = new ArrayList<Boolean>();
+		Comentario comentario = null;
+		for(Video v : videos) {
+			comentario = comentarioService.findByVideoUsuario(v, usuario);
+			if(comentario != null)
+				likes.add(comentario.isGusta());
+			else
+				likes.add(false);
+		}
 		model.addAttribute("videos", videos);
+		model.addAttribute("likes", likes);
 		model.addAttribute("usuario", usuario);
 		
         return "videos/listado";
@@ -57,7 +74,17 @@ public class VideoWebController {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
+		List<Boolean> likes = new ArrayList<Boolean>();
+		Comentario comentario = null;
+		for(Video v : videos) {
+			comentario = comentarioService.findByVideoUsuario(v, usuario);
+			if(comentario != null)
+				likes.add(comentario.isGusta());
+			else
+				likes.add(false);
+		}
 		model.addAttribute("videos", videos);
+		model.addAttribute("likes", likes);
 		model.addAttribute("usuario", usuario);
 		
 		return "videos/listadoPorUsuario";
@@ -106,7 +133,17 @@ public class VideoWebController {
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		List<Video> videosAll = videoService.findAll();
 		List<Video> videos = videoService.findSearch(videosAll, visitas, gustas, titulo, descripcion, genero, user, busqueda);
+		List<Boolean> likes = new ArrayList<Boolean>();
+		Comentario comentario = null;
+		for(Video v : videos) {
+			comentario = comentarioService.findByVideoUsuario(v, usuario);
+			if(comentario != null)
+				likes.add(comentario.isGusta());
+			else
+				likes.add(false);
+		}
 		model.addAttribute("videos", videos);
+		model.addAttribute("likes", likes);
 		model.addAttribute("usuario", usuario);
 		
     	return "videos/listado";

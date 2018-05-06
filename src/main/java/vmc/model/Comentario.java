@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -23,7 +22,7 @@ public class Comentario {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@NotBlank(message = "*Introduzca un texto para el comentario")
+	//@NotBlank(message = "*Introduzca un texto para el comentario")
 	private String descripcion;
 	
 	@ManyToOne
@@ -45,7 +44,8 @@ public class Comentario {
 		super();
 	}
 	
-	public Comentario(@NotBlank String descripcion) {
+	//public Comentario(@NotBlank String descripcion) {
+	public Comentario(String descripcion) {
 		this.descripcion = descripcion;
 	}
 	
