@@ -31,6 +31,31 @@ public class ComentarioWebController {
 	@Autowired
 	private VideoService videoService;
 	
+	@GetMapping("/{logueadoId}/{pinchadoId}/{videoId}")
+	public String findView(Model model, @PathVariable long logueadoId,
+										@PathVariable long pinchadoId,
+										@PathVariable long videoId) {
+				
+		Usuario logueado = usuarioService.findById(logueadoId);
+		Usuario pinchado = usuarioService.findById(pinchadoId);
+		
+		Video video = videoService.findById(videoId);
+		List<Comentario> comentarios = comentarioService.findComentariosByVideo(video);
+		Comentario comentario = null;
+		comentario = comentarioService.findByVideoUsuario(video, logueado);
+		if(comentario != null)
+			model.addAttribute("gusta", true);
+		else
+			model.addAttribute("gusta", false);
+		
+		model.addAttribute("video", video);
+		model.addAttribute("logueado", logueado);
+		model.addAttribute("usuario", pinchado);		
+		model.addAttribute("comentarios", comentarios);
+		
+		return "comentarios/comentarioVideos";
+	}
+	
 	@GetMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}")
 	public String findComentarios(Model model, @PathVariable long logueadoId,
 										       @PathVariable long pinchadoId,
@@ -49,16 +74,16 @@ public class ComentarioWebController {
 		model.addAttribute("comentarios", comentarios);
 		model.addAttribute("comentario", !comentario);
 		
-		return "comentarios/comentarioVideos";
+		return "redirect:/comentarios/{logueadoId}/{pinchadoId}/{videoId}";
 	}
 	
 	// Solucionado el problema de actualizar el navegador ya no suma mas likes, tampoco ni resta
-	@GetMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}/{stopf5}")
+	@GetMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}/{vista}")
 	public String findComentarios(Model model, @PathVariable long logueadoId,
 										       @PathVariable long pinchadoId,
 										       @PathVariable long videoId,
 										       @PathVariable boolean comentario,
-										       @PathVariable String stopf5) {
+										       @PathVariable String vista) {
 				
 		Usuario logueado = usuarioService.findById(logueadoId);
 		Usuario pinchado = usuarioService.findById(pinchadoId);
@@ -66,19 +91,23 @@ public class ComentarioWebController {
 		Video video = videoService.findById(videoId);
 		List<Comentario> comentarios = comentarioService.findComentariosByVideo(video);
 		
-		//if(comentario != null)
-			if(!comentario)
-				comentarioService.create(video, logueado, "", "gusta");
-			else
-				comentarioService.delete(video, logueado);
+		if(!comentario)
+			comentarioService.create(video, logueado, "", "gusta");
+		else
+			comentarioService.delete(video, logueado);
 		
 		model.addAttribute("video", video);
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);		
 		model.addAttribute("comentarios", comentarios);
-		model.addAttribute("comentario", !comentario);
+		model.addAttribute("comentario", comentario);
 		
-		return "redirect:/comentarios/{logueadoId}/{pinchadoId}/{videoId}/{comentario}";
+		switch(vista) {
+			case "inicio" : return "redirect:/videos/misvideos";
+			case "listas" : return "redirect:/videos";
+			case "perfil" : return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}";
+			default : return "redirect:/comentarios/{logueadoId}/{pinchadoId}/{videoId}/{comentario}";
+		}
 	}
 	
 	@PostMapping("/comentarioVideos/{logueadoId}/{pinchadoId}/{videoId}")
@@ -94,6 +123,12 @@ public class ComentarioWebController {
 		comentarioService.create(video, logueado, descripcion, "comentario");
 	
 		List<Comentario> comentariosAllVideo = comentarioService.findComentariosByVideo(video);
+		Comentario comentario = null;
+		comentario = comentarioService.findByVideoUsuario(video, logueado);
+		if(comentario != null)
+			model.addAttribute("gusta", true);
+		else
+			model.addAttribute("gusta", false);
 		
 		model.addAttribute("video", video);
 		model.addAttribute("logueado", logueado);

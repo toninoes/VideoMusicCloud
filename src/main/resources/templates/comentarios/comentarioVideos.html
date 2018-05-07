@@ -78,31 +78,21 @@
 								<img th:src="@{'/usuarios/fotos/' + ${video.usuario.foto}}" alt="author" th:class="@{ava-author}">
 								<span>by <i th:text="${video.usuario.nombre}"></i></span>
 							</a>
-							<span th:class="@{pull-right}">
-								<i th:class="@{stat-icon icon-like-b}"></i>&nbsp;<span th:text="${video.likes}"></span> 
-								<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<span th:text="${video.visualizaciones}"></span>
-							</span>
+							<div th:class="@{pull-right}">
+								<a th:if="${gusta}" th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${true} + '/comentarios'}">
+									<i th:class="@{stat-icon icon-like-b}"></i>
+								</a>
+								<a th:if="${!gusta}" th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${false} + '/comentarios'}">
+									<i th:class="@{stat-icon icon-like}"></i>
+								</a>
+								<i th:text="${video.likes}"></i> 
+								<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<i th:text="${video.visualizaciones}"></i>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!--<form method="POST" th:action="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${gusta}}">
-			<div th:switch="${gusta}" th:class="@{input-col col-xs-12 col-sm-12 custom-margin-icon}">
-				<div th:case="false">
-					<label for="gustar" th:class="@{btn color-4 size-2 hover-1}">
-						<i th:class="@{stat-icon icon-like}"></i>
-						<input type="submit" name="gustar" id ="gustar" hidden="hidden">
-					</label>
-				</div>	
-				<div th:case="true">
-					<label for="gustar" th:class="@{btn color-4 size-2 hover-1}">
-						<i th:class="@{stat-icon icon-like-b}"></i>
-						<input type="submit" name="gustar" id ="gustar" hidden="hidden">
-					</label>
-				</div>
-			</div>
-		</form>-->
 		<form method="POST" th:action="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id}}">
 			<i th:class="@{input-col col-xs-12 col-sm-12}">
 				<input type="submit" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Publicar Comentario'}">

@@ -153,7 +153,7 @@
 													<span th:class="@{custom-td-font}"></span>
 													<span th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 												</i>
-												<a th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${false}}">
+												<a th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${gusta}}">
 													<span th:class="@{pull-right}">
 														<i th:class="@{stat-icon icon-comment}"></i>
 													</span>
@@ -170,10 +170,10 @@
 														<span>by <i th:text="${video.usuario.nombre}"></i></span>
 													</a>
 													<div th:class="@{pull-right}">
-														<a th:if="${gusta} == true" th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${true} + '/stopf5'}">
+														<a th:if="${gusta} == true" th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${true} + '/perfil'}">
 															<i th:class="@{stat-icon icon-like-b}"></i>
 														</a>
-														<a th:if="${gusta} == false" th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${false} + '/stopf5'}">
+														<a th:if="${gusta} == false" th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${false} + '/perfil'}">
 															<i th:class="@{stat-icon icon-like}"></i>
 														</a><i th:text="${video.likes}"></i> 
 														<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<i th:text="${video.visualizaciones}"></i>
