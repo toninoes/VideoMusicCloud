@@ -204,6 +204,31 @@ public class UsuarioWebController {
         return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}";
     }
 	
+	@PostMapping("/perfil/{logueadoId}/{pinchadoId}/{videoId}/{views}")
+    public String saveVisit(Model model, @PathVariable long logueadoId,
+			 							 @PathVariable long pinchadoId,
+			 							 @PathVariable long videoId,
+			 							 @PathVariable long views) {
+		Usuario logueado = usuarioService.findById(logueadoId);
+		Usuario pinchado = usuarioService.findById(pinchadoId);
+		Video video = videoService.findById(videoId);
+		
+		videoService.saveVisit(views + 1, video);
+		
+		Comentario coment = null;
+		coment = comentarioService.findByVideoUsuario(video, logueado);
+		if(coment != null)
+			model.addAttribute("gusta", true);
+		else
+			model.addAttribute("gusta", false);
+		
+		model.addAttribute("video", video);
+		model.addAttribute("logueado", logueado);
+		model.addAttribute("usuario", pinchado);
+		
+		return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}";
+	}
+	
 	@PutMapping("/{id}")	
 	public String update(Model model, @PathVariable(value = "id") Long id, @Valid @RequestBody Usuario u) {
 		model.addAttribute("usuario", usuarioService.update(id, u));

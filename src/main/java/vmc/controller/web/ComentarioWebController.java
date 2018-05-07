@@ -138,4 +138,31 @@ public class ComentarioWebController {
 		return "comentarios/comentarioVideos";
 	}
 	
+	@PostMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}/{vista}/{views}")
+	public String saveVisit(Model model, @PathVariable long logueadoId,
+										 @PathVariable long pinchadoId,
+										 @PathVariable long videoId,
+										 @PathVariable boolean comentario,
+									     @PathVariable String vista,
+									     @PathVariable long views) {
+				
+		Usuario logueado = usuarioService.findById(logueadoId);
+		Usuario pinchado = usuarioService.findById(pinchadoId);
+		Video video = videoService.findById(videoId);
+		
+		videoService.saveVisit(views + 1, video);
+		
+		Comentario coment = null;
+		coment = comentarioService.findByVideoUsuario(video, logueado);
+		if(coment != null)
+			model.addAttribute("gusta", true);
+		else
+			model.addAttribute("gusta", false);
+		
+		model.addAttribute("video", video);
+		model.addAttribute("logueado", logueado);
+		model.addAttribute("usuario", pinchado);
+		
+		return "comentarios/comentarioVideos";
+	}
 }

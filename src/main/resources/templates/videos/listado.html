@@ -44,9 +44,11 @@
 				<div th:class="@{col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ml-12 col-xl-4}" th:each="video,stat : ${videos}" th:with="gusta=${likes[stat.index]}">
 					<div th:class="@{be-post style-5}">
 						<div align="center">
-							<video controls>
-								<source th:src="'/videos/' + ${video.nombre}">
-							</video>
+							<form method="POST" th:id="this" th:action="@{'/videos/misvideos/' + ${usuario.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${video.visualizaciones} + '/listas'}">
+								<video controls th:class="@{be-img-block}" onended="visitsListas();viewsListas(this);">
+									<source th:src="'/videos/' + ${video.nombre}">
+								</video>
+							</form>
 						</div>
 						<div th:class="@{be-rowline}">
 							<ul>
@@ -92,10 +94,10 @@
 								</a>
 								<i th:text="${video.likes}"></i>
 								<i th:if="${video.visualizaciones} == 0">
-									<i th:class="@{stat-icon icon-views}"></i>&nbsp;<i th:text="${video.visualizaciones}"></i>
+									<i th:class="@{stat-icon icon-views}"></i>&nbsp;<i th:class="views" th:text="${video.visualizaciones}"></i>
 								</i> 
 								<i th:if="${video.visualizaciones} > 0">
-									<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<i th:text="${video.visualizaciones}"></i>
+									<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<i th:id="visitListas" th:text="${video.visualizaciones}"></i>
 								</i>
 							</div>
 						</div>

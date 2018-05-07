@@ -148,4 +148,34 @@ public class VideoWebController {
 		
     	return "videos/listado";
     }
+    
+    @PostMapping("/misvideos/{logueadoId}/{pinchadoId}/{videoId}/{views}/{vista}")
+	public String saveVisit(Model model, @PathVariable long logueadoId,
+										 @PathVariable long pinchadoId,
+										 @PathVariable long videoId,
+										 @PathVariable long views,
+										 @PathVariable String vista) {
+				
+		Usuario logueado = usuarioService.findById(logueadoId);
+		Usuario pinchado = usuarioService.findById(pinchadoId);
+		Video video = videoService.findById(videoId);
+		
+		videoService.saveVisit(views + 1, video);
+		
+		Comentario coment = null;
+		coment = comentarioService.findByVideoUsuario(video, logueado);
+		if(coment != null)
+			model.addAttribute("gusta", true);
+		else
+			model.addAttribute("gusta", false);
+		
+		model.addAttribute("video", video);
+		model.addAttribute("logueado", logueado);
+		model.addAttribute("usuario", pinchado);
+		switch(vista) {
+			case "inicio": return "redirect:/videos/misvideos";
+			case "listas": return "redirect:/videos";
+			default: return "redirect:/videos/misvideos";
+		}
+    }
 }

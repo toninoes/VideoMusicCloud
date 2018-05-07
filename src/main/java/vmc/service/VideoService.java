@@ -142,6 +142,11 @@ public class VideoService {
     		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);    
     }
 	
+	public synchronized void saveVisit(@RequestParam("visits") long visits, Video video) {
+		video.setVisualizaciones(visits);
+		videoRepository.save(video);
+	}
+	
 	@ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)
     public ResponseEntity<?> manejarAlmacenamientoFicheroNoEncontrado(AlmacenamientoFicheroNoEncontradoException exc) {
         return ResponseEntity.notFound().build();
