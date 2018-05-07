@@ -89,8 +89,14 @@
 								</a>
 								<a th:if="${gusta} == false" th:href="@{'/comentarios/' + ${usuario.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${false} + '/listas'}">
 									<i th:class="@{stat-icon icon-like}"></i>
-								</a><i th:text="${video.likes}"></i> 
-								<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<i th:text="${video.visualizaciones}"></i>
+								</a>
+								<i th:text="${video.likes}"></i>
+								<i th:if="${video.visualizaciones} == 0">
+									<i th:class="@{stat-icon icon-views}"></i>&nbsp;<i th:text="${video.visualizaciones}"></i>
+								</i> 
+								<i th:if="${video.visualizaciones} > 0">
+									<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<i th:text="${video.visualizaciones}"></i>
+								</i>
 							</div>
 						</div>
 					</div>
