@@ -40,13 +40,13 @@
 							<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
 						</div>
 						<div th:each="rol : ${logueado.Roles}">
-							<div th:if="${rol.nombre} == 'ADMIN'">	
+							<div th:if="${rol.rol} == 'ADMIN'">	
 								<span th:class="drop-down-list">
 									<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
 									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
 								</span>
 							</div>
-							<div th:if="${rol.nombre} != 'ADMIN'">	
+							<div th:if="${rol.rol} != 'ADMIN'">	
 								<span th:class="drop-down-list">
 									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
 								</span>

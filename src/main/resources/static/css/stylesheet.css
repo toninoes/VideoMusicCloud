@@ -45,8 +45,6 @@ ul, li, ol { list-style: none; margin: 0; padding: 0; }
 
 .custom-container { max-width: 1800px; }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 div { margin: 0; }
 
 td { 
@@ -66,6 +64,11 @@ td {
 .bgcolor-black {
 	background-color: black;
 	z-index: 1;	
+}
+
+.bgcolor-black-2 {
+	background-color: black !important;
+	color: white !important;
 }
 
 .custom-textarea {
@@ -144,8 +147,6 @@ td {
 	height: 32px !important;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 .dropdown2 {
     position: relative !important;
     display: inline-block !important;
@@ -166,8 +167,6 @@ td {
 .dropdown2:hover .dropdown-content2 {
     display: block !important;
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .custom-video {
 	max-width: auto;
@@ -202,8 +201,6 @@ video {
 [hidden] {
 	display: none !important;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .custom-column-5 { width: 20%; padding: 0 15px; float: left; }
 

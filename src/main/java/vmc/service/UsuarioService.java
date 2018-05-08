@@ -78,9 +78,9 @@ public class UsuarioService {
         user.setActivo(true);
         
         if(esAdmin)
-        	userRole = rolRepository.findByNombre("ADMIN");
+        	userRole = rolRepository.findByRol("ADMIN");
         else        	
-        	userRole = rolRepository.findByNombre("USER");
+        	userRole = rolRepository.findByRol("USER");
         
         user.setRoles(new HashSet<Rol>(Arrays.asList(userRole)));
 		usuarioRepository.save(user);

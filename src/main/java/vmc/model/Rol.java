@@ -14,27 +14,27 @@ public class Rol {
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@Column(name="nombre")
-	private String nombre;
+	@Column(name="rol")
+	private String rol;
 	
 	public Rol() {
 		super();
 	}
 
-	public Rol(String nombre) {
+	public Rol(String rol) {
 		super();
-		this.nombre = nombre;
+		this.rol = rol;
 	}
 	
 	public long getId() {
 		return id;
 	}
 	
-	public String getNombre() {
-		return nombre;
+	public String getRol() {
+		return rol;
 	}
 	
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setRol(String rol) {
+		this.rol = rol;
 	}	
 }
