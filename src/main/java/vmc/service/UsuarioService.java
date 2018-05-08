@@ -3,6 +3,7 @@ package vmc.service;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -77,9 +78,9 @@ public class UsuarioService {
         user.setActivo(true);
         
         if(esAdmin)
-        	userRole = rolRepository.findByRol("ADMIN");
+        	userRole = rolRepository.findByNombre("ADMIN");
         else        	
-        	userRole = rolRepository.findByRol("USER");
+        	userRole = rolRepository.findByNombre("USER");
         
         user.setRoles(new HashSet<Rol>(Arrays.asList(userRole)));
 		usuarioRepository.save(user);
@@ -201,6 +202,18 @@ public class UsuarioService {
     	usuarioRepository.save(logueado);
     	usuarioRepository.save(pinchado);
     }
+	
+	public Set<Usuario> seguidores(Usuario usuario) {
+		return usuario.getSeguidores();
+	}
+	
+	public Set<Usuario> siguiendo(Usuario usuario) {
+		return usuario.getSiguiendo();
+	}
+	
+	public List<Usuario> findSearch(String busqueda) {
+		return usuarioRepository.findByUsuarioSearch(busqueda);
+	}
 	
 	@ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)
     public ResponseEntity<?> manejarAlmacenamientoFicheroNoEncontrado(AlmacenamientoFicheroNoEncontradoException exc) {

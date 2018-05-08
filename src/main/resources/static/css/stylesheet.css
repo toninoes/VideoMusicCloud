@@ -59,6 +59,10 @@ td {
 	color: white !important;	
 }
 
+.color-black {
+	color: black !important;	
+}
+
 .bgcolor-black {
 	background-color: black;
 	z-index: 1;	

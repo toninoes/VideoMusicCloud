@@ -40,13 +40,13 @@
 							<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
 						</div>
 						<div th:each="rol : ${logueado.Roles}">
-							<div th:if="${rol.rol} == 'ADMIN'">	
+							<div th:if="${rol.nombre} == 'ADMIN'">	
 								<span th:class="drop-down-list">
 									<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
 									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
 								</span>
 							</div>
-							<div th:if="${rol.rol} != 'ADMIN'">	
+							<div th:if="${rol.nombre} != 'ADMIN'">	
 								<span th:class="drop-down-list">
 									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
 								</span>
@@ -112,12 +112,20 @@
 							</div>
 							<div th:class="be-user-statistic">
 								<div th:class="@{stat-row clearfix}">
-									<i th:class="@{stat-icon icon-followers-b}">
-									</i>Seguidores<span th:class="stat-counter" th:text="${usuario.SeguidoresSize}"></span>
+									<a th:href="@{'/usuarios/' + ${logueado.id} + '/' + ${usuario.id} + '/seguidores'}">
+										<i th:class="@{stat-icon icon-followers-b}"></i>Seguidores
+									</a>
+									<a th:href="@{'/usuarios/' + ${logueado.id} + '/' + ${usuario.id} + '/seguidores'}">
+										<span th:class="stat-counter" th:text="${usuario.SeguidoresSize}"></span>
+									</a>
 								</div>
 								<div th:class="@{stat-row clearfix}">
-									<i th:class="@{stat-icon icon-following-b}">
-									</i>Siguiendo<span th:class="stat-counter" th:text="${usuario.SiguiendoSize}"></span>
+									<a th:href="@{'/usuarios/' + ${logueado.id} + '/' + ${usuario.id} + '/siguiendo'}">
+										<i th:class="@{stat-icon icon-following-b}"></i>Siguiendo
+									</a>
+									<a th:href="@{'/usuarios/' + ${logueado.id} + '/' + ${usuario.id} + '/siguiendo'}">
+										<span th:class="stat-counter" th:text="${usuario.SiguiendoSize}"></span>
+									</a>
 								</div>
 							</div>
 						</div>

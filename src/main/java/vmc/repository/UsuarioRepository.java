@@ -9,6 +9,9 @@ import vmc.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	
+	@Query("SELECT u FROM Usuario u ORDER BY u.nombre, u.apellidos")
+	List<Usuario> findAll();
+	
 	List<Usuario> findByNombre(@Param("nombre") String nombre);
 	
 	Usuario findByMail(@Param("mail") String mail);

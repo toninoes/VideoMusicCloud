@@ -48,17 +48,44 @@ public class UsuarioWebController {
 	@Autowired
 	private ApplicationService appService;
 	
-	@GetMapping
-	public String findAll(Model model) {
-		model.addAttribute("usuarios", usuarioService.findAll());
-        return "usuarios/listado";
-	}
-	
 	@GetMapping("/{id}")
 	public String findById(Model model, @PathVariable long id) {
 		Usuario usuario = usuarioService.findById(id);
 		model.addAttribute("usuario", usuario);
+		model.addAttribute("portal", "no");
 		return "usuarios/detalle";
+	}
+	
+	@GetMapping("/detalle/{id}")
+	public String findByIdPortal(Model model, @PathVariable long id) {
+		Usuario usuario = usuarioService.findById(id);
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("portal", "si");
+		return "usuarios/detalle";
+	}
+	
+	@GetMapping("/{logueadoId}/{pinchadoId}/{segsig}")
+	public String findAll(Model model, @PathVariable long logueadoId,
+									   @PathVariable long pinchadoId,
+									   @PathVariable String segsig) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario logueado = usuarioService.findByMail(auth.getName());
+		Usuario pinchado = usuarioService.findById(pinchadoId); 
+		
+		if(segsig.equals("seguidores") && (logueadoId == pinchadoId))
+			model.addAttribute("usuarios", usuarioService.seguidores(logueado));
+		else if(segsig.equals("seguidores") && (logueadoId != pinchadoId))
+			model.addAttribute("usuarios", usuarioService.seguidores(pinchado));
+		else if(segsig.equals("siguiendo") && (logueadoId == pinchadoId))
+			model.addAttribute("usuarios", usuarioService.siguiendo(logueado));
+		else
+			model.addAttribute("usuarios", usuarioService.siguiendo(pinchado));
+        
+		model.addAttribute("logueado", logueado);
+		model.addAttribute("usuario", pinchado);
+			
+		return "usuarios/listado";
 	}
 	
 	@GetMapping("/mail/{mail}")

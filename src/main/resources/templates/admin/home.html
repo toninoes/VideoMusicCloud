@@ -4,7 +4,7 @@
 
 <head th:include="bootstrap :: head">
 	<title>Admin Page</title>
-	<!--link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+	<!--<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
@@ -19,20 +19,99 @@
 	
 		<form th:action="@{/logout}" method="get">
 			<button class="btn btn-md btn-danger btn-block" name="registro"
-				type="Submit">Salir</button>
+				type="Submit">Salir del Portal</button>
 		</form>    
 		
 		<div class="panel-group" style="margin-top:40px">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<span th:utext="${usuario}"></span>
+					<span th:utext="'Bienvenid@ ' + ${usuario.nombre} + ' ' + ${usuario.apellidos}"></span>
 				</div>
-				<!-- <div class="panel-body">
-					<img th:src="@{/images/beer.jpg}" class="img-responsive center-block" width="400" height="400" alt="Beer" /> 
-				</div> -->
 				<h1 class="admin-message-text text-center" th:utext="${mensaje}"></h1>
+				<div class="panel-body">
+					<img th:src="@{/img/stat_4.png}" class="img-responsive center-block" alt="User">
+				</div>
 			</div>
 		</div>
+		
+		<div align="center">
+			<table>
+				<tr th:class="bgcolor-black">
+					<td width="14%">Nombre</td>
+					<td width="14%">Apellidos</td>
+					<td width="28%">Intereses</td>
+					<td width="7%">Activo</td>
+					<td width="14%">Email</td>
+					<td width="14%">Roles</td>
+				</tr>
+				<tr>
+					<td><a th:href="@{'/usuarios/detalle/' + ${usuario.id}}" th:text="${usuario.nombre}"></a></td>
+					<td th:text="${usuario.apellidos}"></td>
+					<td th:text="${usuario.intereses}"></td>
+					<td th:text="${usuario.activo}"></td>
+					<td><a th:href="@{'mailto:' + ${usuario.mail}}" th:text="${usuario.mail}"></a></td>
+					<td><i th:each="rol : ${usuario.roles}" th:text="${rol.nombre} + ' '"></i></td>
+				</tr>
+			</table>
+		</div>
+		
+		<div th:class="panel-group"></div>
+		
+		<form method="POST" th:action="@{'/admin/home/'}" id="formUsers" name="formUsers">
+			<div align="center">
+				<table>
+					<tr>
+						<th>
+							<div align="right">
+								<a th:id="hiperlink" onclick="searchUsers()">
+									<input th:class="btn-success" type="button" value="Buscar">
+								</a>
+							</div>
+						</th>
+						<th>
+							<input type="text" name="search" id="search">
+						</th>
+						<th>
+							<div>
+								<a th:id="hiperlink2" onclick="searchUsers2()">
+									<input th:class="btn-warning" type="button" value="Quitar Filtros">
+								</a>
+							</div>
+						</th>
+						<th>
+							<div align="right">
+								<input th:class="btn-primary" id="activo" name="activo" type="submit" value="Activar/Desactivar">
+								<input type="hidden" id="boxes" name="boxes" th:value="${cboxes}" hidden="hidden">
+							</div>
+						</th>
+						<th colspan="3" align="right">
+							<div align="right">
+								<a th:href="@{'/registro/portal'}"><input th:class="btn-primary" id="crear" name="crear" type="button" value="Crear"></a>
+								<input th:class="btn-danger" id="eliminar" name="eliminar" type="Submit" value="Eliminar">
+							</div>
+						</th>
+					</tr>
+					<tr th:class="bgcolor-black">
+						<td width="14%">Nombre</td>
+						<td width="14%">Apellidos</td>
+						<td width="28%">Intereses</td>
+						<td width="7%">Activo</td>
+						<td width="14%">Email</td>
+						<td width="14%">Roles</td>
+						<td width="7%">Marcar&nbsp;<input th:id="u" type="checkbox" onchange="comprobar('u','uboxes')"></td>
+					</tr>
+					<tr th:each="usr : ${usuarios}">
+						<td><a th:href="@{'/usuarios/detalle/' + ${usr.id}}" th:text="${usr.nombre}"></a></td>
+						<td th:text="${usr.apellidos}"></td>
+						<td th:text="${usr.intereses}"></td>
+						<td th:text="${usr.activo}"></td>
+						<td><a th:href="@{'mailto:' + ${usr.mail}}" th:text="${usr.mail}"></a></td>
+						<td><i th:each="rol : ${usr.roles}" th:text="${rol.nombre} + ' '"></i></td>
+						<td><input type="checkbox" name="uboxes" th:value="${usr.id}"></td>
+					</tr>
+				</table>
+			</div>
+		</form>
 		
 	</div>
 	

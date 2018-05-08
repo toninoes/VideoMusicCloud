@@ -8,7 +8,7 @@
 	<!-- THE LOADER -->
 	<div th:include="spinner :: body"></div>
 	<!-- THE HEADER -->
-	<header>
+	<header th:if="${portal} == 'no'">
 		<div th:class="@{container-fluid custom-container}">
 			<div th:class="@{row no_row row-header}">
 				<!-- THE LOGO -->
@@ -29,6 +29,11 @@
 		</div>
 	</header>
 	<!-- MAIN CONTENT -->
+	<div th:if="${portal} == 'si'">
+		<form th:action="@{/admin/home}" method="get">
+			<button class="btn btn-md btn-danger btn-block" type="Submit">Volver al Portal</button>
+		</form>
+	</div>
 	<div th:id="@{content-block}">
 		<div th:class="@{container be-detail-container}">
 			<div th:class="@{col-xs-12 col-md-12 _editor-content_}">

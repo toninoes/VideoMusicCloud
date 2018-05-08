@@ -1,5 +1,7 @@
 package vmc.controller.web;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +9,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vmc.model.Usuario;
@@ -34,6 +39,16 @@ public class LoginWebController {
 		Usuario usuario = new Usuario();
 		modelAndView.addObject("usuario", usuario);
 		modelAndView.setViewName("registro");
+		return modelAndView;
+	}
+	
+	@GetMapping("/registro/{portal}")
+	public ModelAndView registro(@PathVariable String portal){
+		ModelAndView modelAndView = new ModelAndView();
+		Usuario usuario = new Usuario();
+		modelAndView.addObject("usuario", usuario);
+		modelAndView.setViewName("registro");
+		modelAndView.addObject("portal", "si");
 		return modelAndView;
 	}
 	
@@ -63,8 +78,71 @@ public class LoginWebController {
 		ModelAndView modelAndView = new ModelAndView();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
-		modelAndView.addObject("usuario", "Bienvenido " + usuario.getNombre() + " " + usuario.getApellidos() + " (" + usuario.getMail() + ")");
+		List<Usuario> usuarios = usuarioService.findAll();
+		usuarios.remove(usuario);
 		modelAndView.addObject("mensaje","Portal de Administración");
+		modelAndView.addObject("usuarios", usuarios);
+		modelAndView.addObject("usuario", usuario);
+		modelAndView.setViewName("admin/home");
+		return modelAndView;
+	}
+	
+	@GetMapping("/admin/home/{busqueda}")
+	public ModelAndView searchHome(@PathVariable String busqueda){
+		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		List<Usuario> usuarios = usuarioService.findAll();
+		usuarios.remove(usuario);
+		List<Usuario> uss = usuarioService.findSearch(busqueda);
+		modelAndView.addObject("mensaje","Portal de Administración");
+		modelAndView.addObject("usuarios", uss);
+		modelAndView.addObject("usuario", usuario);
+		modelAndView.setViewName("admin/home");
+		return modelAndView;
+	}
+	
+	@PostMapping("/admin/home")
+	public ModelAndView formHome(@RequestParam(value = "uboxes", required=false) long[] uboxes){
+		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		List<Usuario> usuarios = usuarioService.findAll();
+		usuarios.remove(usuario);
+		long[] cboxes = new long[usuarios.size()];
+		if(uboxes != null) {
+			for(int i = 0; i < uboxes.length; i++) {
+				cboxes[i] = uboxes[i];
+				Usuario us = usuarioService.findById(cboxes[i]);
+				us.setActivo(!us.getActivo());
+				usuarioService.update(cboxes[i], us);
+			}
+			modelAndView.addObject("cboxes", cboxes);
+		} else {
+			for(int i = 0; i < cboxes.length; i++)
+				cboxes[i] = 0;
+			modelAndView.addObject("cboxes", cboxes);
+		}
+		modelAndView.addObject("mensaje","Portal de Administración");
+		modelAndView.addObject("usuarios", usuarios);
+		modelAndView.addObject("usuario", usuario);
+		modelAndView.setViewName("admin/home");
+		return modelAndView;
+	}
+	
+	@DeleteMapping
+	public ModelAndView deleteUser(@RequestParam(value = "uboxes", required=false) long[] uboxes) {
+		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		if(uboxes != null)
+			for(long id: uboxes)
+				usuarioService.delete(id);
+		List<Usuario> usuarios = usuarioService.findAll();
+		usuarios.remove(usuario);
+		modelAndView.addObject("mensaje","Portal de Administración");
+		modelAndView.addObject("usuarios", usuarios);
+		modelAndView.addObject("usuario", usuario);
 		modelAndView.setViewName("admin/home");
 		return modelAndView;
 	}
