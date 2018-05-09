@@ -110,7 +110,7 @@
 								</a>
 								<i th:text="${video.likes}"></i> 
 								<i th:if="${video.visualizaciones} == 0">
-									<i th:class="@{stat-icon icon-views}"></i>&nbsp;<i th:class="views" th:text="${video.visualizaciones}"></i>
+									<i th:class="@{stat-icon icon-views}"></i>&nbsp;<i th:id="visitComentario" th:text="${video.visualizaciones}"></i>
 								</i> 
 								<i th:if="${video.visualizaciones} > 0">
 									<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<i th:id="visitComentario" th:text="${video.visualizaciones}"></i>

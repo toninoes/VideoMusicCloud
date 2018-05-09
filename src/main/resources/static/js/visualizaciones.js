@@ -1,17 +1,29 @@
 function visitsComentario() {
-	document.getElementById("visitComentario").innerText =  1 + parseInt(document.getElementById("visitComentario").innerText);
+	if(document.getElementById("visitComentario") == null)
+		document.getElementById("visitComentario").innerText =  1;
+	else	
+		document.getElementById("visitComentario").innerText =  1 + parseInt(document.getElementById("visitComentario").innerText);
 }
 
 function visitsPerfil() {
-	document.getElementById("visitPerfil").innerText =  1 + parseInt(document.getElementById("visitPerfil").innerText);
+	if(document.getElementById("visitPerfil") == null)
+		document.getElementById("visitPerfil").innerText =  1;
+	else
+		document.getElementById("visitPerfil").innerText =  1 + parseInt(document.getElementById("visitPerfil").innerText);
 }
 
 function visitsInicio() {
-	document.getElementById("visitInicio").innerText =  1 + parseInt(document.getElementById("visitInicio").innerText);
+	if(document.getElementById("visitInicio") == null)
+		document.getElementById("visitInicio").innerText =  1;
+	else
+		document.getElementById("visitInicio").innerText =  1 + parseInt(document.getElementById("visitInicio").innerText);
 }
 
 function visitsListas() {
-	document.getElementById("visitListas").innerText =  1 + parseInt(document.getElementById("visitListas").innerText);
+	if(document.getElementById("visitListas") == null)
+		document.getElementById("visitListas").innerText =  1;
+	else
+		document.getElementById("visitListas").innerText =  1 + parseInt(document.getElementById("visitListas").innerText);
 }
 
 function viewsComentario(nodo) {
