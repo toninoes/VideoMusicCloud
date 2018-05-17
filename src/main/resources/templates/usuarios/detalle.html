@@ -18,7 +18,7 @@
 					<ul th:class="header-menu" id="one">
 						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
 						<li><a th:href="@{/videos}">Listas</a></li>
-						<li><a th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">Perfil</a></li>
+						<li><a th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id} + '/0/0'}">Perfil</a></li>
 						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
 						<li><a th:href="@{#}">Suscripción</a></li>
 					</ul>
@@ -38,7 +38,7 @@
 		<div th:class="@{container be-detail-container}">
 			<div th:class="@{col-xs-12 col-md-12 _editor-content_}">
 				<div th:class="@{affix-block}" th:id="@{basic-information}">
-					<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/detalle/' + ${usuario.id}}">
+					<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/detalle/' + ${portal}}">
 					<div th:class="@{be-large-post}">
 						<div th:class="@{info-block style-2}">
 							<div th:class="@{be-large-post-align}">
@@ -47,7 +47,7 @@
 						</div>
 						<div th:class="@{be-large-post-align}">
 							<div th:class="@{be-change-ava}">
-								<input type="submit" th:href="@{'/usuarios/detalle/' + ${usuario.id}}" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Guardar Cambios'}">
+								<input type="submit" th:href="@{'/usuarios/detalle/' + ${usuario.id} + ${ext}}" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Guardar Cambios'}">
 								<div th:switch="${usuario.foto}">
 									<div th:case="''">
 										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
@@ -62,7 +62,7 @@
 									</div>
 									<div th:case="*">
 										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
-											<img th:src="@{'/usuarios/fotos/' + ${usuario.foto}}" th:alt="@{''}">
+											<img th:src="@{'/usuarios/fotos/' + ${usuario.id} + ${ext}}" th:alt="@{''}">
 										</a>
 										<label th:class="@{btn color-4 size-2 hover-7}" for="quitarFoto">
 											<i th:class="@{fa fa-pencil}"></i>Quitar Foto
@@ -105,6 +105,7 @@
 							</div>
 						</div>
 					</div>
+					<input type="hidden" id="eliminar" name="eliminar" th:value="${usuario.foto}">
 					</form>
 				</div>
 				<div th:class="@{affix-block}" th:id="@{edit-password}">
@@ -147,6 +148,18 @@
 		</div>
 	</div>
 	<!-- THE FOOTER -->
-	<div th:include="footer :: div"></div>
+	<div th:if="${portal} == 'no'" th:include="footer :: div"></div>
+	<div th:if="${portal} == 'si'">
+		<!-- SCRIPTS	 -->
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>		
+		<script type="text/javascript" th:src="@{/js/idangerous.swiper.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/isotope.pkgd.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery.viewportchecker.min.js}"></script>		
+		<script type="text/javascript" th:src="@{/js/global.js}"></script>
+		<script type="text/javascript" th:src="@{/js/visualizaciones.js}"></script>
+		<script	type="text/javascript" th:src="@{/js/admincheckboxes.js}"></script>
+	</div>
 </body>
 </html>

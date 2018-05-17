@@ -2,3 +2,7 @@
 	background-color: black !important;
 	color: white !important;
 }
+
+table.ancho {
+	width: 90%;
+}

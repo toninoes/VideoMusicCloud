@@ -1,6 +1,75 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+</head>
 <body th:fragment="div">
+
+	<div class="custom-margin-bottom"></div>
+
+	<!-- THE FOOTER -->
+	<footer>	
+		<div class="footer-main bgblack">
+			<div class="container-fluid custom-container">
+				<div class="row">	
+					<div class="col-md-2 col-xl-2">
+						<div class="footer-block">
+							<h1 class="footer-title">Redes Sociales</h1>
+							<ul th:class="@{soc_buttons}">
+								<li><a th:href="@{'https://es-es.facebook.com'}"><i class="fa fa-facebook"></i></a></li>
+								<li><a th:href="@{'https://twitter.com'}"><i class="fa fa-twitter"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-5 col-xl-5">
+						<div class="footer-block">
+							<h1 class="footer-title">Equipo RR</h1>
+							<div class="row footer-list-footer">
+								<div class="col-md-12">
+									<ul class="link-list">
+										<li><a th:href="@{#}">Manager > José María García Sánchez</a></li>
+										<li><a th:href="@{#}">Analista > Antonio Ruiz Rondán</a></li>
+										<li><a th:href="@{#}">Diseñador > Andrés Martínez Gavira</a></li>
+										<li><a th:href="@{#}">Programadores > Luis Fernando Pérez Peregrino, Antonio Ruiz Rondán, Andrés Martínez Gavira</a></li>
+										<li><a th:href="@{#}">Testers > José Antonio Rodríguez Cárdenas, Santiago Zaldívar Lavalle</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>				
+					<div class="col-md-2 galerry">
+						<div class="footer-block">					
+							<h1 class="footer-title">Proyecto VMC</h1>
+							<a th:href="@{/videos/misvideos}"><img th:class="@{custom-image-size}" th:src="@{/img/logoblack.png}" alt="Logo"></a>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="footer-block">
+							<h1 class="footer-title">Contacto</h1>
+							<form method="GET" th:action="@{'mailto:' + ${mailadmin}}" class="subscribe-form">
+								<input type="text" placeholder="Tu nombre" required>
+								<div class="submit-block">
+									<i class="fa fa-envelope-o"></i>
+									<input type="submit" value="">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer-bottom bgblack">
+			<div class="container-fluid custom-container">
+				<div class="col-md-12 footer-end clearfix">
+					<div class="left">
+						<span class="copy">© 2018. Todos los derechos reservados.<span class="white"><a th:href="@{#}"> VMC</a></span></span>
+						<span class="created">Creado por <span class="white"><a th:href="@{#}"> RR Team</a></span></span>
+					</div>
+				</div>			
+			</div>
+		</div>		
+	</footer>
+	
 	<!-- SCRIPTS	 -->
 	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
@@ -11,5 +80,6 @@
 	<script type="text/javascript" th:src="@{/js/global.js}"></script>
 	<script type="text/javascript" th:src="@{/js/visualizaciones.js}"></script>
 	<script	type="text/javascript" th:src="@{/js/admincheckboxes.js}"></script>
+	
 </body>
 </html>

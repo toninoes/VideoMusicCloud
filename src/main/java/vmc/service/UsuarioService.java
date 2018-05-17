@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,8 @@ import vmc.repository.UsuarioRepository;
 @Service
 public class UsuarioService {
 	
+	private static final int USUARIOS_POR_PAGINA = 8;
+	
 	@Autowired
 	private AlmacenamientoService almacenamientoService;
 
@@ -50,9 +54,25 @@ public class UsuarioService {
 	@Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
+	public static int getUSUARIOS_POR_PAGINA() {
+		return USUARIOS_POR_PAGINA;
+	}
+	
+	public int allPages(Pageable p, long total, String segsig) {
+		return (int)Math.ceil(total*(1.0) / USUARIOS_POR_PAGINA*(1.0));
+	}
+	
 	public List<Usuario> findAll() {
 		return usuarioRepository.findAll();
 	}
+	
+	public Page<Usuario> findAllSiguiendo(Pageable p, Set<Usuario> usuarios) {   	
+		return usuarioRepository.findAllSiguiendo(p, usuarios);
+    }
+	
+	public Page<Usuario> findAllSeguidores(Pageable p, Set<Usuario> usuarios) {   	
+		return usuarioRepository.findAllSeguidores(p, usuarios);
+    }
 	
 	public Usuario findById(@PathVariable long id) {
 		Usuario usuario = usuarioRepository.findById(id)
@@ -63,6 +83,10 @@ public class UsuarioService {
 	
 	public Usuario findByMail(@PathVariable String mail) {
 		return usuarioRepository.findByMail(mail);
+	}
+	
+	public Usuario findByRol(String roladmin) {
+		return usuarioRepository.findByRolAdmin(rolRepository.findByRol(roladmin));	
 	}
 	
 	public List<Video> findVideosByUsuarioId(@PathVariable long id) {
@@ -117,6 +141,11 @@ public class UsuarioService {
 			usuario.setApellidos(apellidos);
 			usuario.setIntereses(intereses);
 			if(quitarFoto) usuario.setFoto("");
+			else {
+				String ext = usuario.getFoto();
+				ext = ext.substring(ext.lastIndexOf("."));
+				usuario.setFoto(usuario.getId() + ext);
+			}
 			usuarioRepository.save(usuario);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Usuario", id, e.getMessage());
@@ -146,8 +175,17 @@ public class UsuarioService {
                 "attachment; nombrefoto=\fotos\"" + foto.getFilename() + "\"").body(foto);
     }
 	
-	public void borrar(@PathVariable String filename) {
-        almacenamientoService.delete(filename, "foto");
+	public void borrar(Usuario usuario) {
+		String ext = usuario.getFoto();
+		if(!ext.equals(""))
+			ext = ext.substring(ext.lastIndexOf("."));
+		else
+			ext = ".jpg";
+        almacenamientoService.delete(usuario.getId() + ext, "foto");
+    }
+	
+	public void deleteFoto(Usuario usuario) {
+        usuarioRepository.updateByFoto(usuario.getId());
     }
 	
 	public long cambiarClave(@RequestParam("oldpassword") String o,
@@ -174,10 +212,13 @@ public class UsuarioService {
     		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     		Usuario usuario = findByMail(auth.getName());
     		
-    		usuario.setFoto(f.getOriginalFilename());
+    		String ext = f.getOriginalFilename();
+    		ext = ext.substring(ext.lastIndexOf("."));
+    		
+    		usuario.setFoto(usuario.getId() + ext);
     		usuarioRepository.save(usuario);
     		
-        	almacenamientoService.store(f, "foto");
+        	almacenamientoService.store(f, "foto", usuario.getId() + ext);
         	
         	return new ResponseEntity<Usuario>(usuario, HttpStatus.CREATED);
     	}else {
@@ -203,16 +244,25 @@ public class UsuarioService {
     	usuarioRepository.save(pinchado);
     }
 	
-	public Set<Usuario> seguidores(Usuario usuario) {
-		return usuario.getSeguidores();
+	public Page<Usuario> seguidores(Pageable p, Set<Usuario> usuarios) {
+		return usuarioRepository.findAllSeguidores(p, usuarios);
 	}
 	
-	public Set<Usuario> siguiendo(Usuario usuario) {
-		return usuario.getSiguiendo();
+	public Page<Usuario> siguiendo(Pageable p, Set<Usuario> usuarios) {
+		return usuarioRepository.findAllSiguiendo(p, usuarios);
 	}
 	
 	public List<Usuario> findSearch(String busqueda) {
 		return usuarioRepository.findByUsuarioSearch(busqueda);
+	}
+	
+	public Page<Usuario> findPageSearch(Pageable p, String busqueda, String opcion, long id) {
+		switch(opcion) {
+			case "nombre": return usuarioRepository.findByUsuarioSearchNombre(p, busqueda, id);
+			case "apellidos": return usuarioRepository.findByUsuarioSearchApellidos(p, busqueda, id);
+			case "nombreapellidos": return usuarioRepository.findByUsuarioSearchNombreApellidos(p, busqueda, busqueda, id);
+			default: return usuarioRepository.findByUsuarioSearch(p, busqueda, id);
+		}
 	}
 	
 	@ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)

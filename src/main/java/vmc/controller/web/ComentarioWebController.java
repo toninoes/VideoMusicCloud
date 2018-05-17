@@ -38,6 +38,7 @@ public class ComentarioWebController {
 				
 		Usuario logueado = usuarioService.findById(logueadoId);
 		Usuario pinchado = usuarioService.findById(pinchadoId);
+		Usuario admin = usuarioService.findByRol("ADMIN");
 		
 		Video video = videoService.findById(videoId);
 		List<Comentario> comentarios = comentarioService.findComentariosByVideo(video);
@@ -52,6 +53,7 @@ public class ComentarioWebController {
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);		
 		model.addAttribute("comentarios", comentarios);
+		model.addAttribute("mailadmin", admin.getMail());
 		
 		return "comentarios/comentarioVideos";
 	}

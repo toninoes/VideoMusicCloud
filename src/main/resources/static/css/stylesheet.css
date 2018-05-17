@@ -71,6 +71,10 @@ td {
 	color: white !important;
 }
 
+.bgblack {
+	background-color: black !important;
+}
+
 .custom-textarea {
 	font-size: 10px !important;
 }
@@ -91,6 +95,10 @@ td {
 	float: left !important;
 }
 
+.custom-margin-left { 
+	margin-left: 5px; 
+}
+
 .custom-margin { 
 	margin-top: 20px; 
 	margin-bottom: 20px; 
@@ -109,9 +117,20 @@ td {
 	margin-bottom: 10px; 
 }
 
+.custom-margin-bottom {
+	margin-bottom: 302px; 
+}
+
 .custom-margin-icon {
 	margin-left: 10px;
 	margin-right: 10px;
+}
+
+.custom-image-size {
+	min-width: 180px;
+	min-height: 65px;
+	width: auto;
+	height: auto;
 }
 
 .custom-font { 
@@ -200,6 +219,93 @@ video {
 
 [hidden] {
 	display: none !important;
+}
+
+input#videobox {
+	opacity: 0.01;
+}
+
+#div1 {
+	background-color: #181d27;
+	border: 5px dashed white;
+	border-radius: 15px;
+	width: 500px;
+	height: 425px;
+	background-image: url('/img/logoblack.png');
+    background-repeat-x: no-repeat;
+	background-repeat-y: no-repeat;
+	background-position: center;
+}
+
+#div1,
+#div1 input#videobox {
+    width: 500px;
+    height: 425px;
+}
+
+#div1 input.filled {
+    border: 5px dashed green !important;
+}
+
+#div1 input.hover {
+    border: 5px dashed green;
+}
+
+#div1 #list {
+	position: absolute;
+	top: 0px;
+	width: 490px;
+}
+
+#thumb {
+	position: absolute;
+	height: 300px;
+	border: 1px solid #000;
+	margin: 0;
+}
+
+.input-search {
+	z-index: 1 !important;
+}
+
+.pagination {
+    display: block;
+}
+
+.pagination a {
+	background-color: black;
+    color: white;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid #ddd; /* Gray */
+    font-size: 24px;
+    transition: background-color .3s;
+}
+
+.pagination a.active {
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
+}
+
+.pagination a:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.pagination a:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.pagination a:hover:not(.active) {
+	background-color: blue;
+}
+
+.pagination a:visited {
+	color: white;
 }
 
 .custom-column-5 { width: 20%; padding: 0 15px; float: left; }
@@ -1371,6 +1477,8 @@ a.social-btn:hover { opacity: 0.6; color: #fff; }
 .icon-worldwide { display: inline-block; background: url("../img/icon-worldwide.png") no-repeat; text-indent: -9999px; text-align: left; width: 16px; height: 16px; }
 
 .icon-worldwide-b { display: inline-block; background: url("../img/icon-worldwide-b.png") no-repeat; text-indent: -9999px; text-align: left; width: 16px; height: 16px; }
+
+.icon-remove { display: inline-block; background: url("../img/icon-remove.png") no-repeat; text-indent: -9999px; text-align: left; width: 19px; height: 19px; }
 
 .be-user-block.style-2, .be-user-block.style-3 { padding: 30px 15px 15px 15px; text-align: center; }
 

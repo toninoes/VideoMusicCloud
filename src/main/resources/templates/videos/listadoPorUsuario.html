@@ -25,7 +25,7 @@
 					<ul th:class="header-menu" id="one">
 						<li th:class="active-header"><a th:href="@{/videos/misvideos}">Inicio</a></li>
 						<li><a th:href="@{/videos}">Listas</a></li>
-						<li><a th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">Perfil</a></li>
+						<li><a th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id} + '/0/0'}">Perfil</a></li>
 						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
 						<li><a th:href="@{#}">Suscripción</a></li>
 					</ul>
@@ -53,7 +53,7 @@
 						<div th:class="@{be-rowline}">
 							<ul>
 								<li>
-									<a th:class="@{rowline-text}" th:href="@{#}" th:text="${video.titulo}"></a>
+									<a th:class="@{rowline-text}" th:href="@{'/comentarios/' + ${usuario.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${gusta}}" th:text="${video.titulo}"></a>
 									<i th:each="genero : ${video.VideoGeneros}">
 	    								<a th:class="@{rowline-text pull-right}" th:href="@{#}" th:text="@{'#' + ${genero.nombre} + ' '}"></a>
 	    							</i>
@@ -70,18 +70,21 @@
 								<span th:class="@{custom-td-font}"></span>
 								<span th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 							</i>
+							<a th:href="@{'mailto:'+ ${mailadmin}}">
+								<img th:class="@{stat-icon pull-right}" th:src="@{/img/block-16x16.png}" alt="Denunciar video">
+							</a>
 							<a th:href="@{'/comentarios/' + ${usuario.id} + '/' + ${usuario.id} + '/' + ${video.id} + '/' + ${gusta}}">
-								<span th:class="@{pull-right}">
+								<span th:class="@{pull-right custom-margin-icon}">
 									<i th:class="@{stat-icon icon-comment}"></i>
 								</span>
 							</a>
 						</div>
 						<div th:class="@{author-post}" th:switch="${video.usuario.foto}"> 
-							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id}}">
+							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id} + '/0/0'}">
 								<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
 								<span>by <i th:text="${video.usuario.nombre}"></i></span>
 							</a>
-							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id}}">
+							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id} + '/0/0'}">
 								<img th:src="@{'/usuarios/fotos/' + ${video.usuario.foto}}" alt="author" th:class="@{ava-author}">
 								<span>by <i th:text="${video.usuario.nombre}"></i></span>
 							</a>
@@ -103,6 +106,20 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div th:class="@{pagination}">
+				  <a th:href="@{'/videos/misvideos/' + ${page-active-5} + '/0/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${pages} > 5 and ${page} >= 5">&laquo;</a>
+				  <a th:href="@{'/videos/misvideos/' + ${page-active} + '/0/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active}<=${pages-1} and ${page-active}==${page} and ${pages} > 1" class="active" th:text="${page - active + 1}"></a>
+				  <a th:href="@{'/videos/misvideos/' + ${page-active} + '/0/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active}<=${pages-1} and ${page-active}!=${page} and ${pages} > 1" th:text="${page - active + 1}"></a>
+				  <a th:href="@{'/videos/misvideos/' + ${page-active+1} + '/1/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}==${page} and ${pages} > 1" class="active" th:text="${page - active + 2}"></a>
+				  <a th:href="@{'/videos/misvideos/' + ${page-active+1} + '/1/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}!=${page} and ${pages} > 1" th:text="${page - active + 2}"></a>				  
+				  <a th:href="@{'/videos/misvideos/' + ${page-active+2} + '/2/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}==${page} and ${pages} > 1" class="active" th:text="${page - active + 3}"></a>				  
+				  <a th:href="@{'/videos/misvideos/' + ${page-active+2} + '/2/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}!=${page} and ${pages} > 1" th:text="${page - active + 3}"></a>				  
+				  <a th:href="@{'/videos/misvideos/' + ${page-active+3} + '/3/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}==${page} and ${pages} > 1" class="active" th:text="${page - active + 4}"></a>				  
+				  <a th:href="@{'/videos/misvideos/' + ${page-active+3} + '/3/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}!=${page} and ${pages} > 1" th:text="${page - active + 4}"></a>				  
+				  <a th:href="@{'/videos/misvideos/' + ${page-active+4} + '/4/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}==${page} and ${pages} > 1" class="active" th:text="${page - active + 5}"></a>				  
+				  <a th:href="@{'/videos/misvideos/' + ${page-active+4} + '/4/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}!=${page} and ${pages} > 1" th:text="${page - active + 5}"></a>				  
+				  <a th:href="@{'/videos/misvideos/' + ${page-active+5} + '/0/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${pages} > 5 and ${page-active+5} < ${pages}">&raquo;</a>
 			</div>
 		</div>
 	</div>

@@ -35,7 +35,7 @@
 		</div>
 		
 		<div align="center">
-			<table width="90%">
+			<table th:class="ancho">
 				<tr th:class="bgcolor-black-2">
 					<td width="14%">Nombre</td>
 					<td width="14%">Apellidos</td>
@@ -59,7 +59,7 @@
 		
 		<form method="POST" th:action="@{'/admin/home/'}" id="formUsers" name="formUsers">
 			<div align="center">
-				<table width="90%">
+				<table th:class="ancho">
 					<tr>
 						<th>
 							<div align="right">
@@ -86,8 +86,7 @@
 						</th>
 						<th colspan="3" align="right">
 							<div align="right">
-								<a th:href="@{'/registro/portal'}"><input th:class="btn-primary" id="crear" name="crear" type="button" value="Crear"></a>
-								<input th:class="btn-danger" id="eliminar" name="eliminar" type="submit" value="Eliminar">
+								<a th:href="@{'/registro/portal'}"><input th:class="btn-primary" id="crear" name="crear" type="button" value="Crear Usuario"></a>
 							</div>
 						</th>
 					</tr>
@@ -115,7 +114,14 @@
 		
 	</div>
 	
-	<!-- THE FOOTER -->
-	<div th:include="footer :: div"></div>
+	<!-- SCRIPTS -->
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>		
+	<script type="text/javascript" th:src="@{/js/idangerous.swiper.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/isotope.pkgd.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.viewportchecker.min.js}"></script>		
+	<script type="text/javascript" th:src="@{/js/global.js}"></script>
+	<script	type="text/javascript" th:src="@{/js/admincheckboxes.js}"></script>
 </body>
 </html>

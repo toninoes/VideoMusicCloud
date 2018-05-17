@@ -7,12 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import vmc.model.Genero;
-import vmc.model.Video;
 
 public interface GeneroRepository extends JpaRepository<Genero, Long> {		
 	Genero findByNombre(@Param("nombre") String nombre);
 	
-	@Query("SELECT v.videogeneros FROM Video v WHERE v = :video")
-	Set<Genero> findGenerosByVideo(@Param("video") Video video);
+	@Query("SELECT g FROM Genero g WHERE g.nombre LIKE %:nombre%")
+	Set<Genero> findGeneroByNombre(@Param("nombre") String nombre);
 }
 

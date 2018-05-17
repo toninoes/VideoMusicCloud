@@ -1,23 +1,23 @@
 package vmc.controller.web;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-import javax.validation.Valid;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,117 +48,231 @@ public class UsuarioWebController {
 	@Autowired
 	private ApplicationService appService;
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{id}}")
 	public String findById(Model model, @PathVariable long id) {
 		Usuario usuario = usuarioService.findById(id);
+		Usuario admin = usuarioService.findByRol("ADMIN");
+		String ext = "" + usuario.getFoto();
+		if(!ext.equals(""))
+			ext = ext.substring(ext.lastIndexOf("."), ext.length());
+		else
+			ext = ".jpg";
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("portal", "no");
+		model.addAttribute("ext", ext);
+		model.addAttribute("mailadmin", admin.getMail());
 		return "usuarios/detalle";
 	}
 	
 	@GetMapping("/detalle/{id}")
 	public String findByIdPortal(Model model, @PathVariable long id) {
 		Usuario usuario = usuarioService.findById(id);
+		Usuario admin = usuarioService.findByRol("ADMIN");
+		String ext = "" + usuario.getFoto();
+		if(!ext.equals(""))
+			ext = ext.substring(ext.lastIndexOf("."), ext.length());
+		else
+			ext = ".jpg";
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("portal", "si");
+		model.addAttribute("ext", ext);
+		model.addAttribute("mailadmin", admin.getMail());
 		return "usuarios/detalle";
 	}
 	
-	@GetMapping("/{logueadoId}/{pinchadoId}/{segsig}")
-	public String findAll(Model model, @PathVariable long logueadoId,
-									   @PathVariable long pinchadoId,
-									   @PathVariable String segsig) {
+	@GetMapping("/listado/{logueadoId}/{pinchadoId}/{segsig}/{nombre}/{apellidos}/{search}")
+    public String findUsers(@PathVariable long logueadoId, @PathVariable long pinchadoId, @PathVariable String segsig,
+    						@PathVariable String nombre, @PathVariable String apellidos, @PathVariable String search,
+    						RedirectAttributes ra) {
+		
+		Pageable p = PageRequest.of(0, (int)UsuarioService.getUSUARIOS_POR_PAGINA());
+		
+		Usuario pinchado = usuarioService.findById(pinchadoId);
+		ra.addAttribute("logueadoId", logueadoId);
+		ra.addAttribute("pinchadoId", pinchadoId);
+		ra.addAttribute("page", 0);
+		ra.addAttribute("active", 0);
+		if(segsig.equals("seguidores"))
+			ra.addAttribute("pages", usuarioService.allPages(p, pinchado.getSeguidores().size(), segsig));
+		else 
+			ra.addAttribute("pages", usuarioService.allPages(p, pinchado.getSiguiendo().size(), segsig));
+		ra.addAttribute("segsig", segsig);
+		ra.addAttribute("nombre", nombre);
+		ra.addAttribute("apellidos", apellidos);
+		ra.addAttribute("search", search);
+		return "redirect:/usuarios/listado/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}/{segsig}/{nombre}/{apellidos}/{search}";
+	}
+	
+	@GetMapping("/listado/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}/{segsig}/{nombre}/{apellidos}/{search}")
+	public String findUsers(Model model, @PathVariable long logueadoId,
+									     @PathVariable long pinchadoId,
+									     @PathVariable int page,
+									     @PathVariable int active,
+									     @PathVariable int pages,
+									     @PathVariable String segsig,
+									     @PathVariable String nombre,
+									     @PathVariable String apellidos,
+									     @PathVariable String search) {
+		
+		Pageable p = PageRequest.of(page, (int)UsuarioService.getUSUARIOS_POR_PAGINA());
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario logueado = usuarioService.findByMail(auth.getName());
 		Usuario pinchado = usuarioService.findById(pinchadoId); 
+		Usuario admin = usuarioService.findByRol("ADMIN");
 		
-		if(segsig.equals("seguidores") && (logueadoId == pinchadoId))
-			model.addAttribute("usuarios", usuarioService.seguidores(logueado));
-		else if(segsig.equals("seguidores") && (logueadoId != pinchadoId))
-			model.addAttribute("usuarios", usuarioService.seguidores(pinchado));
-		else if(segsig.equals("siguiendo") && (logueadoId == pinchadoId))
-			model.addAttribute("usuarios", usuarioService.siguiendo(logueado));
-		else
-			model.addAttribute("usuarios", usuarioService.siguiendo(pinchado));
-        
+		if(search.equals("0")) {
+			Page<Usuario> usuarios = null;
+			if(segsig.equals("seguidores") && (logueadoId == pinchadoId)) {
+				usuarios = usuarioService.seguidores(p, pinchado.getSeguidores());
+				model.addAttribute("usuarios", usuarios);
+			} else if(segsig.equals("seguidores") && (logueadoId != pinchadoId)) {
+				usuarios = usuarioService.seguidores(p, pinchado.getSeguidores());
+				model.addAttribute("usuarios", usuarios);
+			} else if(segsig.equals("siguiendo") && (logueadoId == pinchadoId)) {
+				usuarios = usuarioService.siguiendo(p, pinchado.getSiguiendo());
+				model.addAttribute("usuarios", usuarios);
+			} else {
+				usuarios = usuarioService.siguiendo(p, pinchado.getSiguiendo());
+				model.addAttribute("usuarios", usuarios);
+			}
+			model.addAttribute("pages", usuarios.getTotalPages());
+		} else {
+			Page<Usuario> usuarios = null;
+			if(nombre.equals("1") && apellidos.equals("1")) {
+				usuarios = usuarioService.findPageSearch(p, search, "nombreapellidos", logueadoId);
+				model.addAttribute("usuarios", usuarios);
+			} else if(nombre.equals("1")) {
+				usuarios = usuarioService.findPageSearch(p, search, "nombre", logueadoId);
+				model.addAttribute("usuarios", usuarios);
+			} else if(apellidos.equals("1")) {
+				usuarios = usuarioService.findPageSearch(p, search, "apellidos", logueadoId);
+				model.addAttribute("usuarios", usuarios);
+			} else {
+				usuarios = usuarioService.findPageSearch(p, search, "0", logueadoId);
+				model.addAttribute("usuarios", usuarios);
+			}
+			model.addAttribute("pages", usuarios.getTotalPages());
+		}
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
-			
+		model.addAttribute("mailadmin", admin.getMail());
+		model.addAttribute("page", page);
+		model.addAttribute("active", active);	
+		model.addAttribute("segsig", segsig);
+		
 		return "usuarios/listado";
 	}
 	
-	@GetMapping("/mail/{mail}")
+	/*@GetMapping("/mail/{mail}")
 	public String findByMail(Model model, @PathVariable String mail) {
 		model.addAttribute("usuario", usuarioService.findByMail(mail));
 		return "usuarios/detalle";
-	}
+	}*/
 	
 	@GetMapping("/perfil")
-	public String findMyVideos(Model model) {
+    public String findMyVideos(RedirectAttributes ra) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
-		List<Video> videos = videoService.findVideosByUsuarioId(usuario.getId());
-		List<Boolean> likes = new ArrayList<Boolean>();
-		Comentario comentario = null;
-		for(Video v : videos) {
-			comentario = comentarioService.findByVideoUsuario(v, usuario);
-			if(comentario != null)
-				likes.add(comentario.isGusta());
-			else
-				likes.add(false);
-		}
-		model.addAttribute("videos", videos);
-		model.addAttribute("likes", likes);
-		model.addAttribute("usuario", usuario);
-		
-		return "usuarios/perfil";
+		ra.addAttribute("logueadoId", usuario.getId());
+		ra.addAttribute("pinchadoId", usuario.getId());
+		ra.addAttribute("page", 0);
+		ra.addAttribute("active", 0);
+		return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}/{page}/{active}";
 	}
 	
-	@GetMapping("/fotos/{nombrefoto:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> servirFoto(@PathVariable String nombrefoto) {
-    	return usuarioService.descargar(nombrefoto);
-    }
+	@GetMapping("/perfil/{logueadoId}/{pinchadoId}/{page}/{active}")
+    public String findMyVideos(@PathVariable long logueadoId, @PathVariable long pinchadoId, 
+    		                   @PathVariable int page, @PathVariable int active, RedirectAttributes ra) {
+		
+		Usuario usuario = usuarioService.findById(pinchadoId);
+		ra.addAttribute("logueadoId", logueadoId);
+		ra.addAttribute("pinchadoId", pinchadoId);
+		ra.addAttribute("page", page);
+		ra.addAttribute("active", active);
+		Set<Usuario> usuarios = new HashSet<Usuario>();
+		ra.addAttribute("pages", videoService.myPages(usuario, usuarios));
+		ra.addAttribute("search", "0");
+		ra.addAttribute("visitas", 0);
+		ra.addAttribute("gustas", 0);
+		ra.addAttribute("titulo", 0);
+		ra.addAttribute("descripcion", 0);
+		ra.addAttribute("genero", 0);
+		ra.addAttribute("user", 0);
+		return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}";
+	}
 	
-	@GetMapping("/perfil/{logueadoId}/{pinchadoId}")
-	public String findPerfil(Model model, @PathVariable long logueadoId,
-										  @PathVariable long pinchadoId) {
-		String sigue = "";		
+	@GetMapping("/perfil/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}")
+	public String findMyVideos(Model model, @PathVariable long logueadoId, @PathVariable long pinchadoId, 
+            				   @PathVariable int page, @PathVariable int active, @PathVariable int pages,
+            				   @PathVariable String search, @PathVariable int visitas, @PathVariable int gustas,
+							   @PathVariable int titulo, @PathVariable int descripcion, @PathVariable int genero,
+							   @PathVariable int user) {
+		
+		String sigue = "";
+		Pageable p = PageRequest.of(page, (int)VideoService.getVIDEOS_POR_PAGINA());
+		
 		Usuario logueado = usuarioService.findById(logueadoId);
-		Usuario pinchado = usuarioService.findById(pinchadoId);
-		List<Video> videos = videoService.findVideosByUsuarioId(pinchado.getId());
+		Usuario usuario = usuarioService.findById(pinchadoId);
+		Usuario admin = usuarioService.findByRol("ADMIN");
+		Set<Usuario> usuarios = new HashSet<Usuario>(); 
 		List<Boolean> likes = new ArrayList<Boolean>();
-		Comentario comentario = null;
-		for(Video v : videos) {
-			comentario = comentarioService.findByVideoUsuario(v, logueado);
-			if(comentario != null)
-				likes.add(comentario.isGusta());
-			else
-				likes.add(false);
+		
+		if(visitas == 1 || gustas == 1 || titulo == 1 || descripcion == 1 || genero == 1 || user == 1 || !search.equals("0")) {
+			List<Video> videosMy = videoService.findMyVideos(usuario, usuarios);
+			Page<Video> videos = videoService.findSearch(p, videosMy, visitas, gustas, titulo, descripcion, genero, user, search);
+			for(Video v : videos) {
+				Comentario comentario = comentarioService.findByVideoUsuario(v, usuario);
+				if(comentario != null)
+					likes.add(comentario.isGusta());
+				else
+					likes.add(false);
+			}
+			model.addAttribute("pages", videos.getTotalPages());
+			model.addAttribute("videos", videos);
+		} else {
+			//usuario.getSiguiendo().add(usuario);
+			Page<Video> videosMy = videoService.findMyPage(p, usuario, usuarios);
+			for(Video v : videosMy) {
+				Comentario comentario = comentarioService.findByVideoUsuario(v, usuario);
+				if(comentario != null)
+					likes.add(comentario.isGusta());
+				else
+					likes.add(false);
+			}
+			model.addAttribute("pages", videosMy.getTotalPages());
+			model.addAttribute("videos", videosMy);
 		}
 		
 		if(logueado.getId() == pinchadoId)
 			sigue = "hidden";
-		else if(usuarioService.findBySiguiendo(logueado, pinchado)) 
+		else if(usuarioService.findBySiguiendo(logueado, usuario)) 
 			sigue = "dejar";
 		else
 			sigue = "seguir";
 		
-		model.addAttribute("logueado", logueado);
-		model.addAttribute("usuario", pinchado);		
-		model.addAttribute("videos", videos);
+		String ext = "" + usuario.getFoto();
+		if(!ext.equals(""))
+			ext = ext.substring(ext.lastIndexOf("."), ext.length());
+		else 
+			ext = ".jpg";
+		
 		model.addAttribute("likes", likes);
 		model.addAttribute("sigue", sigue);
+		model.addAttribute("logueado", logueado);
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("ext", ext);
+		model.addAttribute("mailadmin", admin.getMail());
+		model.addAttribute("page", page);
+		model.addAttribute("active", active);
 		
 		return "usuarios/perfil";
 	}
 	
-	@GetMapping("/perfil/{logueadoId}/{pinchadoId}/{sigue}")
-	public String cambiarBoton(Model model, @PathVariable long logueadoId, 
-			                                @PathVariable long pinchadoId, 
-			                                @PathVariable String sigue, 
-			                                RedirectAttributes ra) {
+	@GetMapping("/perfil/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}/{sigue}")
+	public String cambiarBoton(@PathVariable long logueadoId, @PathVariable long pinchadoId, 
+			   				   @PathVariable int page, @PathVariable int active, @PathVariable int pages, 
+			                   @PathVariable String sigue, RedirectAttributes ra) {
 		
 		Usuario logueado = usuarioService.findById(logueadoId);
 		Usuario pinchado = usuarioService.findById(pinchadoId);
@@ -171,25 +285,37 @@ public class UsuarioWebController {
 			sigue = "dejar";
 		}
 		
-		List<Video> videos = videoService.findVideosByUsuarioId(pinchado.getId());
-		List<Boolean> likes = new ArrayList<Boolean>();
-		Comentario comentario = null;
-		for(Video v : videos) {
-			comentario = comentarioService.findByVideoUsuario(v, logueado);
-			if(comentario != null)
-				likes.add(comentario.isGusta());
-			else
-				likes.add(false);
-		}
+		ra.addAttribute("logueadoId", logueadoId);
+		ra.addAttribute("pinchadoId", pinchadoId);
+		ra.addAttribute("page", page);
+		ra.addAttribute("active", active);
+		ra.addAttribute("pages", pages);
+		ra.addAttribute("sigue", sigue);
 		
-		model.addAttribute("logueado", logueado);
-		model.addAttribute("usuario", pinchado);
-		model.addAttribute("videos", videos);
-		model.addAttribute("likes", likes);
-		model.addAttribute("sigue", sigue);
-		
-		return "usuarios/perfil";
+		return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}";
 	}
+	
+	@GetMapping("/perfil/{id}")
+	public String elimnarVideo(Model model, @PathVariable long id, RedirectAttributes ra) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		Video video = videoService.findById(id);
+		videoService.delete(video);
+		String ext = video.getNombre();
+		ext = ext.substring(ext.lastIndexOf("."));
+		videoService.borrar(video.getId() + ext);
+		
+		ra.addAttribute("logueadoId", usuario.getId());
+		ra.addAttribute("pinchadoId", usuario.getId());
+		
+		return "redirect:/usuarios/perfil";
+	}
+	
+	@GetMapping("/fotos/{nombrefoto:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> servirFoto(@PathVariable String nombrefoto) {
+		return usuarioService.descargar(nombrefoto);
+    }
 	
 	@PostMapping("/detalle")
 	public String cambiarClave(@RequestParam("oldpassword") String o,
@@ -200,24 +326,120 @@ public class UsuarioWebController {
 		return "redirect:/usuarios/{id}";
 	}
 	
-	@PostMapping("/detalle/{id}")
-	public String savePerfilById(@PathVariable long id, @RequestParam("foto") MultipartFile f, 
-														@RequestParam(required = false) boolean quitarFoto,
-														@RequestParam("nombre") String nombre,
-														@RequestParam("apellidos") String apellidos,
-														@RequestParam("intereses") String intereses,
-														RedirectAttributes ra) {
+	@PostMapping("/detalle/{portal}")
+	public String saveDeletePerfilById(@PathVariable String portal,
+									   @RequestParam(value = "eliminar", required=false) String eliminar,
+							  		   @RequestParam("foto") MultipartFile f, 
+									   @RequestParam(required = false) boolean quitarFoto,
+									   @RequestParam("nombre") String nombre,
+									   @RequestParam("apellidos") String apellidos,
+									   @RequestParam("intereses") String intereses,
+									   RedirectAttributes ra) {
 		
-		if(appService.checkFilePhotoSize(f)) {	
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		if(eliminar != null && !eliminar.equals("")) {
+			usuarioService.deleteFoto(usuario);
+			usuarioService.borrar(usuario);
+		} else if(appService.checkFilePhotoSize(f)) {	
     		usuarioService.subir(f);
-    		usuarioService.update(id, quitarFoto, nombre, apellidos, intereses);
+    		usuarioService.update(usuario.getId(), quitarFoto, nombre, apellidos, intereses);
     		ra.addFlashAttribute("mensajeSubir", "Foto " + f.getOriginalFilename() + " subida correctamente.");
         	ra.addFlashAttribute("mensajeEliminar", "Foto " + f.getOriginalFilename() + " eliminada correctamente.");
     	} else
     		ra.addFlashAttribute("mensaje", "Error, la foto ocupa más de 22 megas");
-    		
-    	return "redirect:/usuarios/{id}";
+		
+		ra.addAttribute("id", usuario.getId());
+		
+    	if(portal.equals("si"))	
+    		return "redirect:/usuarios/detalle/{id}";
+    	else
+    		return "redirect:/usuarios/{id}";
 	}
+	
+	@PostMapping("/listado/{logueadoId}/{pinchadoId}/{segsig}")
+    public String buscarUsuario(Model model, @RequestParam(value = "Nombre", required = false) Boolean nombre,
+    									     @RequestParam(value = "Apellidos", required = false) Boolean apellidos,
+    									     @RequestParam(value = "Busqueda") String busqueda,
+    									     @PathVariable("logueadoId") long logueadoId,
+    									     @PathVariable("pinchadoId") long pinchadoId,
+    									     @PathVariable("segsig") String segsig,
+    									     RedirectAttributes ra) {
+		
+		ra.addAttribute("logueadoId", logueadoId);
+		ra.addAttribute("pinchadoId", pinchadoId);
+		ra.addAttribute("segsig", segsig);
+		
+		if(nombre == null)
+			ra.addAttribute("nombre", "0");
+		else
+			ra.addAttribute("nombre", "1");
+		
+		if(apellidos == null)
+			ra.addAttribute("apellidos", "0");
+		else
+			ra.addAttribute("apellidos", "1");
+		
+		if(busqueda.equals(""))
+			ra.addAttribute("search", "0");
+		else
+			ra.addAttribute("search", busqueda.toLowerCase());
+		
+		return "redirect:/usuarios/listado/{logueadoId}/{pinchadoId}/{segsig}/{nombre}/{apellidos}/{search}";
+	}
+	
+	@PostMapping("/perfil")
+    public String buscarVideo(Model model, @RequestParam(value = "Visualizaciones", required = false) Boolean visitas,
+    									   @RequestParam(value = "Likes", required = false) Boolean gustas,
+    									   @RequestParam(value = "Titulo", required = false) Boolean titulo,
+    									   @RequestParam(value = "Descripcion", required = false) Boolean descripcion,
+    									   @RequestParam(value = "Genero", required = false) Boolean genero,
+    									   @RequestParam(value = "Usuario", required = false) Boolean user,
+    									   @RequestParam(value = "Busqueda", required = false) String busqueda,
+    									   RedirectAttributes ra) {
+    	ra.addAttribute("page", 0);
+		ra.addAttribute("active", 0);
+		Pageable p = PageRequest.of(0, (int)VideoService.getVIDEOS_POR_PAGINA());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		Set<Usuario> usuarios = new HashSet<Usuario>();
+		ra.addAttribute("pages", videoService.findMyPage(p, usuario, usuarios).getTotalPages());
+		
+		ra.addAttribute("logueadoId", usuario.getId());
+		ra.addAttribute("pinchadoId", usuario.getId());
+		
+		if(busqueda.equals(""))
+			ra.addAttribute("search", "0");
+		else
+			ra.addAttribute("search", busqueda);
+    	
+    	if(visitas == null)
+    		ra.addAttribute("visitas", 0);
+    	else
+    		ra.addAttribute("visitas", 1);
+    	if(gustas == null)
+    		ra.addAttribute("gustas", 0);
+    	else
+    		ra.addAttribute("gustas", 1);
+    	if(titulo == null)
+    		ra.addAttribute("titulo", 0);
+    	else
+    		ra.addAttribute("titulo", 1);
+    	if(descripcion == null)
+    		ra.addAttribute("descripcion", 0);
+    	else
+    		ra.addAttribute("descripcion", 1);
+    	if(genero == null)
+    		ra.addAttribute("genero", 0);
+    	else
+    		ra.addAttribute("genero", 1);
+    	if(user == null)
+    		ra.addAttribute("user", 0);
+    	else
+    		ra.addAttribute("user", 1);
+
+		return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}"; 
+    }
 	
 	@PostMapping("/perfil/{logueadoId}/{pinchadoId}")
     public String subirFoto(@RequestParam("foto") MultipartFile f, RedirectAttributes ra) {
@@ -228,7 +450,7 @@ public class UsuarioWebController {
 		} else
     		ra.addFlashAttribute("mensaje", "Error, la foto ocupa más de 22 megas");
 
-        return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}";
+        return "redirect:/usuarios/perfil";
     }
 	
 	@PostMapping("/perfil/{logueadoId}/{pinchadoId}/{videoId}/{views}")
@@ -242,9 +464,8 @@ public class UsuarioWebController {
 		
 		videoService.saveVisit(views + 1, video);
 		
-		Comentario coment = null;
-		coment = comentarioService.findByVideoUsuario(video, logueado);
-		if(coment != null)
+		Comentario comentario = comentarioService.findByVideoUsuario(video, logueado);
+		if(comentario != null)
 			model.addAttribute("gusta", true);
 		else
 			model.addAttribute("gusta", false);
@@ -253,10 +474,10 @@ public class UsuarioWebController {
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
 		
-		return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}";
+		return "redirect:/usuarios/perfil";
 	}
 	
-	@PutMapping("/{id}")	
+	/*@PutMapping("/{id}")	
 	public String update(Model model, @PathVariable(value = "id") Long id, @Valid @RequestBody Usuario u) {
 		model.addAttribute("usuario", usuarioService.update(id, u));
 		return "usuarios/detalle";
@@ -266,5 +487,5 @@ public class UsuarioWebController {
 	public String delete(Model model, @PathVariable(value = "id") Long id) {
 		model.addAttribute("usuario", usuarioService.delete(id));
         return "usuarios/listado";
-	}
+	}*/
 }

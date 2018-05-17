@@ -55,6 +55,29 @@ public class AlmacenamientoService {
             throw new AlmacenamientoException("Error al almacenar el fichero " + filename, e);
         }
     }
+    
+    /* Este es el método sobrecargado el que vale*/
+    public void store(MultipartFile file, String option, String name) {
+        String filename = StringUtils.cleanPath(name);
+        try {
+            if (file.isEmpty()) {
+                throw new AlmacenamientoException("Error al guardar el fichero vacío " + filename);
+            }
+            if (filename.contains("..")) {
+                // This is a security check
+                throw new AlmacenamientoException(
+                        "No se puede almacenar el fichero con una ruta relativa fuera del directorio actual "
+                                + filename);
+            }
+            if(option.equals("video"))
+            	Files.copy(file.getInputStream(), this.rootLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+            else
+            	Files.copy(file.getInputStream(), this.rootLocationFotos.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (IOException e) {
+            throw new AlmacenamientoException("Error al almacenar el fichero " + filename, e);
+        }
+    }
 
     public Stream<Path> loadAll(String option) {
         try {

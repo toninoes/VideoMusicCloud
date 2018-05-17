@@ -1,25 +1,25 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:include="bootstrap :: head">
 	<meta charset="utf-8" />
 	<title>Listado de usuarios</title>
 </head>
 <body>
-	<!-- THE LOADER -->
+	
 	<div th:include="spinner :: body"></div>
 	
-	<!-- THE HEADER -->
+	
 	<header>
 		<div th:class="@{container-fluid custom-container}">
 			<div th:class="@{row no_row row-header}">
 	
-				<!-- THE LOGO -->
+				
 				<div th:include="logo :: body"></div>
 	
-				<!-- THE SEARCH -->
+				
 				<div th:include="buscador :: body"></div>		
 				
-				<!-- THE MENU -->	
+				
 				<div th:class="header-menu-block">
 					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
 					<ul th:class="header-menu" id="one">
@@ -31,7 +31,7 @@
 					</ul>
 				</div>
 				
-				<!-- THE HELLO USER -->
+				
 				<div th:class="@{login-header-block}">
 					<div th:class="@{login-block be-drop-down login-user-down}">
 						<div th:switch="${usuario.foto}" th:class="@{login-user}">
@@ -58,7 +58,7 @@
 		</div>
 	</header>
 	
-	<!-- MAIN CONTENT -->
+	
 	<div th:id="@{content-block}" th:class="@{custom-container-5}">
 		<div th:class="@{container be-detail-container}">
 			<div th:class="@{col-xs-12 col-md-12}">
@@ -108,7 +108,6 @@
 		</div>
 	</div>
 	
-	<!-- THE FOOTER -->
 	<div th:include="footer :: div"></div>
 </body>
-</html>
+</html>-->
