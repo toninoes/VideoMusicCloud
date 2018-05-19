@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import vmc.model.Comentario;
 import vmc.model.Usuario;
@@ -45,7 +44,7 @@ public class ComentarioWebController {
 		Comentario comentario = null;
 		comentario = comentarioService.findByVideoUsuario(video, logueado);
 		if(comentario != null)
-			model.addAttribute("gusta", true);
+			model.addAttribute("gusta", comentario.isGusta());
 		else
 			model.addAttribute("gusta", false);
 		
@@ -58,7 +57,7 @@ public class ComentarioWebController {
 		return "comentarios/comentarioVideos";
 	}
 	
-	@GetMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}")
+	/*@GetMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}")
 	public String findComentarios(Model model, @PathVariable long logueadoId,
 										       @PathVariable long pinchadoId,
 										       @PathVariable long videoId,
@@ -74,18 +73,29 @@ public class ComentarioWebController {
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);		
 		model.addAttribute("comentarios", comentarios);
-		model.addAttribute("comentario", !comentario);
+		model.addAttribute("comentario", comentario);
 		
 		return "redirect:/comentarios/{logueadoId}/{pinchadoId}/{videoId}";
-	}
+	}*/
 	
 	// Solucionado el problema de actualizar el navegador ya no suma mas likes, tampoco ni resta
-	@GetMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}/{vista}")
+	/*@GetMapping("/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}/{videoId}/{comentario}/{vista}")
 	public String findComentarios(Model model, @PathVariable long logueadoId,
 										       @PathVariable long pinchadoId,
+										       @PathVariable int page,
+										       @PathVariable int active,
+										       @PathVariable int pages,
+										       @PathVariable String search,
+										       @PathVariable long visitas,
+										       @PathVariable long gustas,
+										       @PathVariable int titulo,
+										       @PathVariable int descripcion,
+										       @PathVariable int genero,
+										       @PathVariable int user,
 										       @PathVariable long videoId,
 										       @PathVariable boolean comentario,
-										       @PathVariable String vista) {
+										       @PathVariable String vista,
+										       RedirectAttributes ra) {
 				
 		Usuario logueado = usuarioService.findById(logueadoId);
 		Usuario pinchado = usuarioService.findById(pinchadoId);
@@ -104,15 +114,16 @@ public class ComentarioWebController {
 		model.addAttribute("comentarios", comentarios);
 		model.addAttribute("comentario", comentario);
 		
+		
 		switch(vista) {
 			case "inicio" : return "redirect:/videos/misvideos";
 			case "listas" : return "redirect:/videos";
-			case "perfil" : return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}";
+			case "perfil" : return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}";
 			default : return "redirect:/comentarios/{logueadoId}/{pinchadoId}/{videoId}/{comentario}";
 		}
-	}
+	}*/
 	
-	@PostMapping("/comentarioVideos/{logueadoId}/{pinchadoId}/{videoId}")
+	/*@PostMapping("/comentarioVideos/{logueadoId}/{pinchadoId}/{videoId}")
 	public String saveComment(Model model, @RequestParam("descripcion") String descripcion,
 										   @PathVariable long logueadoId,
 										   @PathVariable long pinchadoId,
@@ -138,7 +149,7 @@ public class ComentarioWebController {
 		model.addAttribute("comentarios", comentariosAllVideo);
 		
 		return "comentarios/comentarioVideos";
-	}
+	}*/
 	
 	@PostMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}/{vista}/{views}")
 	public String saveVisit(Model model, @PathVariable long logueadoId,

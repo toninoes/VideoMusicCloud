@@ -284,7 +284,7 @@ public class VideoWebController {
 		} 
     }
     
-    @PostMapping("/misvideos/{logueadoId}/{pinchadoId}/{videoId}/{views}/{vista}")
+    /*@PostMapping("/misvideos/{logueadoId}/{pinchadoId}/{videoId}/{views}/{vista}")
 	public String saveVisit(Model model, @PathVariable long logueadoId,
 										 @PathVariable long pinchadoId,
 										 @PathVariable long videoId,
@@ -311,5 +311,5 @@ public class VideoWebController {
 			case "listas": return "redirect:/videos";
 			default: return "redirect:/videos/misvideos";
 		}
-    }
+    }*/
 }

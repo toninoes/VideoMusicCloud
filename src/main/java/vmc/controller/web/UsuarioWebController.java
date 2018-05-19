@@ -251,17 +251,24 @@ public class UsuarioWebController {
 		else
 			sigue = "seguir";
 		
-		String ext = "" + usuario.getFoto();
+		String ext = "" + logueado.getFoto();
 		if(!ext.equals(""))
 			ext = ext.substring(ext.lastIndexOf("."), ext.length());
 		else 
 			ext = ".jpg";
+		
+		String extpinchado = "" + usuario.getFoto();
+		if(!extpinchado.equals(""))
+			extpinchado = extpinchado.substring(extpinchado.lastIndexOf("."), extpinchado.length());
+		else 
+			extpinchado = ".jpg";
 		
 		model.addAttribute("likes", likes);
 		model.addAttribute("sigue", sigue);
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("ext", ext);
+		model.addAttribute("extpinchado", extpinchado);
 		model.addAttribute("mailadmin", admin.getMail());
 		model.addAttribute("page", page);
 		model.addAttribute("active", active);

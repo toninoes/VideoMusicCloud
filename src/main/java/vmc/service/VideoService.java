@@ -219,7 +219,7 @@ public class VideoService {
     		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);    
     }
 	
-	public synchronized void saveVisit(@RequestParam("visits") long visits, Video video) {
+	public synchronized void saveVisit(long visits, Video video) {
 		video.setVisualizaciones(visits);
 		videoRepository.save(video);
 	}

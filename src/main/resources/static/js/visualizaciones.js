@@ -1,31 +1,12 @@
-function visitsComentario() {
-	document.getElementById("visitComentario").innerText =  1 + parseInt(document.getElementById("visitComentario").innerText);
-}
-
-function visitsPerfil() {
-	document.getElementById("visitPerfil").innerText =  1 + parseInt(document.getElementById("visitPerfil").innerText);
-}
-
-function visitsInicio() {
-	document.getElementById("visitInicio").innerText =  1 + parseInt(document.getElementById("visitInicio").innerText);
-}
-
-function visitsListas() {
-	document.getElementById("visitListas").innerText =  1 + parseInt(document.getElementById("visitListas").innerText);
-}
-
-function viewsComentario(nodo) {
-	nodo.parentNode.submit();
-}
-
-function viewsPerfil(nodo) {
-	nodo.parentNode.submit();
-}
-
-function viewsInicio(nodo) {
-	nodo.parentNode.submit();
-}
-
-function viewsListas(nodo) {
-	nodo.parentNode.submit();
+function visualizaciones(videoId, videoVisualizaciones) {
+	var id = "visitInicio" + videoId;
+	document.getElementById(id).innerText =  1 + parseInt(document.getElementById(id).innerText);
+	$.ajax({
+		url: window.location.protocol + "//" + window.location.hostname + ":" + location.port + "/api/videos/" + videoId + "/" + videoVisualizaciones,
+		type: "GET",
+	}).done(function(textStatus, jqXHR) {
+		var id = "#i" + videoId;
+		$(id).removeClass().addClass("stat-icon icon-views-b");
+	}).fail(function(jqXHR, textStatus, errorThrown){
+	});
 }

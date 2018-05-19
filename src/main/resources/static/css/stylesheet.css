@@ -53,6 +53,10 @@ td {
 	padding: 0; 
 }
 
+a.megusta {
+	cursor: pointer;
+}
+
 .color-white {
 	color: white !important;	
 }
