@@ -9,4 +9,20 @@ function visualizaciones(videoId, videoVisualizaciones) {
 		$(id).removeClass().addClass("stat-icon icon-views-b");
 	}).fail(function(jqXHR, textStatus, errorThrown){
 	});
+} 
+
+function Pause(videoId) {
+	var id = "v" + videoId;
+	var myVideo = document.getElementById(id);
+	myVideo.pause();
+	myVideo.muted = false;
+}
+
+function Play(videoId) {
+	var id = "v" + videoId;
+	var myVideo = document.getElementById(id);
+	if(myVideo.paused) { 
+		myVideo.muted = true;
+		myVideo.play();     
+	}
 }

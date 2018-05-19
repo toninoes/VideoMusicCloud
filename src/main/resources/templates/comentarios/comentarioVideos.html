@@ -63,9 +63,11 @@
 					<div th:class="@{be-post style-5}">
 						<div align="center" th:class="@{custom-video bgcolor-black}">
 							<!--<form method="POST" th:id="this" name="visitasComentario" th:action="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${true} + '/comentarios/' + ${video.visualizaciones}}">-->
-								<video controls th:class="@{be-img-block}" th:onended="'javascript:visualizaciones(\''+${video.id}+'\',\''+${video.visualizaciones}+'\')'">
-									<source th:src="'/videos/' + ${video.nombre}">
-								</video>
+								<div th:onmouseover="'javascript:Play(\''+${video.id}+'\')'" th:onmouseout="'javascript:Pause(\''+${video.id}+'\')'">
+									<video th:id="'v'+${video.id}" controls th:class="@{be-img-block}" th:onended="'javascript:visualizaciones(\''+${video.id}+'\',\''+${video.visualizaciones}+'\')'">
+										<source th:src="'/videos/' + ${video.nombre}">
+									</video>
+								</div>
 							<!--</form>-->
 						</div>
 						<div th:class="@{be-rowline}">
