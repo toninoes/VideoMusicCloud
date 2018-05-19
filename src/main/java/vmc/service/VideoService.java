@@ -33,7 +33,7 @@ import vmc.repository.VideoRepository;
 @Service
 public class VideoService {
 	
-	private static final int VIDEOS_POR_PAGINA = 6;
+	private int VIDEOS_POR_PAGINA = 6;
 	
 	@Autowired
 	private AlmacenamientoService almacenamientoService;
@@ -53,8 +53,12 @@ public class VideoService {
 	@Autowired
 	private GeneroRepository generoRepository;
 	
-	public static int getVIDEOS_POR_PAGINA() {
+	public int getVIDEOS_POR_PAGINA() {
 		return VIDEOS_POR_PAGINA;
+	}
+	
+	public void setVIDEOS_POR_PAGINA(int VIDEOS_POR_PAGINA) {
+		this.VIDEOS_POR_PAGINA = VIDEOS_POR_PAGINA;
 	}
 	
 	public int allPages() {

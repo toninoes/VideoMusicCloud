@@ -37,7 +37,7 @@ import vmc.repository.UsuarioRepository;
 @Service
 public class UsuarioService {
 	
-	private static final int USUARIOS_POR_PAGINA = 8;
+	private int USUARIOS_POR_PAGINA = 8;
 	
 	@Autowired
 	private AlmacenamientoService almacenamientoService;
@@ -54,8 +54,12 @@ public class UsuarioService {
 	@Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	public static int getUSUARIOS_POR_PAGINA() {
+	public int getUSUARIOS_POR_PAGINA() {
 		return USUARIOS_POR_PAGINA;
+	}
+	
+	public void setUSUARIOS_POR_PAGINA(int USUARIOS_POR_PAGINA) {
+		this.USUARIOS_POR_PAGINA = USUARIOS_POR_PAGINA;
 	}
 	
 	public int allPages(Pageable p, long total, String segsig) {

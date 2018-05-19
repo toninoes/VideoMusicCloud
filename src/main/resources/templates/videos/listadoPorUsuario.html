@@ -132,6 +132,31 @@
 				  <a th:href="@{'/videos/misvideos/' + ${page-active+5} + '/0/' + ${pages} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${pages} > 5 and ${page-active+5} < ${pages}">&raquo;</a>
 			</div>
 		</div>
+		<div th:class="be-user-statisticInicioListas">
+			<div th:class="@{stat-rowInicioListas}">
+				<span th:class="@{color-white}">Resultados por página</span>
+				<div th:class="@{paginationCustom}">
+					<form method="POST" th:action="@{'/videos/misvideos/' + ${usuario.id} + '/' + ${usuario.id}}">
+						<select id="UsuariosPorPagina" name="UsuariosPorPagina" th:class="@{be-custom-select pull-left}">
+						  	<option value="" th:class="@{color-blue}" disabled selected>...</option>
+						  	<option value="todos" th:class="@{color-blue}">Todos</option>
+						  	<option value="100" th:class="@{color-blue}">100</option>
+						  	<option value="50" th:class="@{color-blue}">50</option>
+						  	<option value="40" th:class="@{color-blue}">40</option>
+						  	<option value="30" th:class="@{color-blue}">30</option>
+						  	<option value="20" th:class="@{color-blue}">20</option>
+						  	<option value="10" th:class="@{color-blue}">10</option>
+						  	<option value="8" th:class="@{color-blue}">8</option>
+						  	<option value="6" th:class="@{color-blue}">6</option>
+						  	<option value="4" th:class="@{color-blue}">4</option>
+						  	<option value="2" th:class="@{color-blue}">2</option>
+						  	<option value="1" th:class="@{color-blue}">1</option>
+						</select>
+						<input type="submit" name="paginator" id="paginator" class="fa fa-check color-white login-header-block btn color-1 size-2 hover-1 pull-left custom-margin-icon" value="Ir">
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<!-- THE FOOTER -->

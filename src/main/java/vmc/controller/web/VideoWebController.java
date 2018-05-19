@@ -70,7 +70,7 @@ public class VideoWebController {
     								@PathVariable int descripcion, @PathVariable int genero, @PathVariable int user,
     								Model model, RedirectAttributes ra) {
 		
-		Pageable p = PageRequest.of(page, (int)VideoService.getVIDEOS_POR_PAGINA());
+		Pageable p = PageRequest.of(page, (int)videoService.getVIDEOS_POR_PAGINA());
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
@@ -151,7 +151,7 @@ public class VideoWebController {
 										@PathVariable int titulo, @PathVariable int descripcion, @PathVariable int genero,
 										@PathVariable int user) {
     	
-    	Pageable p = PageRequest.of(page, (int)VideoService.getVIDEOS_POR_PAGINA());
+    	Pageable p = PageRequest.of(page, (int)videoService.getVIDEOS_POR_PAGINA());
     	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
@@ -275,13 +275,62 @@ public class VideoWebController {
 
 		switch(view) {
    			case "listado": return "redirect:/videos/listado/{page}/{active}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}";
-   			case "misvideos": Pageable p = PageRequest.of(0, (int)VideoService.getVIDEOS_POR_PAGINA());
+   			case "misvideos": Pageable p = PageRequest.of(0, (int)videoService.getVIDEOS_POR_PAGINA());
    							  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
    							  Usuario usuario = usuarioService.findByMail(auth.getName());
    							  ra.addAttribute("pages", videoService.findMyPage(p, usuario, usuario.getSiguiendo()).getTotalPages());
    							  return "redirect:/videos/misvideos/{page}/{active}/{pages}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}";
    			default: return "redirect:/videos/misvideos";
 		} 
+    }
+    
+    @PostMapping("/listado/{logueadoId}")
+    public String customPaginator(@RequestParam("UsuariosPorPagina") String items,
+    							  @PathVariable long logueadoId, RedirectAttributes ra) {
+    	
+    	long videos = videoService.findAll().size();
+		
+		if(items.equals("todos"))
+			videoService.setVIDEOS_POR_PAGINA((int)videos);
+		else
+			videoService.setVIDEOS_POR_PAGINA(Integer.parseInt(items));
+    	
+    	ra.addAttribute("page", 0);
+		ra.addAttribute("active", 0);
+		ra.addAttribute("search", "0");	
+    	ra.addAttribute("visitas", 0);    	
+    	ra.addAttribute("gustas", 0);    	
+    	ra.addAttribute("titulo", 0);
+    	ra.addAttribute("descripcion", 0);    	
+    	ra.addAttribute("genero", 0);    	
+    	ra.addAttribute("user", 0);
+
+   		return "redirect:/videos/listado/{page}/{active}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}"; 
+    }
+    
+    @PostMapping("/misvideos/{logueadoId}/{pinchadoId}")
+    public String customPaginator(@RequestParam("UsuariosPorPagina") String items,
+    							  @PathVariable long logueadoId, @PathVariable long pinchadoId, RedirectAttributes ra) {
+    	
+    	Usuario logueado = usuarioService.findById(logueadoId);
+    	long videos = videoService.findMyVideos(logueado, logueado.getSiguiendo()).size();
+		
+		if(items.equals("todos"))
+			videoService.setVIDEOS_POR_PAGINA((int)videos);
+		else
+			videoService.setVIDEOS_POR_PAGINA(Integer.parseInt(items));
+    	
+    	ra.addAttribute("page", 0);
+		ra.addAttribute("active", 0);
+		ra.addAttribute("search", "0");	
+    	ra.addAttribute("visitas", 0);    	
+    	ra.addAttribute("gustas", 0);    	
+    	ra.addAttribute("titulo", 0);
+    	ra.addAttribute("descripcion", 0);    	
+    	ra.addAttribute("genero", 0);    	
+    	ra.addAttribute("user", 0);
+
+   		return "redirect:/videos/listado/{page}/{active}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}"; 
     }
     
     /*@PostMapping("/misvideos/{logueadoId}/{pinchadoId}/{videoId}/{views}/{vista}")
