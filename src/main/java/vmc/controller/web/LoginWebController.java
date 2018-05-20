@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vmc.model.Usuario;
+import vmc.model.Video;
 import vmc.service.UsuarioService;
+import vmc.service.VideoService;
 
 
 @Controller
@@ -24,6 +26,9 @@ public class LoginWebController {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private VideoService videoService;
 
 	@GetMapping({"/", "/login"})
 	public ModelAndView login(){
@@ -115,6 +120,13 @@ public class LoginWebController {
 				Usuario us = usuarioService.findById(cboxes[i]);
 				us.setActivo(!us.getActivo());
 				usuarioService.update(cboxes[i], us);
+				List<Video> videos = videoService.findVideosByUsuarioId(us.getId());
+				for(Video v : videos) {
+					if(us.getActivo())
+						videoService.update(v, false);
+					else
+						videoService.update(v, true);
+				}
 			}
 			modelAndView.addObject("cboxes", cboxes);
 		} else {

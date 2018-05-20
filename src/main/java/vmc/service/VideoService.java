@@ -228,6 +228,11 @@ public class VideoService {
 		videoRepository.save(video);
 	}
 	
+	public synchronized void update(Video video, boolean privado) {
+		video.setPrivado(privado);
+		videoRepository.save(video);
+	}
+	
 	@ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)
     public ResponseEntity<?> manejarAlmacenamientoFicheroNoEncontrado(AlmacenamientoFicheroNoEncontradoException exc) {
         return ResponseEntity.notFound().build();

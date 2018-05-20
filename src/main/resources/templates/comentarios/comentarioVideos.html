@@ -62,13 +62,11 @@
 				<div th:class="@{col-lg-12 col-md-12 col-sm-12 col-xs-12 col-ml-12 col-xl-4}">
 					<div th:class="@{be-post style-5}">
 						<div align="center" th:class="@{custom-video bgcolor-black}">
-							<!--<form method="POST" th:id="this" name="visitasComentario" th:action="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${true} + '/comentarios/' + ${video.visualizaciones}}">-->
-								<div th:onmouseover="'javascript:Play(\''+${video.id}+'\')'" th:onmouseout="'javascript:Pause(\''+${video.id}+'\')'">
-									<video th:id="'v'+${video.id}" controls th:class="@{be-img-block}" th:onended="'javascript:visualizaciones(\''+${video.id}+'\',\''+${video.visualizaciones}+'\')'">
-										<source th:src="'/videos/' + ${video.nombre}">
-									</video>
-								</div>
-							<!--</form>-->
+							<div th:onmouseover="'javascript:Play(\''+${video.id}+'\')'" th:onmouseout="'javascript:Pause(\''+${video.id}+'\')'">
+								<video th:id="'v'+${video.id}" controls th:class="@{be-img-block}" th:onended="'javascript:visualizaciones(\''+${video.id}+'\',\''+${video.visualizaciones}+'\')'">
+									<source th:src="'/videos/' + ${video.nombre}">
+								</video>
+							</div>
 						</div>
 						<div th:class="@{be-rowline}">
 							<ul>
@@ -94,6 +92,10 @@
 								<img th:class="@{stat-icon pull-right}" th:src="@{/img/block-16x16.png}" alt="Denunciar video">
 							</a>
 						</div>
+						<div th:class="@{be-rowline row}">
+							<div class="sharethis-inline-share-buttons pull-right"></div>
+							<i class="rowline-text pull-right custom-margin-icon" th:text="@{Share it!}"></i>
+						</div>
 						<div th:class="@{author-post}" th:switch="${video.usuario.foto}"> 
 							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id} + '/0/0'}">
 								<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
@@ -112,12 +114,6 @@
 									<i th:id="'t'+${video.id}"></i>
 									<i th:id="'f'+${video.id}" th:class="@{stat-icon icon-like}"></i>
 								</a>
-							<!--<a th:if="${gusta}" th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${true} + '/comentarios'}">
-									<i th:class="@{stat-icon icon-like-b}"></i>
-								</a>
-								<a th:if="${!gusta}" th:href="@{'/comentarios/' + ${logueado.id} + '/' + ${logueado.id} + '/' + ${video.id} + '/' + ${false} + '/comentarios'}">
-									<i th:class="@{stat-icon icon-like}"></i>
-								</a>-->
 								<i th:id="${video.id}" th:text="${video.likes}"></i> 
 								<i th:if="${video.visualizaciones} == 0">
 									<i th:id="'i'+${video.id}" th:class="@{stat-icon icon-views}"></i>&nbsp;<i th:id="@{'visitInicio'+${video.id}}" th:text="0"></i>

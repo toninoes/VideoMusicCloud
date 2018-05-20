@@ -310,17 +310,14 @@ public class UsuarioWebController {
 	}
 	
 	@GetMapping("/perfil/{id}")
-	public String elimnarVideo(Model model, @PathVariable long id, RedirectAttributes ra) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioService.findByMail(auth.getName());
+	public String elimnarVideo(Model model, @PathVariable long id) {
+		
 		Video video = videoService.findById(id);
+		comentarioService.delete(video);
 		videoService.delete(video);
 		String ext = video.getNombre();
 		ext = ext.substring(ext.lastIndexOf("."));
 		videoService.borrar(video.getId() + ext);
-		
-		ra.addAttribute("logueadoId", usuario.getId());
-		ra.addAttribute("pinchadoId", usuario.getId());
 		
 		return "redirect:/usuarios/perfil";
 	}

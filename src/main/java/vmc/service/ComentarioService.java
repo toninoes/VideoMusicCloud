@@ -98,6 +98,19 @@ public class ComentarioService {
 		return new ResponseEntity<Comentario>(HttpStatus.OK);
 	}
 	
+	public ResponseEntity<Comentario> delete(@Valid @RequestBody Video v) {
+
+		List<Comentario> c = comentarioRepository.findByVideo(v);
+		try {
+			comentarioRepository.deleteByVideo(v.getId());
+			comentarioRepository.flush();
+		} catch (Exception e) {
+			throw new ErrorInternoServidorException("borrar", "Comentario", c, e.getMessage());
+		}
+		
+		return new ResponseEntity<Comentario>(HttpStatus.OK);
+	}
+	
 	/*public ResponseEntity<Comentario> delete(@Valid @RequestBody Video v, @Valid @RequestBody Usuario u) {
 
 		List<Comentario> c = comentarioRepository.findByVideoUsuario(v, u);
