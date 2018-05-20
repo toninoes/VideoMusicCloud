@@ -306,7 +306,7 @@ public class UsuarioWebController {
 		ra.addAttribute("pages", pages);
 		ra.addAttribute("sigue", sigue);
 		
-		return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}/{page}/{active}/{pages}";
+		return "redirect:/usuarios/perfil/{logueadoId}/{pinchadoId}/{page}/{active}";
 	}
 	
 	@GetMapping("/perfil/{id}")
@@ -483,7 +483,7 @@ public class UsuarioWebController {
     }
 	
 	@PostMapping("/perfil/{pinchadoId}")
-    public String customPaginator(@RequestParam("UsuariosPorPagina") String items,
+    public String customPaginator(@RequestParam("VideosPorPagina") String items,
     							  @PathVariable long pinchadoId,
     							  RedirectAttributes ra) {
 		

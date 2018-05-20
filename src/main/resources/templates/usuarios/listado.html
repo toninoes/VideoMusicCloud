@@ -126,7 +126,7 @@
 				<div th:class="@{paginationCustom}">
 					<form method="POST" th:action="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${segsig} + '/0' }">
 						<select id="UsuariosPorPagina" name="UsuariosPorPagina" th:class="@{be-custom-select pull-left}">
-							<option value="" th:class="@{color-blue}" disabled selected>...</option>
+							<option value="8" th:class="@{color-blue}" selected>...</option>
 						  	<option value="todos" th:class="@{color-blue}">Todos</option>
 						  	<option value="100" th:class="@{color-blue}">100</option>
 						  	<option value="50" th:class="@{color-blue}">50</option>

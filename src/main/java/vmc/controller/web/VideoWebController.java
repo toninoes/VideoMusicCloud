@@ -285,7 +285,7 @@ public class VideoWebController {
     }
     
     @PostMapping("/listado/{logueadoId}")
-    public String customPaginator(@RequestParam("UsuariosPorPagina") String items,
+    public String customPaginator(@RequestParam("VideosPorPagina") String items,
     							  @PathVariable long logueadoId, RedirectAttributes ra) {
     	
     	long videos = videoService.findAll().size();
@@ -309,7 +309,7 @@ public class VideoWebController {
     }
     
     @PostMapping("/misvideos/{logueadoId}/{pinchadoId}")
-    public String customPaginator(@RequestParam("UsuariosPorPagina") String items,
+    public String customPaginator(@RequestParam("VideosPorPagina") String items,
     							  @PathVariable long logueadoId, @PathVariable long pinchadoId, RedirectAttributes ra) {
     	
     	Usuario logueado = usuarioService.findById(logueadoId);
