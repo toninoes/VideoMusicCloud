@@ -43,12 +43,12 @@
 							<div th:if="${rol.rol} == 'ADMIN'">	
 								<span th:class="drop-down-list">
 									<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
-									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
+									<a th:href="@{'/usuarios/detalle/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
 								</span>
 							</div>
 							<div th:if="${rol.rol} != 'ADMIN'">	
 								<span th:class="drop-down-list">
-									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
+									<a th:href="@{'/usuarios/detalle/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
 								</span>
 							</div>
 						</div>
@@ -181,11 +181,11 @@
 											</div>
 											<div th:class="@{author-post}">
 												<div th:switch="${video.usuario.foto}">
-													<a th:case="''" th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${video.usuario.id}}">
+													<a th:case="''" th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${video.usuario.id} + '/0/0'}">
 														<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
 														<span>by <i th:text="${video.usuario.nombre}"></i></span>
 													</a>
-													<a th:case="*" th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${video.usuario.id}}">
+													<a th:case="*" th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${video.usuario.id} + '/0/0'}">
 														<img th:src="@{'/usuarios/fotos/' + ${video.usuario.id} + ${ext}}" alt="author" th:class="@{ava-author}">
 														<span>by <i th:text="${video.usuario.nombre}"></i></span>
 													</a>

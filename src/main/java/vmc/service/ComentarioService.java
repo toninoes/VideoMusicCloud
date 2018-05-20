@@ -3,8 +3,16 @@ package vmc.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import vmc.exception.ErrorInternoServidorException;
 import vmc.model.Comentario;
 import vmc.model.Usuario;
 import vmc.model.Video;
@@ -70,7 +78,7 @@ public class ComentarioService {
 		return comentarioRepository.findByVideoUsuario(video.getId(), usuario.getId());
 	}
 	
-	/*public ResponseEntity<Comentario> create(@Valid @RequestBody Video v, @Valid @RequestBody Usuario u,
+	public ResponseEntity<Comentario> create(@Valid @RequestBody Video v, @Valid @RequestBody Usuario u,
 			                                 @RequestParam("comentario") String comentario, String option) {
 
 		Comentario c = new Comentario(comentario);
@@ -88,7 +96,7 @@ public class ComentarioService {
 		}
 		
 		return new ResponseEntity<Comentario>(HttpStatus.OK);
-	}*/
+	}
 	
 	/*public ResponseEntity<Comentario> delete(@Valid @RequestBody Video v, @Valid @RequestBody Usuario u) {
 

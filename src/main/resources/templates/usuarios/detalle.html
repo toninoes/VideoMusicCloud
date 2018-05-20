@@ -38,7 +38,7 @@
 		<div th:class="@{container be-detail-container}">
 			<div th:class="@{col-xs-12 col-md-12 _editor-content_}">
 				<div th:class="@{affix-block}" th:id="@{basic-information}">
-					<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/detalle/' + ${portal}}">
+					<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/detalle/' + ${usuario.id} + '/' + ${portal}}">
 					<div th:class="@{be-large-post}">
 						<div th:class="@{info-block style-2}">
 							<div th:class="@{be-large-post-align}">
@@ -47,7 +47,7 @@
 						</div>
 						<div th:class="@{be-large-post-align}">
 							<div th:class="@{be-change-ava}">
-								<input type="submit" th:href="@{'/usuarios/detalle/' + ${usuario.id} + ${ext}}" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Guardar Cambios'}">
+								<input type="submit" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Guardar Cambios'}">
 								<div th:switch="${usuario.foto}">
 									<div th:case="''">
 										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
@@ -117,7 +117,7 @@
 						</div>
 						<div th:class="@{be-large-post-align}">
 							<div th:class="@{row}">
-								<form method="POST" th:action="@{'/usuarios/detalle'}">
+								<form method="POST" th:action="@{'/usuarios/detalle/' + ${portal}}">
 									<div th:class="@{input-col col-xs-12 col-sm-4}">
 										<div th:class="@{form-group focus-2}">
 											<div th:class="@{form-label}">Antigua Clave</div>									

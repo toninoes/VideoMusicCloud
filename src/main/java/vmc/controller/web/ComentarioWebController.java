@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import vmc.model.Comentario;
 import vmc.model.Usuario;
@@ -123,7 +124,7 @@ public class ComentarioWebController {
 		}
 	}*/
 	
-	/*@PostMapping("/comentarioVideos/{logueadoId}/{pinchadoId}/{videoId}")
+	@PostMapping("/comentarioVideos/{logueadoId}/{pinchadoId}/{videoId}")
 	public String saveComment(Model model, @RequestParam("descripcion") String descripcion,
 										   @PathVariable long logueadoId,
 										   @PathVariable long pinchadoId,
@@ -139,7 +140,7 @@ public class ComentarioWebController {
 		Comentario comentario = null;
 		comentario = comentarioService.findByVideoUsuario(video, logueado);
 		if(comentario != null)
-			model.addAttribute("gusta", true);
+			model.addAttribute("gusta", comentario.isGusta());
 		else
 			model.addAttribute("gusta", false);
 		
@@ -149,7 +150,7 @@ public class ComentarioWebController {
 		model.addAttribute("comentarios", comentariosAllVideo);
 		
 		return "comentarios/comentarioVideos";
-	}*/
+	}
 	
 	@PostMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}/{vista}/{views}")
 	public String saveVisit(Model model, @PathVariable long logueadoId,

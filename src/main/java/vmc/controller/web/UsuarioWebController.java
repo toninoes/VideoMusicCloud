@@ -48,7 +48,7 @@ public class UsuarioWebController {
 	@Autowired
 	private ApplicationService appService;
 	
-	@GetMapping("/{id}}")
+	@GetMapping("/detalle/{id}")
 	public String findById(Model model, @PathVariable long id) {
 		Usuario usuario = usuarioService.findById(id);
 		Usuario admin = usuarioService.findByRol("ADMIN");
@@ -64,8 +64,9 @@ public class UsuarioWebController {
 		return "usuarios/detalle";
 	}
 	
-	@GetMapping("/detalle/{id}")
-	public String findByIdPortal(Model model, @PathVariable long id) {
+	@GetMapping("/detalle/{id}/{portal}")
+	public String findByIdPortal(Model model, @PathVariable long id, @PathVariable String portal,
+								 RedirectAttributes ra) {
 		Usuario usuario = usuarioService.findById(id);
 		Usuario admin = usuarioService.findByRol("ADMIN");
 		String ext = "" + usuario.getFoto();
@@ -74,10 +75,16 @@ public class UsuarioWebController {
 		else
 			ext = ".jpg";
 		model.addAttribute("usuario", usuario);
-		model.addAttribute("portal", "si");
+		model.addAttribute("portal", portal);
 		model.addAttribute("ext", ext);
 		model.addAttribute("mailadmin", admin.getMail());
-		return "usuarios/detalle";
+		
+		ra.addAttribute("id", id);
+		
+		if(portal.equals("si"))
+			return "usuarios/detalle";
+		else
+			return "redirect:/usuarios/detalle/{id}";
 	}
 	
 	@GetMapping("/listado/{logueadoId}/{pinchadoId}/{segsig}/{nombre}/{apellidos}/{search}")
@@ -324,20 +331,24 @@ public class UsuarioWebController {
 		return usuarioService.descargar(nombrefoto);
     }
 	
-	@PostMapping("/detalle")
-	public String cambiarClave(@RequestParam("oldpassword") String o,
+	@PostMapping("/detalle/{portal}")
+	public String cambiarClave(@PathVariable String portal,
+							   @RequestParam("oldpassword") String o,
 							   @RequestParam("newpassword") String n, 
 							   @RequestParam("rnewpassword") String r, 
-			                    RedirectAttributes ra) {
+			                   RedirectAttributes ra) {
 		ra.addAttribute("id", usuarioService.cambiarClave(o, n, r));
-		return "redirect:/usuarios/{id}";
+		if(portal.equals("si"))	
+    		return "redirect:/usuarios/detalle/{id}/{portal}";
+    	else
+    		return "redirect:/usuarios/detalle/{id}";
 	}
 	
-	@PostMapping("/detalle/{portal}")
-	public String saveDeletePerfilById(@PathVariable String portal,
+	@PostMapping("/detalle/{id}/{portal}")
+	public String saveDeletePerfilById(@PathVariable long id, @PathVariable String portal,
 									   @RequestParam(value = "eliminar", required=false) String eliminar,
 							  		   @RequestParam("foto") MultipartFile f, 
-									   @RequestParam(required = false) boolean quitarFoto,
+									   @RequestParam(value="quitarFoto", required=false) Boolean quitarFoto,
 									   @RequestParam("nombre") String nombre,
 									   @RequestParam("apellidos") String apellidos,
 									   @RequestParam("intereses") String intereses,
@@ -345,23 +356,23 @@ public class UsuarioWebController {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = usuarioService.findByMail(auth.getName());
-		if(eliminar != null && !eliminar.equals("")) {
+		if(eliminar != null && !eliminar.equals("") && quitarFoto != null && quitarFoto) {
 			usuarioService.deleteFoto(usuario);
 			usuarioService.borrar(usuario);
-		} else if(appService.checkFilePhotoSize(f)) {	
+			ra.addFlashAttribute("mensajeEliminar", "Foto " + f.getOriginalFilename() + " eliminada correctamente.");
+		} else if(quitarFoto == null && eliminar != null && eliminar.equals("") && !f.getOriginalFilename().equals("") && appService.checkFilePhotoSize(f)) {	
     		usuarioService.subir(f);
-    		usuarioService.update(usuario.getId(), quitarFoto, nombre, apellidos, intereses);
+    		usuarioService.update(usuario.getId(), false, nombre, apellidos, intereses);
     		ra.addFlashAttribute("mensajeSubir", "Foto " + f.getOriginalFilename() + " subida correctamente.");
-        	ra.addFlashAttribute("mensajeEliminar", "Foto " + f.getOriginalFilename() + " eliminada correctamente.");
-    	} else
+    	} else if(!f.getOriginalFilename().equals(""))
     		ra.addFlashAttribute("mensaje", "Error, la foto ocupa más de 22 megas");
 		
 		ra.addAttribute("id", usuario.getId());
 		
     	if(portal.equals("si"))	
-    		return "redirect:/usuarios/detalle/{id}";
+    		return "redirect:/usuarios/detalle/{id}/{portal}";
     	else
-    		return "redirect:/usuarios/{id}";
+    		return "redirect:/usuarios/detalle/{id}";
 	}
 	
 	@PostMapping("/listado/{logueadoId}/{pinchadoId}/{segsig}")
