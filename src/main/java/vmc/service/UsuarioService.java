@@ -132,7 +132,7 @@ public class UsuarioService {
 	}
 	
 	/* Aquí sí funciona y no sé si el de arriba se utilizará en un futuro - método sobrecargado update */
-	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @RequestParam(required = false) boolean quitarFoto,
+	public ResponseEntity<Usuario> update(@PathVariable(value = "id") Long id, @RequestParam(value="quitarFoto", required=false) Boolean quitarFoto,
 																			   @RequestParam("nombre") String nombre,
 																			   @RequestParam("apellidos") String apellidos,
 																			   @RequestParam("intereses") String intereses) {
@@ -144,8 +144,8 @@ public class UsuarioService {
 			usuario.setNombre(nombre);
 			usuario.setApellidos(apellidos);
 			usuario.setIntereses(intereses);
-			if(quitarFoto) usuario.setFoto("");
-			else {
+			if(quitarFoto == null) usuario.setFoto("");
+			else if(!usuario.getFoto().equals("")){
 				String ext = usuario.getFoto();
 				ext = ext.substring(ext.lastIndexOf("."));
 				usuario.setFoto(usuario.getId() + ext);
@@ -260,12 +260,18 @@ public class UsuarioService {
 		return usuarioRepository.findByUsuarioSearch(busqueda);
 	}
 	
-	public Page<Usuario> findPageSearch(Pageable p, String busqueda, String opcion, long id) {
+	public Page<Usuario> findPageSearch(Pageable p, String busqueda, String opcion, Usuario usuario, String segsig) {
+		
+		Set<Usuario> users = null;
+		if(segsig.equals("seguidores"))
+			users = usuario.getSeguidores();
+		else
+			users = usuario.getSiguiendo();
 		switch(opcion) {
-			case "nombre": return usuarioRepository.findByUsuarioSearchNombre(p, busqueda, id);
-			case "apellidos": return usuarioRepository.findByUsuarioSearchApellidos(p, busqueda, id);
-			case "nombreapellidos": return usuarioRepository.findByUsuarioSearchNombreApellidos(p, busqueda, busqueda, id);
-			default: return usuarioRepository.findByUsuarioSearch(p, busqueda, id);
+			case "nombre": return usuarioRepository.findByUsuarioSearchNombre(p, busqueda, users, usuario.getId());
+			case "apellidos": return usuarioRepository.findByUsuarioSearchApellidos(p, busqueda, users, usuario.getId());
+			case "nombreapellidos": return usuarioRepository.findByUsuarioSearchNombreApellidos(p, busqueda, busqueda, users, usuario.getId());
+			default: return usuarioRepository.findByUsuarioSearch(p, busqueda, usuario.getId());
 		}
 	}
 	

@@ -24,8 +24,8 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
 	@Query("SELECT c FROM Comentario c WHERE c.video = :video AND c.usuario = :usuario ORDER BY c.creacion DESC")
 	List<Comentario> gusta(@Param("video") Video video, @Param("usuario") Usuario usuario);
 	
-	@Query("SELECT c FROM Comentario c WHERE c.usuario.id = :usuarioid AND c.video.id = :videoid AND c.descripcion = ''")
-	Comentario findByVideoIdUsuarioId(@Param("videoid") long videoid, @Param("usuarioid") long usuarioid);
+	@Query("SELECT c FROM Comentario c WHERE c.usuario.id = :usuarioid AND c.video.id = :videoid")
+	List<Comentario> findByVideoIdUsuarioId(@Param("videoid") long videoid, @Param("usuarioid") long usuarioid);
 	
 	@Query("SELECT c FROM Comentario c WHERE c.usuario.id = :usuarioid AND c.video.id = :videoid")
 	List<Comentario> findByVideoUsuario(@Param("videoid") long videoid, @Param("usuarioid") long usuarioid);

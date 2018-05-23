@@ -17,8 +17,8 @@
 					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
 					<ul th:class="header-menu" id="one">
 						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
-						<li><a th:href="@{/videos}">Listas</a></li>
-						<li><a th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id} + '/0/0'}">Perfil</a></li>
+						<li><a th:href="@{/videos/listado}">Listas</a></li>
+						<li><a th:href="@{'/usuarios/perfil/perfilog/' + ${usuario.id}}">Perfil</a></li>
 						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
 						<li><a th:href="@{#}">Suscripción</a></li>
 					</ul>
@@ -38,7 +38,7 @@
 		<div th:class="@{container be-detail-container}">
 			<div th:class="@{col-xs-12 col-md-12 _editor-content_}">
 				<div th:class="@{affix-block}" th:id="@{basic-information}">
-					<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/detalle/' + ${usuario.id} + '/' + ${portal}}">
+					<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/detalle/' + ${portal} + '/' + ${logueado.id} + '/' + ${usuario.id}}">
 					<div th:class="@{be-large-post}">
 						<div th:class="@{info-block style-2}">
 							<div th:class="@{be-large-post-align}">
@@ -50,7 +50,7 @@
 								<input type="submit" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Guardar Cambios'}">
 								<div th:switch="${usuario.foto}">
 									<div th:case="''">
-										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
+										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/detalle/' + ${portal} + '/' + ${logueado.id} + '/' + ${usuario.id}}">
 											<img th:src="@{'/img/ava_10.jpg'}" th:alt="@{''}"> 
 										</a>
 										<label th:class="@{btn color-1 size-2 hover-7}" for="foto">
@@ -61,7 +61,7 @@
 										<div th:text="${mensaje}"></div>
 									</div>
 									<div th:case="*">
-										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${usuario.id}}">
+										<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/detalle/' + ${portal} + '/' + ${logueado.id} + '/' + ${usuario.id}}">
 											<img th:src="@{'/usuarios/fotos/' + ${usuario.id} + ${ext}}" th:alt="@{''}">
 										</a>
 										<label th:class="@{btn color-4 size-2 hover-7}" for="quitarFoto">
@@ -80,13 +80,13 @@
 								<div th:class="@{input-col col-xs-12 col-sm-12 custom-margin-head}">
 									<div th:class="@{form-group focus-2}">
 										<div th:class="@{form-label}">Nombre</div>
-										<input th:class="@{form-input}" type="text" name="nombre" id="nombre" th:value="${usuario.nombre}">
+										<input th:class="@{form-input}" type="text" name="nombre" id="nombre" th:value="${usuario.nombre}" required>
 									</div>							
 								</div>
 								<div th:class="@{input-col col-xs-12 col-sm-12}">
 									<div th:class="@{form-group focus-2}">
 										<div th:class="@{form-label}">Apellidos</div>									
-										<input th:class="@{form-input}" type="text" name="apellidos" id="apellidos" th:value="${usuario.apellidos}">
+										<input th:class="@{form-input}" type="text" name="apellidos" id="apellidos" th:value="${usuario.apellidos}" required>
 									</div>								
 								</div>
 								<div th:class="@{input-col col-xs-12 col-sm-12}">
@@ -100,6 +100,8 @@
 						</div>
 					</div>
 					<input type="hidden" id="eliminar" name="eliminar" th:value="${usuario.foto}">
+					<input type="hidden" id="logueadoId" name="logueadoId" th:value="${logueado.id}">
+					<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${usuario.id}">
 					</form>
 				</div>
 				<div th:class="@{affix-block}" th:id="@{edit-password}">
@@ -133,6 +135,7 @@
 									<div th:class="@{input-col col-xs-12 col-sm-12}">
 										<input type="submit" th:class="@{btn color-1 size-2 hover-1 btn-right}" th:value="@{Cambiar Clave}">
 									</div>
+									<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${usuario.id}">
 								</form>																
 							</div>
 						</div>

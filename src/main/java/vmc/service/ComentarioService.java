@@ -50,10 +50,12 @@ public class ComentarioService {
 	
 	public Comentario update(boolean comentario, long logueadoId, long videoId) {
 		
-		Comentario c = comentarioRepository.findByVideoIdUsuarioId(videoId, logueadoId);
+		List<Comentario> comentarios = comentarioRepository.findByVideoIdUsuarioId(videoId, logueadoId);
 		Video video = videoRepository.findById(videoId);
-		c.setGusta(comentario);
-		comentarioRepository.save(c);
+		for(Comentario c: comentarios) {
+			c.setGusta(comentario);
+			comentarioRepository.save(c);
+		}
 		
 		if(comentario)
 				video.setLikes(video.getLikes() + 1);
@@ -62,7 +64,7 @@ public class ComentarioService {
 			
 		videoRepository.save(video);
 		
-		return c;
+		return comentarios.get(0);
 	}
 	
 	public List<Comentario> findComentariosByVideo(Video video) {
@@ -70,7 +72,7 @@ public class ComentarioService {
 		return comentarios;
 	}
 	
-	public Comentario findByVideoUsuario(Video video, Usuario usuario) {
+	public List<Comentario> findByVideoUsuario(Video video, Usuario usuario) {
 		return comentarioRepository.findByVideoIdUsuarioId(video.getId(), usuario.getId());
 	}
 	
@@ -110,21 +112,4 @@ public class ComentarioService {
 		
 		return new ResponseEntity<Comentario>(HttpStatus.OK);
 	}
-	
-	/*public ResponseEntity<Comentario> delete(@Valid @RequestBody Video v, @Valid @RequestBody Usuario u) {
-
-		List<Comentario> c = comentarioRepository.findByVideoUsuario(v, u);
-		try {
-			comentarioRepository.deleteByVideoUsuario(c.get(0).getId());
-			comentarioRepository.flush();
-			if(v.getLikes() > 0) {
-				v.setLikes(v.getLikes() - 1);
-				videoRepository.save(v);
-			}
-		} catch (Exception e) {
-			throw new ErrorInternoServidorException("borrar", "Comentario", c.get(0).getId(), e.getMessage());
-		}
-		
-		return new ResponseEntity<Comentario>(HttpStatus.OK);
-	}*/
 }

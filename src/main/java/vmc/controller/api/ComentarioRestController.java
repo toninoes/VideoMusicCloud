@@ -53,7 +53,10 @@ public class ComentarioRestController {
 		
 		Video video = videoService.findById(videoId);
 		Usuario usuario = usuarioService.findById(logueadoId);
-		Comentario c = comentarioService.findByVideoUsuario(video, usuario);
+		List<Comentario> comentarios = comentarioService.findByVideoUsuario(video, usuario);
+		Comentario c = null;
+		if(!comentarios.isEmpty())
+			c = comentarios.get(0);
 		boolean bComentario;
 		if(c == null)
 			bComentario = true;

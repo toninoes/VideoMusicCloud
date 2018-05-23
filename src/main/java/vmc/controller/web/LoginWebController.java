@@ -29,6 +29,15 @@ public class LoginWebController {
 	
 	@Autowired
 	private VideoService videoService;
+	
+	/*
+	 * GET METHODS - LOGIN - REGISTRO - ADMIN 
+	 * 
+	 */
+	
+	/*
+	 * GET - LOGIN
+	 */
 
 	@GetMapping({"/", "/login"})
 	public ModelAndView login(){
@@ -36,6 +45,10 @@ public class LoginWebController {
 		modelAndView.setViewName("login");
 		return modelAndView;
 	}
+	
+	/*
+	 * GET - REGISTRO (NO PORTAL)
+	 */
 	
 	@GetMapping("/registro")
 	public ModelAndView registro(){
@@ -46,6 +59,10 @@ public class LoginWebController {
 		return modelAndView;
 	}
 	
+	/*
+	 * GET - REGISTRO (PORTAL)
+	 */
+	
 	@GetMapping("/registro/{portal}")
 	public ModelAndView registro(@PathVariable String portal){
 		ModelAndView modelAndView = new ModelAndView();
@@ -55,6 +72,52 @@ public class LoginWebController {
 		modelAndView.addObject("portal", "si");
 		return modelAndView;
 	}
+	
+	/*
+	 * GET - PORTAL ADMIN
+	 */
+	
+	@GetMapping("/admin/home")
+	public ModelAndView home(){
+		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		List<Usuario> usuarios = usuarioService.findAll();
+		usuarios.remove(usuario);
+		modelAndView.addObject("mensaje","Portal de Administración");
+		modelAndView.addObject("usuarios", usuarios);
+		modelAndView.addObject("usuario", usuario);
+		modelAndView.setViewName("admin/home");
+		return modelAndView;
+	}
+	
+	/*
+	 * GET - PORTAL ADMIN - BUSQUEDA DE USUARIOS - ROL USER
+	 */
+	
+	@GetMapping("/admin/home/{busqueda}")
+	public ModelAndView searchHome(@PathVariable String busqueda){
+		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByMail(auth.getName());
+		List<Usuario> usuarios = usuarioService.findAll();
+		usuarios.remove(usuario);
+		List<Usuario> uss = usuarioService.findSearch(busqueda);
+		modelAndView.addObject("mensaje","Portal de Administración");
+		modelAndView.addObject("usuarios", uss);
+		modelAndView.addObject("usuario", usuario);
+		modelAndView.setViewName("admin/home");
+		return modelAndView;
+	}
+	
+	/*
+	 * POST METHODS - REGISTRO - ADMIN
+	 * 
+	 */
+	
+	/*
+	 * POST - REGISTRO
+	 */
 	
 	@PostMapping("/registro")
 	public ModelAndView create(@Valid Usuario u, BindingResult bindingResult) {
@@ -77,34 +140,9 @@ public class LoginWebController {
 		return modelAndView;
 	}
 	
-	@GetMapping("/admin/home")
-	public ModelAndView home(){
-		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioService.findByMail(auth.getName());
-		List<Usuario> usuarios = usuarioService.findAll();
-		usuarios.remove(usuario);
-		modelAndView.addObject("mensaje","Portal de Administración");
-		modelAndView.addObject("usuarios", usuarios);
-		modelAndView.addObject("usuario", usuario);
-		modelAndView.setViewName("admin/home");
-		return modelAndView;
-	}
-	
-	@GetMapping("/admin/home/{busqueda}")
-	public ModelAndView searchHome(@PathVariable String busqueda){
-		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioService.findByMail(auth.getName());
-		List<Usuario> usuarios = usuarioService.findAll();
-		usuarios.remove(usuario);
-		List<Usuario> uss = usuarioService.findSearch(busqueda);
-		modelAndView.addObject("mensaje","Portal de Administración");
-		modelAndView.addObject("usuarios", uss);
-		modelAndView.addObject("usuario", usuario);
-		modelAndView.setViewName("admin/home");
-		return modelAndView;
-	}
+	/*
+	 * POST - ADMIN
+	 */
 	
 	@PostMapping("/admin/home")
 	public ModelAndView formHome(@RequestParam(value = "uboxes", required=false) long[] uboxes){
@@ -141,7 +179,7 @@ public class LoginWebController {
 		return modelAndView;
 	}
 	
-	@PostMapping("/admin/home/{eliminar}")
+	/*@PostMapping("/admin/home/{eliminar}")
 	public ModelAndView deleteUser(@RequestParam(value = "uboxes", required=false) long[] uboxes) {
 		ModelAndView modelAndView = new ModelAndView();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -156,5 +194,5 @@ public class LoginWebController {
 		modelAndView.addObject("usuario", usuario);
 		modelAndView.setViewName("admin/home");
 		return modelAndView;
-	}
+	}*/
 }

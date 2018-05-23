@@ -45,7 +45,7 @@
 					<td width="14%">Roles</td>
 				</tr>
 				<tr>
-					<td><a th:href="@{'/usuarios/detalle/' + ${usuario.id} + '/si'}" th:text="${usuario.nombre}"></a></td>
+					<td><a th:href="@{'/usuarios/detalle/si/' + ${usuario.id} + '/' + ${usuario.id}}" th:text="${usuario.nombre}"></a></td>
 					<td th:text="${usuario.apellidos}"></td>
 					<td th:text="${usuario.intereses}"></td>
 					<td th:text="${usuario.activo}"></td>
@@ -100,7 +100,7 @@
 						<td width="7%">Marcar&nbsp;<input th:id="uBox" type="checkbox" onchange="comprobar('uBox','uboxes')"></td>
 					</tr>
 					<tr th:each="usr : ${usuarios}">
-						<td><a th:href="@{'/usuarios/detalle/' + ${usr.id} + '/si'}" th:text="${usr.nombre}"></a></td>
+						<td><a th:href="@{'/usuarios/detalle/si/' + ${usuario.id} + '/' + ${usr.id}}" th:text="${usr.nombre}"></a></td>
 						<td th:text="${usr.apellidos}"></td>
 						<td th:text="${usr.intereses}"></td>
 						<td th:text="${usr.activo}"></td>

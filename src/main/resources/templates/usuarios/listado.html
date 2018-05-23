@@ -24,8 +24,8 @@
 					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
 					<ul th:class="header-menu" id="one">
 						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
-						<li><a th:href="@{/videos}">Listas</a></li>
-						<li><a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${logueado.id} + '/0/0'}">Perfil</a></li>
+						<li><a th:href="@{/videos/listado}">Listas</a></li>
+						<li><a th:href="@{'/usuarios/perfil/perfilog/' + ${logueado.id}}">Perfil</a></li>
 						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
 						<li><a th:href="@{#}">Suscripción</a></li>
 					</ul>
@@ -39,17 +39,21 @@
 							<img th:case="*" th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${logueado.foto}}">
 							<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
 						</div>
-						<div th:each="rol : ${logueado.Roles}">
+						<div th:each="rol : ${usuario.Roles}">
 							<div th:if="${rol.rol} == 'ADMIN'">	
-								<span th:class="drop-down-list">
-									<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
-									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
-								</span>
+								<div th:class="drop-down-list">
+									<span th:class="drop-down-list">
+										<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
+										<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+									</span>
+								</div>
 							</div>
 							<div th:if="${rol.rol} != 'ADMIN'">	
-								<span th:class="drop-down-list">
-									<a th:href="@{'/usuarios/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
-								</span>
+								<div th:class="drop-down-list">
+									<span th:class="drop-down-list">
+										<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -71,26 +75,26 @@
 										<div align="center" th:class="@{be-img-block custom-video-perfil}">
 											<div th:switch="${usuario.foto}">
 												<div th:case="''">
-													<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${usuario.id} + '/0/0'}">
+													<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/perfil/' + ${usuario.id}}">
 														<img th:src="@{'/img/ava_10.jpg'}" th:alt="@{''}"> 
 													</a>
 												</div>
 												<div th:case="*">
-													<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${usuario.id} + '/0/0'}">
+													<a th:class="@{be-ava-user style-2}" th:href="@{'/usuarios/perfil/perfil/' + ${usuario.id}}">
 														<img th:src="@{'/usuarios/fotos/' + ${usuario.foto}}" th:alt="@{''}">
 													</a>
 												</div>
 											</div>
 											<div th:class="be-user-statistic">
 												<div th:class="@{stat-row clearfix}">
-													<a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${usuario.id} + '/0/0'}">
+													<a th:href="@{'/usuarios/perfil/perfil/' + ${usuario.id}}">
 														<i th:if="${segsig} == 'seguidores'"><i th:class="@{stat-icon icon-followers-b}"></i>Seguidor</i>
 														<i th:if="${segsig} == 'siguiendo'"><i th:class="@{stat-icon icon-following-b}"></i>Siguiendo</i>
 														<span th:class="stat-counter" th:text="${usuario.nombre}"></span>
 													</a>
 												</div>
 												<div th:class="@{stat-row clearfix}">
-													<a th:href="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${usuario.id} + '/0/0'}">
+													<a th:href="@{'/usuarios/perfil/perfil/' + ${usuario.id}}">
 														<i th:if="${segsig} == 'seguidores'" th:class="@{stat-icon icon-followers-b}"></i>
 														<i th:if="${segsig} == 'siguiendo'" th:class="@{stat-icon icon-following-b}"></i>
 														<span th:class="stat-counter" th:text="${usuario.apellidos}"></span>
@@ -103,20 +107,36 @@
 		                 	</div>                         
 		           		</div>
 					</div>
-					<div th:class="@{pagination}">
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active-5} + '/0' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${pages} > 5 and ${page} >= 5">&laquo;</a>
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active} + '/0' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active}<=${pages-1} and ${page-active}==${page} and ${pages} > 1" class="active" th:text="${page - active + 1}"></a>
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active} + '/0' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active}<=${pages-1} and ${page-active}!=${page} and ${pages} > 1" th:text="${page - active + 1}"></a>
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active+1} + '/1' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}==${page} and ${pages} > 1" class="active" th:text="${page - active + 2}"></a>
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active+1} + '/1' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}!=${page} and ${pages} > 1" th:text="${page - active + 2}"></a>				  
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active+2} + '/2' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}==${page} and ${pages} > 1" class="active" th:text="${page - active + 3}"></a>				  
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active+2} + '/2' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}!=${page} and ${pages} > 1" th:text="${page - active + 3}"></a>				  
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active+3} + '/3' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}==${page} and ${pages} > 1" class="active" th:text="${page - active + 4}"></a>				  
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active+3} + '/3' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}!=${page} and ${pages} > 1" th:text="${page - active + 4}"></a>				  
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active+4} + '/4' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}==${page} and ${pages} > 1" class="active" th:text="${page - active + 5}"></a>				  
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active+4} + '/4' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}!=${page} and ${pages} > 1" th:text="${page - active + 5}"></a>				  
-					  <a th:href="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page-active+5} + '/0' + '/' + ${pages} + '/' + ${segsig} + '/' + ${nombre} + '/' + ${apellidos} + '/' + ${search}}" th:if="${pages} > 5 and ${page-active+5} < ${pages}">&raquo;</a>
-					</div>				
+					<div th:switch="${search}=='0' and ${nombre}==null and ${apellidos}==null">
+						<div th:case="true" th:class="@{pagination}">
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active-5} + '/0'}" th:if="${pages} > 5 and ${page} >= 5">&laquo;</a>
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active} + '/0'}" th:if="${page-active}<=${pages-1} and ${page-active}==${page} and ${pages} > 1" class="active" th:text="${page - active + 1}"></a>
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active} + '/0'}" th:if="${page-active}<=${pages-1} and ${page-active}!=${page} and ${pages} > 1" th:text="${page - active + 1}"></a>
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+1} + '/1'}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}==${page} and ${pages} > 1" class="active" th:text="${page - active + 2}"></a>
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+1} + '/1'}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}!=${page} and ${pages} > 1" th:text="${page - active + 2}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+2} + '/2'}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}==${page} and ${pages} > 1" class="active" th:text="${page - active + 3}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+2} + '/2'}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}!=${page} and ${pages} > 1" th:text="${page - active + 3}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+3} + '/3'}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}==${page} and ${pages} > 1" class="active" th:text="${page - active + 4}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+3} + '/3'}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}!=${page} and ${pages} > 1" th:text="${page - active + 4}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+4} + '/4'}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}==${page} and ${pages} > 1" class="active" th:text="${page - active + 5}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+4} + '/4'}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}!=${page} and ${pages} > 1" th:text="${page - active + 5}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+5} + '/0'}" th:if="${pages} > 5 and ${page-active+5} < ${pages}">&raquo;</a>
+						</div>
+						<div th:case="false" th:class="@{pagination}">
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active-5} + '/0/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${pages} > 5 and ${page} >= 5">&laquo;</a>
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active} + '/0/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active}<=${pages-1} and ${page-active}==${page} and ${pages} > 1" class="active" th:text="${page - active + 1}"></a>
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active} + '/0/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active}<=${pages-1} and ${page-active}!=${page} and ${pages} > 1" th:text="${page - active + 1}"></a>
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+1} + '/1/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}==${page} and ${pages} > 1" class="active" th:text="${page - active + 2}"></a>
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+1} + '/1/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}!=${page} and ${pages} > 1" th:text="${page - active + 2}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+2} + '/2/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}==${page} and ${pages} > 1" class="active" th:text="${page - active + 3}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+2} + '/2/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}!=${page} and ${pages} > 1" th:text="${page - active + 3}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+3} + '/3/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}==${page} and ${pages} > 1" class="active" th:text="${page - active + 4}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+3} + '/3/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}!=${page} and ${pages} > 1" th:text="${page - active + 4}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+4} + '/4/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}==${page} and ${pages} > 1" class="active" th:text="${page - active + 5}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+4} + '/4/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}!=${page} and ${pages} > 1" th:text="${page - active + 5}"></a>				  
+						  <a th:href="@{'/usuarios/listado/' + ${segsig} + '/' + ${usuario.id} + '/' + ${page-active+5} + '/0/' + ${search} + '/' + ${nombre} + '/' + ${apellidos}}" th:if="${pages} > 5 and ${page-active+5} < ${pages}">&raquo;</a>
+						</div>	
+					</div>			
 				</div>				
 			</div>
 		</div>
@@ -124,7 +144,7 @@
 			<div th:class="@{stat-rowUsuario}">
 				<span th:class="@{color-white}">Resultados por página</span>
 				<div th:class="@{paginationCustom}">
-					<form method="POST" th:action="@{'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${segsig} + '/0' }">
+					<form method="POST" th:action="@{'/usuarios/listado/' + ${segsig} + '/' + ${logueado.id} + '/' + ${usuario.id}}">
 						<select id="UsuariosPorPagina" name="UsuariosPorPagina" th:class="@{be-custom-select pull-left}">
 							<option value="8" th:class="@{color-blue}" selected>...</option>
 						  	<option value="todos" th:class="@{color-blue}">Todos</option>

@@ -44,12 +44,21 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	@Query("SELECT u FROM Usuario u WHERE u.nombre LIKE %:nombre% AND u.id != :id ORDER BY u.nombre")
 	Page<Usuario> findByUsuarioSearch(Pageable p, @Param("nombre") String nombre, @Param("id") long id);
 	
+	@Query("SELECT u FROM Usuario u WHERE u IN(:users) AND u.nombre LIKE %:nombre% AND u.id != :id ORDER BY u.nombre")
+	Page<Usuario> findByUsuarioSearchNombre(Pageable p, @Param("nombre") String nombre, @Param("users") Set<Usuario> users, @Param("id") long id);
+	
 	@Query("SELECT u FROM Usuario u WHERE u.nombre LIKE %:nombre% AND u.id != :id ORDER BY u.nombre")
 	Page<Usuario> findByUsuarioSearchNombre(Pageable p, @Param("nombre") String nombre, @Param("id") long id);
 	
 	@Query("SELECT u FROM Usuario u WHERE u.apellidos LIKE %:apellidos% AND u.id != :id ORDER BY u.nombre")
 	Page<Usuario> findByUsuarioSearchApellidos(Pageable p, @Param("apellidos") String apellidos, @Param("id") long id);
 	
+	@Query("SELECT u FROM Usuario u WHERE u IN(:users) AND u.apellidos LIKE %:apellidos% AND u.id != :id ORDER BY u.nombre")
+	Page<Usuario> findByUsuarioSearchApellidos(Pageable p, @Param("apellidos") String apellidos, @Param("users") Set<Usuario> users, @Param("id") long id);
+	
 	@Query("SELECT u FROM Usuario u WHERE u.nombre LIKE %:nombre% AND u.apellidos LIKE %:apellidos% AND u.id != :id ORDER BY u.nombre")
 	Page<Usuario> findByUsuarioSearchNombreApellidos(Pageable p, @Param("nombre") String nombre, @Param("apellidos") String apellidos, @Param("id") long id);
+	
+	@Query("SELECT u FROM Usuario u WHERE u IN(:users) AND u.nombre LIKE %:nombre% AND u.apellidos LIKE %:apellidos% AND u.id != :id ORDER BY u.nombre")
+	Page<Usuario> findByUsuarioSearchNombreApellidos(Pageable p, @Param("nombre") String nombre, @Param("apellidos") String apellidos, @Param("users") Set<Usuario> users, @Param("id") long id);
 }

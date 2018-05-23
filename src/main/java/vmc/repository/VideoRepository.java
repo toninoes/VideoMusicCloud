@@ -27,8 +27,8 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	@Query("SELECT v FROM Video v WHERE v.usuario = :usuario AND v.privado = 0 ORDER BY v.creacion DESC")
 	Page<Video> findByPageUsuario(Pageable p, @Param("usuario") Usuario usuario);
 	
-	@Query("SELECT v FROM Video v WHERE v.usuario = :usuario ORDER BY v.creacion DESC")
-	List<Video> findByUsuario(@Param("usuario") Usuario usuario);
+	@Query("SELECT v FROM Video v WHERE v.usuario.id = :id ORDER BY v.creacion DESC")
+	List<Video> findByVideoUsuario(@Param("id") long id);
 	
 	@Query("SELECT v FROM Video v WHERE v.usuario = :usuario AND v.privado = 0 ORDER BY v.creacion DESC")
 	List<Video> findBySiguiendo(@Param("usuario") Usuario usuario);
@@ -36,17 +36,32 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	@Query("SELECT v FROM Video v WHERE v.privado = 0 ORDER BY v.visualizaciones DESC, v.creacion DESC")
 	List<Video> findByVisualizaciones();
 	
+	@Query("SELECT v FROM Video v WHERE v.privado = 0 AND v.usuario=:logueado ORDER BY v.visualizaciones DESC, v.creacion DESC")
+	List<Video> findByVisualizacionesUser(@Param("logueado") Usuario logueado);
+	
+	@Query("SELECT v FROM Video v WHERE v.privado = 0 AND v.usuario IN(:u) ORDER BY v.visualizaciones DESC, v.creacion DESC")
+	List<Video> findByVisualizacionesUsers(@Param("u") Set<Usuario> u);
+	
 	@Query("SELECT v FROM Video v WHERE v.privado = 0 ORDER BY v.visualizaciones DESC, v.creacion DESC")
 	Page<Video> findByPageVisualizaciones(Pageable p);
 	
 	@Query("SELECT v FROM Video v WHERE v.privado = 0 ORDER BY v.likes DESC, v.creacion DESC")
 	List<Video> findByLikes();
 	
+	@Query("SELECT v FROM Video v WHERE v.privado = 0 AND v.usuario=:logueado ORDER BY v.likes DESC, v.creacion DESC")
+	List<Video> findByLikesUser(@Param("logueado") Usuario logueado);
+	
+	@Query("SELECT v FROM Video v WHERE v.privado = 0 AND v.usuario IN(:u) ORDER BY v.likes DESC, v.creacion DESC")
+	List<Video> findByLikesUsers(@Param("u") Set<Usuario> u);
+	
 	@Query("SELECT v FROM Video v WHERE v.privado = 0 ORDER BY v.likes DESC, v.creacion DESC")
 	Page<Video> findByPageLikes(Pageable p);
 	
 	@Query("SELECT v FROM Video v WHERE v.privado = 0 ORDER BY v.creacion DESC")
 	Page<Video> findAll(Pageable p);
+	
+	@Query("SELECT v FROM Video v WHERE 1=0 ORDER BY v.creacion DESC")
+	List<Video> findNothing();
 	
 	@Query("SELECT v FROM Video v WHERE 1=0 ORDER BY v.creacion DESC")
 	Page<Video> findNothing(Pageable p);
@@ -66,23 +81,53 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	@Query("SELECT v FROM Video v WHERE v.privado = 0 ORDER BY v.visualizaciones DESC, v.likes DESC, v.creacion DESC")
 	List<Video> findByVisualizacionesLikes();
 	
+	@Query("SELECT v FROM Video v WHERE v.privado = 0 AND v.usuario=:logueado ORDER BY v.visualizaciones DESC, v.likes DESC, v.creacion DESC")
+	List<Video> findByVisualizacionesLikesUser(@Param("logueado") Usuario logueado);
+	
+	@Query("SELECT v FROM Video v WHERE v.privado = 0 AND v.usuario IN(:u) ORDER BY v.visualizaciones DESC, v.likes DESC, v.creacion DESC")
+	List<Video> findByVisualizacionesLikesUsers(@Param("u") Set<Usuario> u);
+	
 	@Query("SELECT v FROM Video v WHERE v.privado = 0 ORDER BY v.visualizaciones DESC, v.likes DESC, v.creacion DESC")
 	Page<Video> findByPageVisualizacionesLikes(Pageable p);
 	
 	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:titulo% AND v.privado = 0")
 	List<Video> findByTitulo(@Param("titulo") String titulo);
 	
+	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:busqueda% AND v.privado = 0 AND v.usuario = :logueado")
+	List<Video> findByTituloUser(@Param("logueado") Usuario logueado, @Param("busqueda") String busqueda);
+	
+	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:busqueda% AND v.privado = 0 AND v.usuario IN(:u)")
+	List<Video> findByTituloUsers(@Param("u") Set<Usuario> u, @Param("busqueda") String busqueda);
+	
 	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:titulo% AND v.privado = 0")
 	Page<Video> findByPageTitulo(Pageable p, @Param("titulo") String titulo);
 	
+	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:busqueda% AND v.privado = 0 AND v.usuario=:logueado")
+	Page<Video> findByPageTituloUser(Pageable p, @Param("logueado") Usuario logueado, @Param("busqueda") String busqueda);
+	
+	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:busqueda% AND v.privado = 0 AND v.usuario IN(:u)")
+	Page<Video> findByPageTituloUsers(Pageable p, @Param("u") Set<Usuario> u, @Param("busqueda") String busqueda);
+	
 	@Query("SELECT v FROM Video v WHERE v.descripcion LIKE %:descripcion% AND v.privado = 0")
 	List<Video> findByDescripcion(@Param("descripcion") String descripcion);
+	
+	@Query("SELECT v FROM Video v WHERE v.descripcion LIKE %:busqueda% AND v.privado = 0 AND v.usuario=:logueado")
+	List<Video> findByDescripcionUser(@Param("logueado") Usuario logueado, @Param("busqueda") String busqueda);
+	
+	@Query("SELECT v FROM Video v WHERE v.descripcion LIKE %:busqueda% AND v.privado = 0 AND v.usuario IN(:u)")
+	List<Video> findByDescripcionUsers(@Param("u") Set<Usuario> u, @Param("busqueda") String busqueda);
 	
 	@Query("SELECT v FROM Video v WHERE v.descripcion LIKE %:descripcion% AND v.privado = 0")
 	Page<Video> findByPageDescripcion(Pageable p, @Param("descripcion") String descripcion);
 		
 	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:busqueda% AND v.descripcion LIKE %:busqueda% AND v.privado = 0")
 	List<Video> findByTituloDescripcion(@Param("busqueda") String busqueda);
+	
+	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:busqueda% AND v.descripcion LIKE %:busqueda% AND v.privado = 0 AND v.usuario=:logueado")
+	List<Video> findByTituloDescripcionUser(@Param("logueado") Usuario logueado, @Param("busqueda") String busqueda);
+	
+	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:busqueda% AND v.descripcion LIKE %:busqueda% AND v.privado = 0 AND v.usuario IN(:u)")
+	List<Video> findByTituloDescripcionUsers(@Param("u") Set<Usuario> u, @Param("busqueda") String busqueda);
 	
 	@Query("SELECT v FROM Video v WHERE v.titulo LIKE %:busqueda% AND v.descripcion LIKE %:busqueda% AND v.privado = 0")
 	Page<Video> findByPageTituloDescripcion(Pageable p, @Param("busqueda") String busqueda);

@@ -78,11 +78,11 @@ public class VideoService {
 				subtotal += videos.size();
 			}
 			videos.clear();
-			videos = videoRepository.findByUsuario(usuario);
+			videos = videoRepository.findByVideoUsuario(usuario.getId());
 			subtotal += videos.size();
 			return (int)Math.ceil(subtotal*(1.0) / VIDEOS_POR_PAGINA*(1.0));
 		} else
-			return (int)Math.ceil((videoRepository.findByUsuario(usuario)).size()*(1.0) / VIDEOS_POR_PAGINA*(1.0));
+			return (int)Math.ceil((videoRepository.findByVideoUsuario(usuario.getId())).size()*(1.0) / VIDEOS_POR_PAGINA*(1.0));
 	}	
 	
 	public Page<Video> findMyPage(Pageable p, Usuario usuario, Set<Usuario> users) {   	
@@ -96,7 +96,7 @@ public class VideoService {
 		if(!users.isEmpty())
 			return videoRepository.findByVideos(users);
 		else
-			return videoRepository.findByUsuario(usuario);
+			return videoRepository.findByVideoUsuario(usuario.getId());
     }
 	
 	public List<Video> findAll() {   	
@@ -111,7 +111,7 @@ public class VideoService {
 		Usuario usuario = usuarioRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
 		
-		return videoRepository.findByUsuario(usuario);
+		return videoRepository.findByVideoUsuario(usuario.getId());
 	}
 	
 	public List<Video> findVideosByUsuarioIdSiguiendo(Pageable p, Usuario usuario) {
@@ -119,7 +119,7 @@ public class VideoService {
 		if(!siguiendo.getContent().isEmpty()) {
 			List<Video> videos = null;
 			List<Video> total = new ArrayList<Video>();
-			videos = videoRepository.findByUsuario(usuario);
+			videos = videoRepository.findByVideoUsuario(usuario.getId());
 			for(int i = 0; i < videos.size(); i++)
 				total.add(videos.get(i));
 			for(Usuario u: siguiendo) {
@@ -130,11 +130,12 @@ public class VideoService {
 			}
 			return total;
 		} else
-			return videoRepository.findByUsuario(usuario);
+			return videoRepository.findByVideoUsuario(usuario.getId());
 	}
 	
-	public Page<Video> findSearch(Pageable p, List<Video> videosAll, int visitas, int gustas, int titulo, 
-								  int descripcion, int genero, int user, String busqueda) {
+	public Page<Video> findSearch(Pageable p, List<Video> videosAll, boolean visitas, boolean gustas, boolean titulo, 
+								  boolean descripcion, boolean genero, boolean user, String busqueda, String view, 
+								  Usuario logueado, Set<Usuario> usuarios) {
 		
 		List<Video> videos = null;
 	    List<Video> videosViGu = null; 
@@ -143,33 +144,82 @@ public class VideoService {
 	    List<Video> videosUs = null;
 		String ordenacion = "fecha";
 
-		if(visitas == 1 && gustas == 1) {
-			videosViGu = videoRepository.findByVisualizacionesLikes();
+		if(visitas && gustas) {
+			if(view.equals("perfil"))
+				videosViGu = videoRepository.findByVisualizacionesLikesUser(logueado);
+			else if(view.equals("misvideos"))
+				videosViGu = videoRepository.findByVisualizacionesLikesUsers(usuarios);
+			else 
+				videosViGu = videoRepository.findByVisualizacionesLikes();
 			ordenacion = "visitasgustas";
-		} else if(visitas == 1) {
-			videosViGu = videoRepository.findByVisualizaciones();
+		} else if(visitas) {
+			if(view.equals("perfil"))
+				videosViGu = videoRepository.findByVisualizacionesUser(logueado);
+			else if(view.equals("misvideos"))
+				videosViGu = videoRepository.findByVisualizacionesUsers(usuarios);
+			else
+				videosViGu = videoRepository.findByVisualizaciones();
 			ordenacion = "visitas";
-		} else if(gustas == 1) {
-			videosViGu = videoRepository.findByLikes();
+		} else if(gustas) {
+			if(view.equals("perfil"))
+				videosViGu = videoRepository.findByLikesUser(logueado);
+			else if(view.equals("misvideos"))
+				videosViGu = videoRepository.findByLikesUsers(usuarios);
+			else
+				videosViGu = videoRepository.findByLikes();
 			ordenacion = "gustas";
 		}
 		
-		if(titulo == 1 && descripcion == 1 && !busqueda.equals("0"))
-			videosTiDe = videoRepository.findByTituloDescripcion(busqueda.toLowerCase());
-		else if(titulo == 1)
-			videosTiDe = videoRepository.findByTitulo(busqueda.toLowerCase());
-		else if(descripcion == 1)
-			videosTiDe = videoRepository.findByDescripcion(busqueda.toLowerCase());
+		if(titulo && descripcion && !busqueda.equals("0")) {
+			if(view.equals("perfil"))
+				videosViGu = videoRepository.findByTituloDescripcionUser(logueado, busqueda.toLowerCase());
+			else if(view.equals("misvideos"))
+				videosViGu = videoRepository.findByTituloDescripcionUsers(usuarios, busqueda.toLowerCase());
+			else
+				videosTiDe = videoRepository.findByTituloDescripcion(busqueda.toLowerCase());
+		} else if(titulo) {
+			if(view.equals("perfil"))
+				videosViGu = videoRepository.findByTituloUser(logueado, busqueda.toLowerCase());
+			else if(view.equals("misvideos"))
+				videosViGu = videoRepository.findByTituloUsers(usuarios, busqueda.toLowerCase());
+			else
+				videosTiDe = videoRepository.findByTitulo(busqueda.toLowerCase());
+		} else if(descripcion) {
+			if(view.equals("perfil"))
+				videosViGu = videoRepository.findByDescripcionUser(logueado, busqueda.toLowerCase());
+			else if(view.equals("misvideos"))
+				videosViGu = videoRepository.findByDescripcionUsers(usuarios, busqueda.toLowerCase());
+			else
+				videosTiDe = videoRepository.findByDescripcion(busqueda.toLowerCase());
+		}
 		
-		if(genero == 1 && !busqueda.equals("0"))
+		if(genero && !busqueda.equals("0") && view.equals("listado"))
 			videosGe = getVideosGeneros(p, videosAll, busqueda.toLowerCase());
-		if(user == 1 && !busqueda.equals("0"))
-			videosUs = getVideosUsuarios(p, busqueda.toLowerCase());
+		else if(genero && !busqueda.equals("0") && view.equals("perfil")) {
+			videosGe = videoRepository.findByVideoUsuario(logueado.getId());
+			videosGe = getVideosGeneros(p, videosGe, busqueda.toLowerCase());
+		} else if(genero && !busqueda.equals("0")) {
+			videosGe = videoRepository.findByVideos(usuarios);
+			videosGe = getVideosGeneros(p, videosGe, busqueda.toLowerCase());
+		}
+		if(user && !busqueda.equals("0") && view.equals("listado"))
+			videosUs = getVideosUsuarios(p, busqueda.toLowerCase(), null, null);
+		else if(user && !busqueda.equals("0") && view.equals("perfil")) {
+			videosUs = getVideosUsuarios(p, busqueda.toLowerCase(), logueado, null);
+		} else if(user && !busqueda.equals("0")) {
+			videosUs = getVideosUsuarios(p, busqueda.toLowerCase(), logueado, usuarios);
+		}
 		
-		if(visitas == 0 && gustas == 0 && titulo == 0 && descripcion == 0 && genero == 0 && user == 0 && busqueda.equals("0"))
+		if(visitas && gustas && titulo && descripcion && genero && user && busqueda.equals("0") && view.equals("listado"))
 			return videoRepository.findAll(p);
-		else if(visitas == 0 && gustas == 0 && descripcion == 0 && genero == 0 && user == 0 && !busqueda.equals("0")) {
-			Page<Video> v = videoRepository.findByPageTitulo(p, busqueda.toLowerCase());
+		else if(!visitas && !gustas && !descripcion && !genero && !user && !busqueda.equals("0")) {
+			Page<Video> v = null;
+			if(view.equals("perfil"))
+				v = videoRepository.findByPageTituloUser(p, logueado, busqueda.toLowerCase());
+			else if(view.equals("misvideos"))
+				v = videoRepository.findByPageTituloUsers(p, usuarios, busqueda.toLowerCase());
+			else
+				v = videoRepository.findByPageTitulo(p, busqueda.toLowerCase());
 			return v;
 		} else {
 			videos = organizeVideos(p, videosViGu, videosTiDe, videosGe, videosUs, ordenacion);
@@ -266,9 +316,25 @@ public class VideoService {
 		return videos;
 	}
 	
-	private List<Video> getVideosUsuarios(Pageable p, String busqueda) {
-		List<Usuario> usuario = usuarioRepository.findByUsuarioSearch(busqueda);
-		List<Video> videos = videoRepository.findByUsuarioSearch(usuario);
+	private List<Video> getVideosUsuarios(Pageable p, String busqueda, Usuario logueado, Set<Usuario> users) {
+		
+		List<Usuario> usuarios = null, us = new ArrayList<Usuario>();
+		List<Video> videos = null;
+	
+		if(logueado != null && users == null) {
+			usuarios = usuarioRepository.findByUsuarioSearch(busqueda);
+			for(Usuario u: usuarios)
+				if(u.getId() == logueado.getId()) {
+					us.add(logueado);
+					videos = videoRepository.findByUsuarioSearch(us);
+					break;
+				}
+			if(videos == null) 
+				videos = videoRepository.findNothing();
+		} else if(logueado == null && users == null) {
+			videos = videoRepository.findByUsuarioSearch(usuarios);
+			usuarios = usuarioRepository.findByUsuarioSearch(busqueda);
+		}
 		return videos;
 	}
 	
