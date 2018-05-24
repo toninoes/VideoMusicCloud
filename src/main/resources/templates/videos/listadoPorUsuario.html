@@ -10,29 +10,37 @@
 	
 	<!-- THE HEADER -->
 	<header>
-		<div th:class="@{container-fluid custom-container}">
-			<div th:class="@{row no_row row-header}">
-	
-				<!-- THE LOGO -->
-				<div th:include="logo :: body"></div>
-	
-				<!-- THE SEARCH -->
-				<div th:include="buscador :: body"></div>		
-				
-				<!-- THE MENU -->	
-				<div th:class="header-menu-block">
-					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
-					<ul th:class="header-menu" id="one">
-						<li th:class="active-header"><a th:href="@{/videos/misvideos}">Inicio</a></li>
-						<li><a th:href="@{/videos/listado}">Listas</a></li>
-						<li><a th:href="@{'/usuarios/perfil/perfilog/' + ${usuario.id}}">Perfil</a></li>
-						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
-						<li><a th:href="@{#}">Suscripción</a></li>
-					</ul>
-				</div>
-				
-				<!-- THE HELLO USER -->
-				<div th:include="hellouser :: body"></div>
+		<div class="container-fluid custom-container col-md-12">
+			<div class="row-header">
+
+			<!-- THE LOGO -->
+			<div th:include="logo :: body"></div>
+
+			<!-- THE SEARCH -->
+			<div th:include="buscador :: body"></div>		
+			
+			<!-- THE MENU -->	
+			<div class="header-menu-block">
+				<button class="cmn-toggle-switch cmn-toggle-switch__htx"><span></span></button>
+				<ul th:class="header-menu" id="one">
+					<li th:if="${usuario.roles[0].rol} == 'ADMIN'" class="administracion"><a th:href="@{/home/admin}">Administración</a></li>
+					<li class="perfil"><a th:href="@{'/usuarios/detalle/no/' + ${usuario.id} + '/' + ${usuario.id}}">Editar Perfil</a></li>
+					<li class="active-header"><a th:href="@{/videos/misvideos}">Inicio</a></li>
+					<li><a th:href="@{/videos/listado}">Listas</a></li>
+					<li><a th:href="@{'/usuarios/perfil/perfilog/' + ${usuario.id}}">Perfil</a></li>
+					<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
+					<li><a>Suscripción</a></li>
+					<li class="exit"><a th:href="@{/logout}">Logout</a></li>
+					<li class="buscadormenu2"><div th:include="buscadormenu :: body"></div></li>
+				</ul>
+			</div>
+			
+			<!-- THE LOGOUT -->
+			<div th:include="logout :: body"></div>
+			
+			<!-- THE HELLO USER -->
+			<div th:include="hellouser :: body"></div>
+			
 			</div>
 		</div>
 	</header>

@@ -4,17 +4,17 @@
 	<meta charset="utf-8" />
 </head>
 <body th:fragment="buscausers :: body">
-	<div th:class="@{dropdown2 login-header-block col-md-2 left-feild pull-left}">
-		<form th:class="@{input-search dropdown2}" method="POST" th:action="'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page} + '/' + ${active} + '/' + ${pages} + '/' + ${segsig}">
+	<div th:class="@{buscador login-header-block col-md-2 left-feild pull-left}">
+		<form th:class="@{input-search}" method="POST" th:action="'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page} + '/' + ${active} + '/' + ${pages} + '/' + ${segsig}">
 			<div th:class="dropdown2">
 				<input type="text" placeholder="Buscar..." name="Busqueda" id="Busqueda">
      			<i class="fa fa-search"></i>
      			<input type="submit" name="submit" id="submit">
      			<div th:class="@{dropdown-content2}">
-     				<label th:class="custom-right" for="Visualizaciones"> Por Nombre
+     				<label th:class="custom-right" for="Nombre"> Por Nombre
      					<input type="checkbox" th:class="@{color-white}" id="Nombre" name="Nombre">
      				</label>
-     				<label th:class="custom-right" for="Likes"> Por Apellidos
+     				<label th:class="custom-right" for="Apellidos"> Por Apellidos
      					<input type="checkbox" th:class="@{color-white}" id="Apellidos" name="Apellidos">
      				</label>
      			</div>

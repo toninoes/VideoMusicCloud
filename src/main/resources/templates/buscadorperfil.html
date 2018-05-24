@@ -4,9 +4,9 @@
 	<meta charset="utf-8" />
 </head>
 <body th:fragment="buscadorperfil :: body">
-	<div th:class="@{dropdown2 login-header-block col-md-2 left-feild pull-left}">
-		<form th:class="@{input-search dropdown2}" method="POST" th:action="@{'/usuarios/perfil/buscador/perfilog/' + ${usuario.id} + '/' + ${logueado.id}}">
-			<div th:class="dropdown2">
+	<div class="buscador login-header-block2 custom-margin-left2">
+		<form th:class="@{input-search}" method="POST" th:action="@{'/usuarios/perfil/buscador/perfilog/' + ${usuario.id} + '/' + ${logueado.id}}">
+			<div class="dropdown2">
 				<input type="text" placeholder="Buscar..." name="Busqueda" id="Busqueda">
 		  		<i class="fa fa-search"></i>
 		  		<input type="submit" name="submit" id="submit">

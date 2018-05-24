@@ -45,13 +45,127 @@ ul, li, ol { list-style: none; margin: 0; padding: 0; }
 
 .custom-container { max-width: 1800px; }
 
-div { margin: 0; }
+@media screen and (min-width: 1px) {
+	.custom-margin-left2 { 
+		padding-left: 55px !important; 
+	}
+	.exit { 
+		 display: block !important;
+	}
+	.salir { 
+		 display: none !important;
+	}
+	.savefoto {
+		 display: none !important;
+	}
+}
 
-td { 
-	text-align: center; 
+@media screen and (min-width: 424px) {
+	.exit { 
+		 display: none !important;
+	}
+	.salir { 
+		 display: block !important;
+	}
+	.savefoto {
+		 display: block !important;
+	}
+	.buscador { 
+		 display: block !important;
+	}
+	.hellouser { 
+		 display: block !important;
+	}
+}
+
+@media screen and (max-width: 425px) {
+	.buscador2 {
+		margin-left: 10px !important;
+		text-align: left !important;
+	}
+	.search2 {
+		width: 170px !important;
+	}
+	label {
+		font-size: 10px !important;
+		text-align: left !important;
+	}
+	#lupa {
+		font-size: 22px !important;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.buscador { 
+		 display: none !important;
+	}
+	.hellouser { 
+		 display: none !important;
+	}
+	.buscador2 {
+		margin-left: 10px !important;
+		text-align: left !important;
+	}
+	.search2 {
+		width: 170px !important;
+	}
+	label {
+		font-size: 10px !important;
+		text-align: left !important;
+	}
+	#lupa {
+		font-size: 22px !important;
+	}
+}
+
+@media screen and (min-width: 769px) {
+	.administracion {
+		display: none !important;
+	}
+	.perfil {
+		display: none !important;
+	}
+	.buscadormenu2 {
+		display: none !important;
+	}
+}
+
+@media screen and (min-width: 1200px) {
+	.custom-margin-left2 { 
+		display: block !important;
+		position: relative !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		top: 15px !important;
+	}
+	.salir { 
+		display: block !important;
+	}
+}
+
+#videobox {
+	width: auto;
+	height: auto;
+}
+
+table {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+tr {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+td {  
 	margin: 0; 
 	padding: 0; 
 }
+
+div { margin: 0; }
 
 a.megusta {
 	cursor: pointer;
@@ -188,7 +302,8 @@ a.megusta {
 
 .dropdown2 {
     position: relative !important;
-    display: inline-block !important;
+    display: block !important;
+    width: 100% !important;
 }
 
 .dropdown-content2 {
@@ -196,8 +311,8 @@ a.megusta {
     position: absolute !important;
     background-color: #222835 !important;
     top: 52px !important;
-    left: -210px !important;
-    width: 1519px !important;
+    left: -200px;
+    width: 1599px !important;
     height: 50px !important;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2) !important;
     padding: 12px 16px !important;
@@ -206,7 +321,13 @@ a.megusta {
 
 .dropdown2:hover .dropdown-content2 {
     display: block !important;
+    width: 1599px !important;
     z-index: 1 !important;
+}
+
+.input-search {
+	width: 170px !important;
+	z-index: 1 !important;
 }
 
 .custom-video {
@@ -285,10 +406,6 @@ input#videobox {
 	height: 300px;
 	border: 1px solid #000;
 	margin: 0;
-}
-
-.input-search {
-	z-index: 1 !important;
 }
 
 .pagination {
@@ -508,6 +625,8 @@ img.be_logo { text-align: left; }
 /*login-block*/
 .login-header-block { margin-top: 17.5px; float: right; }
 
+.login-header-block2 { margin-top: 17.5px; float: left; }
+
 .login_block { text-align: right; }
 
 .login_block .btn-login { margin-right: 0px; margin-bottom: 0px; padding: 0; }
@@ -516,6 +635,8 @@ img.be_logo { text-align: left; }
 
 /*login user page*/
 .page-login .login-header-block { margin-top: 15px; }
+
+.page-login .login-header-block2 { margin-top: 15px; }
 
 .page-login .login_block .be-drop-down { margin-top: 1.5px; float: right; }
 
@@ -689,7 +810,8 @@ a.settings>i{font-size: 16px !important;}
   body.menu-open .login_block .be-drop-down { display: inline-block; }
   header .col-xs-3:last-child { float: right; }
   .header-menu > li ul { background: #F6F6F6; margin: 0; padding: 0; }
-  .login-header-block { padding-right: 0; float: right; } }
+  .login-header-block { padding-right: 0; float: right; } 
+  .login-header-block2 { padding-right: 0; float: left; }}
 
 @media screen and (max-width: 600px) { .noto-popup { left: 15px; width: auto; } }
 
@@ -2706,5 +2828,4 @@ transition: all ease-out 0.3s;}
 @media screen and (min-width: 993px){
   .header-menu ul{border-radius: 0 0 5px 5px;
     box-shadow: 0 0 20px rgba(0,0,0,0.7);}
-
 }

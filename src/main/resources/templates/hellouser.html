@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 </head>
 <body th:fragment="hellouser :: body">
-	<div th:class="@{login-header-block be-drop-down login-user-down}">
+	<div th:class="@{hellouser login-header-block be-drop-down login-user-down}">
 		<div th:switch="${usuario.foto}">
 			<div th:case="''">
 				<img th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">

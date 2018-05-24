@@ -4,9 +4,8 @@
 	<meta charset="utf-8" />
 </head>
 <body th:fragment="logo :: body">
-	<div th:class="brand-be">
+	<div th:class="@{brand-be}">
 		<a th:href="@{/videos/misvideos}"><img th:src="@{/img/logowhite.png}" width="75%" alt="logo" th:class="be_logo"></a>
-	</div> 
-	<a href="/logout" th:class="@{login-header-block btn color-1 size-2 hover-1 color-white}"><i th:class="@{fa fa-user color-white}"></i>Log out</a>
+	</div>
 </body>
 </html>

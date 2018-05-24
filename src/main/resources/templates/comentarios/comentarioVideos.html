@@ -16,20 +16,26 @@
 				<!-- THE LOGO -->
 				<div th:include="logo :: body"></div>		
 				
-				<!-- THE MENU -->	
-				<div th:class="header-menu-block">
-					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
+				<!-- THE MENU -->
+				<div class="header-menu-block">
+					<button class="cmn-toggle-switch cmn-toggle-switch__htx"><span></span></button>
 					<ul th:class="header-menu" id="one">
+						<li th:if="${usuario.roles[0].rol} == 'ADMIN'" class="administracion"><a th:href="@{/home/admin}">Administración</a></li>
+						<li class="perfil"><a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}">Editar Perfil</a></li>
 						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
 						<li><a th:href="@{/videos/listado}">Listas</a></li>
-						<li><a th:href="@{'/usuarios/perfil/perfilog/' + ${usuario.id}}">Perfil</a></li>
+						<li><a th:href="@{'/usuarios/perfil/perfilog/' + ${logueado.id}}">Perfil</a></li>
 						<li><a th:href="@{/videos/subidaVideos}">Subir Video</a></li>
-						<li><a th:href="@{#}">Suscripción</a></li>
+						<li><a>Suscripción</a></li>
+						<li class="exit"><a th:href="@{/logout}">Logout</a></li>
 					</ul>
 				</div>
 				
+				<!-- THE LOGOUT -->
+				<div th:include="logout :: body"></div>
+				
 				<!-- THE HELLO USER -->
-				<div th:class="@{login-header-block be-drop-down login-user-down}">
+				<div th:class="@{hellouser login-header-block be-drop-down login-user-down}">
 					<div th:switch="${usuario.foto}">
 						<div th:case="''">
 							<img th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">

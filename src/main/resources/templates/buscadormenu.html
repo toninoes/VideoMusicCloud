@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+</head>
+<body th:fragment="buscadormenu :: body">
+	<div class="buscador2">
+		<form method="POST" th:action="'/videos/' + ${view}">
+			<div>
+				<input class="search2" type="text" placeholder="Buscar..." name="Busqueda" id="Busqueda">
+				<label id="lupa">
+     				<i class="fa fa-search"></i>
+     				<input type="submit" name="submit" id="submit" hidden="hidden">
+     			</label>
+     			<div>
+     				<label for="Visualizaciones">
+     					<input type="checkbox" th:class="@{color-white}" id="Visualizaciones" name="Visualizaciones">
+     					Los + Vistos
+     				</label><br>
+     				<label for="Likes">
+     					<input type="checkbox" th:class="@{color-white}" id="Likes" name="Likes">
+     					Los que + Gustan
+     				</label><br>
+     				<label for="Titulo">
+     					<input type="checkbox" th:class="@{color-white}" id="Titulo" name="Titulo">
+     					Por Título
+     				</label><br>
+     				<label for="Descripcion">
+     					<input type="checkbox" th:class="@{color-white}" id="Descripcion" name="Descripcion">
+     					Por Descripción
+     				</label><br>
+     				<label for="Genero"> 
+     					<input type="checkbox" th:class="@{color-white}" id="Genero" name="Genero">
+     					Por Género
+     				</label><br>
+     				<label for="Usuario">
+     					<input type="checkbox" th:class="@{color-white}" id="Usuario" name="Usuario">
+     					Por Usuario
+     				</label>
+     			</div>
+     		</div>		
+     	</form>
+	</div>
+</body>
+</html>	
