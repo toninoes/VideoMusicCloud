@@ -1,6 +1,7 @@
 package vmc.controller.web;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -102,7 +103,7 @@ public class LoginWebController {
 		Usuario usuario = usuarioService.findByMail(auth.getName());
 		List<Usuario> usuarios = usuarioService.findAll();
 		usuarios.remove(usuario);
-		List<Usuario> uss = usuarioService.findSearch(busqueda);
+		Set<Usuario> uss = usuarioService.findSearch(busqueda);
 		modelAndView.addObject("mensaje","Portal de Administración");
 		modelAndView.addObject("usuarios", uss);
 		modelAndView.addObject("usuario", usuario);

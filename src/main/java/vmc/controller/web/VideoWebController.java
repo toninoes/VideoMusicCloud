@@ -172,6 +172,7 @@ public class VideoWebController {
 		Usuario admin = usuarioService.findByRol("ADMIN");
 		List<Boolean> likes = new ArrayList<Boolean>();
 		Page<Video> videos = null;
+		Set<Usuario> usuarios = null;
 		
 		if((visitas != null && visitas)         || 
 		   (gustas != null && gustas)           || 
@@ -181,16 +182,17 @@ public class VideoWebController {
 		   (user != null && user)               ||  
 		   (search != null && !search.equals("0"))) {
 			
-			Set<Usuario> usuarios = new HashSet<Usuario>();
+			usuarios = new HashSet<Usuario>();
 			List<Video> videosMy = videoService.findAll();
-			for(Video v: videosMy)
-				if(!usuarios.contains(v.getUsuario()))
-					usuarios.add(v.getUsuario());
-			videos = videoService.findSearch(p, videosMy, visitas, gustas, titulo, descripcion, genero, user, search, "misvideos", null, usuarios);
+			usuarios.add(usuario);
+			usuarios.addAll(usuario.getSiguiendo());
+			videos = videoService.findSearch(p, videosMy, visitas, gustas, titulo, descripcion, genero, user, search, "misvideos", usuario, usuarios);
 			
 		} else {
-			usuario.getSiguiendo().add(usuario);
-			videos = videoService.findMyPage(p, usuario, usuario.getSiguiendo());
+			usuarios = new HashSet<Usuario>();
+			usuarios.add(usuario);
+			usuarios.addAll(usuario.getSiguiendo());
+			videos = videoService.getMyVideos(p, usuario, usuarios);
 		}
 		
 		for(Video v : videos) {

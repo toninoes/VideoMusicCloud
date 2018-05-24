@@ -32,29 +32,28 @@
 				</div>
 				
 				<!-- THE HELLO USER -->
-				<div th:class="@{login-header-block}">
-					<div th:class="@{login-block be-drop-down login-user-down}">
-						<div th:switch="${logueado.foto}" th:class="@{login-user}">
-							<img th:case="''" th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
-							<img th:case="*" th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${logueado.foto}}">
-							<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
+				<div th:class="@{login-header-block be-drop-down login-user-down}">
+					<div th:switch="${usuario.foto}">
+						<div th:case="''">
+							<img th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
+							<span th:class="@{color-white}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
 						</div>
-						<div th:each="rol : ${usuario.Roles}">
-							<div th:if="${rol.rol} == 'ADMIN'">	
-								<div th:class="drop-down-list">
-									<span th:class="drop-down-list">
-										<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
-										<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
-									</span>
-								</div>
-							</div>
-							<div th:if="${rol.rol} != 'ADMIN'">	
-								<div th:class="drop-down-list">
-									<span th:class="drop-down-list">
-										<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
-									</span>
-								</div>
-							</div>
+						<div th:case="*">
+							<img th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${logueado.foto}}">
+							<span th:class="@{color-white}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
+						</div>
+					</div>
+					<div th:class="@{color-white}" th:each="rol : ${usuario.Roles}">
+						<div th:if="${rol.rol} == 'ADMIN'">
+							<span th:class="drop-down-list">
+								<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
+								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+							</span>
+						</div>
+						<div th:if="${rol.rol} != 'ADMIN'">	
+							<span th:class="drop-down-list">
+								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+							</span>
 						</div>
 					</div>
 				</div>		
@@ -88,16 +87,16 @@
 											<div th:class="be-user-statistic">
 												<div th:class="@{stat-row clearfix}">
 													<a th:href="@{'/usuarios/perfil/perfil/' + ${usuario.id}}">
-														<i th:if="${segsig} == 'seguidores'"><i th:class="@{stat-icon icon-followers-b}"></i>Seguidor</i>
-														<i th:if="${segsig} == 'siguiendo'"><i th:class="@{stat-icon icon-following-b}"></i>Siguiendo</i>
-														<span th:class="stat-counter" th:text="${usuario.nombre}"></span>
+														<i th:if="${segsig} == 'seguidores'" class="color-white"><i th:class="@{stat-icon icon-followers}"></i>Seguidor</i>
+														<i th:if="${segsig} == 'siguiendo'" class="color-white"><i th:class="@{stat-icon icon-following}"></i>Siguiendo</i>
+														<span th:class="@{stat-counter color-white}" th:text="${usuario.nombre}"></span>
 													</a>
 												</div>
 												<div th:class="@{stat-row clearfix}">
 													<a th:href="@{'/usuarios/perfil/perfil/' + ${usuario.id}}">
-														<i th:if="${segsig} == 'seguidores'" th:class="@{stat-icon icon-followers-b}"></i>
-														<i th:if="${segsig} == 'siguiendo'" th:class="@{stat-icon icon-following-b}"></i>
-														<span th:class="stat-counter" th:text="${usuario.apellidos}"></span>
+														<i th:if="${segsig} == 'seguidores'" th:class="@{stat-icon icon-followers}"></i>
+														<i th:if="${segsig} == 'siguiendo'" th:class="@{stat-icon icon-following}"></i>
+														<span th:class="@{stat-counter color-white}" th:text="${usuario.apellidos}"></span>
 													</a>
 												</div>
 											</div>
@@ -140,7 +139,7 @@
 				</div>				
 			</div>
 		</div>
-		<div th:class="be-user-statisticUsuario">
+		<div th:if="${pages} > 1" th:class="be-user-statisticUsuario">
 			<div th:class="@{stat-rowUsuario}">
 				<span th:class="@{color-white}">Resultados por página</span>
 				<div th:class="@{paginationCustom}">

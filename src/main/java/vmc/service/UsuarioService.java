@@ -256,7 +256,7 @@ public class UsuarioService {
 		return usuarioRepository.findAllSiguiendo(p, usuarios);
 	}
 	
-	public List<Usuario> findSearch(String busqueda) {
+	public Set<Usuario> findSearch(String busqueda) {
 		return usuarioRepository.findByUsuarioSearch(busqueda);
 	}
 	

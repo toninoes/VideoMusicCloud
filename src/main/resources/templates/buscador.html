@@ -4,8 +4,8 @@
 	<meta charset="utf-8" />
 </head>
 <body th:fragment="buscador :: body">
-	<div th:class="@{login-header-block col-md-2 left-feild pull-left}">
-		<form th:class="@{input-search}" method="POST" th:action="'/videos/' + ${view}">
+	<div th:class="@{dropdown2 login-header-block col-md-2 left-feild pull-left}">
+		<form th:class="@{input-search dropdown2}" method="POST" th:action="'/videos/' + ${view}">
 			<div th:class="dropdown2">
 				<input type="text" placeholder="Buscar..." name="Busqueda" id="Busqueda">
      			<i class="fa fa-search"></i>

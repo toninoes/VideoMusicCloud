@@ -8,7 +8,7 @@
 	<div class="custom-margin-bottom"></div>
 
 	<!-- THE FOOTER -->
-	<footer>	
+	<footer th:if="${portal} != 'portaladmin'">	
 		<div class="footer-main bgblack">
 			<div class="container-fluid custom-container">
 				<div class="row">	
@@ -40,7 +40,7 @@
 					<div class="col-md-2 galerry">
 						<div class="footer-block">					
 							<h1 class="footer-title">Proyecto VMC</h1>
-							<a th:href="@{/videos/misvideos}"><img th:class="@{custom-image-size}" th:src="@{/img/logoblack.png}" alt="Logo"></a>
+							<a th:href="@{/videos/misvideos}"><img th:class="@{custom-image-size}" th:src="@{/img/logowhite.png}" alt="Logo"></a>
 						</div>
 					</div>
 					<div class="col-md-3">

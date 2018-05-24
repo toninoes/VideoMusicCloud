@@ -29,29 +29,28 @@
 				</div>
 				
 				<!-- THE HELLO USER -->
-				<div th:class="@{login-header-block}">
-					<div th:class="@{login-block be-drop-down login-user-down}">
-						<div th:switch="${logueado.foto}" th:class="@{login-user}">
-							<img th:case="''" th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
-							<img th:case="*" th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${logueado.foto}}">
-							<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
+				<div th:class="@{login-header-block be-drop-down login-user-down}">
+					<div th:switch="${usuario.foto}">
+						<div th:case="''">
+							<img th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
+							<span th:class="@{color-white}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
 						</div>
-						<div th:each="rol : ${usuario.Roles}">
-							<div th:if="${rol.rol} == 'ADMIN'">	
-								<div th:class="drop-down-list">
-									<span th:class="drop-down-list">
-										<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
-										<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
-									</span>
-								</div>
-							</div>
-							<div th:if="${rol.rol} != 'ADMIN'">	
-								<div th:class="drop-down-list">
-									<span th:class="drop-down-list">
-										<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
-									</span>
-								</div>
-							</div>
+						<div th:case="*">
+							<img th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${logueado.foto}}">
+							<span th:class="@{color-white}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
+						</div>
+					</div>
+					<div th:class="@{color-white}" th:each="rol : ${usuario.Roles}">
+						<div th:if="${rol.rol} == 'ADMIN'">
+							<span th:class="drop-down-list">
+								<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
+								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+							</span>
+						</div>
+						<div th:if="${rol.rol} != 'ADMIN'">	
+							<span th:class="drop-down-list">
+								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+							</span>
 						</div>
 					</div>
 				</div>
@@ -97,15 +96,14 @@
 							</a>
 						</div>
 						<div th:class="@{be-rowline row}">
-							<div class="sharethis-inline-share-buttons pull-right"></div>
-							<i class="rowline-text pull-right custom-margin-icon" th:text="@{Share it!}"></i>
+							<div class="sharethis-inline-share-buttons"></div>
 						</div>
 						<div th:class="@{author-post}" th:switch="${video.usuario.foto}"> 
-							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id} + '/0/0'}">
+							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${view} + '/' + ${video.usuario.id}}">
 								<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
 								<span>by <i th:text="${video.usuario.nombre}"></i></span>
 							</a>
-							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id} + '/0/0'}">
+							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${view} + '/' + ${video.usuario.id}}">
 								<img th:src="@{'/usuarios/fotos/' + ${video.usuario.foto}}" alt="author" th:class="@{ava-author}">
 								<span>by <i th:text="${video.usuario.nombre}"></i></span>
 							</a>
@@ -131,19 +129,18 @@
 				</div>
 			</div>
 		</div>
-		<form method="POST" th:action="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id}}">
-			<i th:class="@{input-col col-xs-12 col-sm-12}">
-				<input type="submit" th:class="@{custom-float-right btn color-1 size-2 hover-7}" th:value="@{'Publicar Comentario'}">
-				<i th:class="@{form-group focus-2}">
-					<i th:class="@{form-label}">Escribe debajo tu comentario...</i>									
-					<textarea maxlength="255" th:class="@{form-input}" name="descripcion" id="descripcion" th:placeholder="@{''}" th:text="@{''}">										
-					</textarea>
-				</i>								
-			</i>
+		<form method="POST" th:action="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id}}" class="custom-margin-icon2">
+			<div class="g-recaptcha" data-sitekey="6LdTD1sUAAAAADIZ34RKbo881dd5D5LRuK2KMTCe"></div>
+			<input type="submit" th:class="@{btn color-1 size-2 hover-4 pull-right}" th:value="@{'Publicar Comentario'}">
+			<div th:class="@{custom-margin-icon2 form-group focus-2}">
+				<i th:class="@{form-label}">Escribe debajo tu comentario...</i>									
+				<textarea maxlength="255" th:class="@{form-input}" name="descripcion" id="descripcion" th:placeholder="@{''}" th:text="@{''}">										
+				</textarea>
+			</div>
 		</form>
-		<div th:class="@{content-block}" th:each="comentario : ${comentarios}" th:switch="${comentario.descripcion}">
+		<div th:class="@{content-block custom-margin-icon2}" th:each="comentario : ${comentarios}" th:switch="${comentario.descripcion}">
 			<div th:case="''"></div>
-			<div th:case="*" th:class="@{be-post style-5}">
+			<div th:case="*" th:class="@{be-post style-5 custom-margin-top}">
 				<div th:class="@{author-post}">
 					<i th:class="@{rowline-text}" th:text="${comentario.descripcion}"></i>
 					<i th:class="@{fa fa-calendar pull-right custom-margin-icon}">
@@ -151,11 +148,11 @@
 						<span th:class="@{rowline-text}" th:text="${#dates.format(comentario.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 					</i>
 					<i th:class="@{rowline-text pull-right custom-margin-icon}" th:switch="${comentario.usuario.foto}"> 
-						<a th:case="''" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${comentario.usuario.id} + '/0/0'}">
+						<a th:case="''" th:href="@{'/usuarios/perfil/'  + ${view} + '/' + ${comentario.usuario.id}}">
 							<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
 							<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
 						</a>
-						<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${comentario.usuario.id} + '/0/0'}">
+						<a th:case="*" th:href="@{'/usuarios/perfil/'  + ${view} + '/' + ${comentario.usuario.id}}">
 							<img th:src="@{'/usuarios/fotos/' + ${comentario.usuario.foto}}" alt="author" th:class="@{ava-author}">
 							<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
 						</a>

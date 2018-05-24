@@ -269,7 +269,6 @@ public class UsuarioWebController {
 		Usuario usuario = usuarioService.findById(pinchadoId);
 		Usuario admin = usuarioService.findByRol("ADMIN");
 		Set<Usuario> usuarios = null;
-		usuarios = new HashSet<Usuario>();
 		List<Boolean> likes = new ArrayList<Boolean>();
 		Page<Video> videos = null;
 		
@@ -281,12 +280,15 @@ public class UsuarioWebController {
 		   (user != null && user)               ||  
 		   (search != null && !search.equals("0"))) {
 		
+			usuarios = new HashSet<Usuario>();
 			List<Video> videosMy = videoService.findMyVideos(usuario, usuarios);
 			videos = videoService.findSearch(p, videosMy, visitas, gustas, titulo, descripcion, genero, user, search, "perfil", logueado, usuarios);
 			
-		} else
-			videos = videoService.findMyPage(p, usuario, usuarios);
-		
+		} else {
+			usuarios = new HashSet<Usuario>();
+			usuarios.add(usuario);
+			videos = videoService.findMyPage(p, usuarios);
+		}
 		for(Video v : videos) {
 			List<Comentario> comentarios = comentarioService.findByVideoUsuario(v, usuario);
 			if(!comentarios.isEmpty()) {
@@ -319,6 +321,7 @@ public class UsuarioWebController {
 		else 
 			extpinchado = ".jpg";
 		
+		model.addAttribute("view", view);
 		model.addAttribute("likes", likes);
 		model.addAttribute("sigue", sigue);
 		model.addAttribute("logueado", logueado);
@@ -333,10 +336,111 @@ public class UsuarioWebController {
     	model.addAttribute("descripcion", descripcion);
     	model.addAttribute("genero", genero);
     	model.addAttribute("user", user);
-    	model.addAttribute("view", view);
+    	model.addAttribute("portal", "no");
 		
 		return "usuarios/perfil";
 	}
+	
+	/*
+   	 * GET - DESDE PORTAL ADMIN - BORRAR VIDEOS AL USUARIO
+   	 */
+    
+    @GetMapping("/perfil/{view}/{portal}/{pinchadoId}")
+    public String paginatorMisVideos(Model model,
+    								 @RequestParam(value = "page", required = false) Integer page, 
+			  						 @RequestParam(value = "active", required = false) Integer active,
+    								 @PathVariable String view,
+    								 @PathVariable String portal,  
+    					    		 @PathVariable long pinchadoId) {
+    	
+    	Pageable p = null;
+		
+		if(page != null) {
+			p = PageRequest.of(page, (int)videoService.getVIDEOS_POR_PAGINA());
+			model.addAttribute("page", page);
+		} else {
+			p = PageRequest.of(0, (int)videoService.getVIDEOS_POR_PAGINA());
+			model.addAttribute("page", 0);
+		}
+		
+		if(active != null)
+			model.addAttribute("active", active);
+		else
+			model.addAttribute("active", 0);
+    	
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario logueado = usuarioService.findByMail(auth.getName());
+    	Usuario usuario = usuarioService.findById(pinchadoId);
+    	Usuario admin = usuarioService.findByRol("ADMIN");
+    	
+    	String ext = "" + logueado.getFoto();
+		if(!ext.equals(""))
+			ext = ext.substring(ext.lastIndexOf("."), ext.length());
+		else 
+			ext = ".jpg";
+		
+		String extpinchado = "" + usuario.getFoto();
+		if(!extpinchado.equals(""))
+			extpinchado = extpinchado.substring(extpinchado.lastIndexOf("."), extpinchado.length());
+		else 
+			extpinchado = ".jpg";
+		
+		Set<Usuario> usuarios = new HashSet<Usuario>();
+		usuarios.add(usuario);
+		Page<Video> videos = videoService.findMyPage(p, usuarios);
+		List<Boolean> likes = new ArrayList<Boolean>();
+		
+		for(Video v : videos) {
+			List<Comentario> comentarios = comentarioService.findByVideoUsuario(v, usuario);
+			if(!comentarios.isEmpty()) {
+				Comentario comentario = comentarios.get(0);
+				if(comentario != null)
+					likes.add(comentario.isGusta());
+				else
+					likes.add(false);
+			} else likes.add(false);
+		}
+		
+    	model.addAttribute("view", view);
+		model.addAttribute("likes", likes);
+		model.addAttribute("sigue", "hidden");
+		model.addAttribute("logueado", logueado);
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("ext", ext);
+		model.addAttribute("extpinchado", extpinchado);
+		model.addAttribute("mailadmin", admin.getMail());
+    	model.addAttribute("search", "0");
+    	model.addAttribute("visitas", false);
+    	model.addAttribute("gustas", false);
+    	model.addAttribute("titulo", false);
+    	model.addAttribute("descripcion", false);
+    	model.addAttribute("genero", false);
+    	model.addAttribute("user", false);
+    	model.addAttribute("pages", videos.getTotalPages());
+    	model.addAttribute("videos", videos);
+		model.addAttribute("portal", portal);
+
+   		return "usuarios/perfil"; 
+    }
+    
+    /*
+   	 * GET - PAGINADOR DE LISTADO DE VIDEOS (PERFIL) - DESDE PORTAL ADMIN
+   	 */
+    
+    @GetMapping("/perfil/{view}/{portal}/{page}/{active}/{pinchadoId}")
+    public String paginatorMisVideosAdmin(@PathVariable String view,
+    									  @PathVariable String portal,
+    								      @PathVariable int page,
+    					    		      @PathVariable int active,  
+    					    		      @PathVariable long pinchadoId,
+    					    		      RedirectAttributes ra) {
+    	
+    	ra.addAttribute("page", page);
+		ra.addAttribute("active", active);
+		ra.addAttribute("portal", portal);
+
+   		return "redirect:/usuarios/perfil/{view}/{portal}/{pinchadoId}"; 
+    }
 	
 	/*
    	 * GET - PAGINADOR DE LISTADO DE VIDEOS (PERFIL)
@@ -390,12 +494,13 @@ public class UsuarioWebController {
 	 * GET - ELIMINAR VIDEO CON MENSAJE DE CONFIRMACIÓN
 	 */
 	
-	@GetMapping("/perfil/{view}/{action}/{logueadoId}/{videoId}/{borrar}")
+	@GetMapping("/perfil/{view}/{action}/{logueadoId}/{videoId}/{borrar}/{portal}")
 	public String elimnarVideo(Model model, @PathVariable String view,
 											@PathVariable String action,
 											@PathVariable long logueadoId,
 											@PathVariable long videoId,
-											@PathVariable String borrar) {
+											@PathVariable String borrar,
+											@PathVariable String portal) {
 		
 		Video video = videoService.findById(videoId);
 		comentarioService.delete(video);
@@ -403,8 +508,10 @@ public class UsuarioWebController {
 		String ext = video.getNombre();
 		ext = ext.substring(ext.lastIndexOf("."));
 		videoService.borrar(video.getId() + ext);
-		
-		return "redirect:/usuarios/perfil/{view}/{logueadoId}";
+		if(!portal.equals("portaladmin"))
+			return "redirect:/usuarios/perfil/{view}/{logueadoId}";
+		else
+			return "redirect:/admin/home";
 	}
 	
 	/*
@@ -671,11 +778,13 @@ public class UsuarioWebController {
 	
 	@PostMapping("/perfil/{view}/{paginador}/{custom}/{logueadoId}/{pinchadoId}")
     public String customPaginator(Model model, @RequestParam("VideosPorPagina") String items,
+    										   @RequestParam("pr") String pr,
     										   @PathVariable String view,
     										   @PathVariable String paginador,
     										   @PathVariable String custom,
     										   @PathVariable long logueadoId,
-    										   @PathVariable long pinchadoId) {
+    										   @PathVariable long pinchadoId,
+    										   RedirectAttributes ra) {
 		
 		long videos = videoService.findVideosByUsuarioId(pinchadoId).size();
 		
@@ -690,10 +799,11 @@ public class UsuarioWebController {
 		Usuario logueado = usuarioService.findByMail(auth.getName());
 		Usuario usuario = usuarioService.findById(pinchadoId);
 		Set<Usuario> usuarios = new HashSet<Usuario>();
+		usuarios.add(usuario);
 		
 		model.addAttribute("page", 0);
 		model.addAttribute("active", 0);
-		model.addAttribute("pages", videoService.findMyPage(p, usuario, usuarios).getTotalPages());
+		model.addAttribute("pages", videoService.findMyPage(p, usuarios).getTotalPages());
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("search", "0");
@@ -704,8 +814,13 @@ public class UsuarioWebController {
 		model.addAttribute("genero", false);
 		model.addAttribute("user", false);
 		model.addAttribute("view", view);
+		model.addAttribute("portal", pr);
+		ra.addAttribute("portal", pr);
 
-		return "redirect:/usuarios/perfil/{view}/{pinchadoId}"; 
+		if(pr.equals("portaladmin"))
+			return "redirect:/usuarios/perfil/{view}/{portal}/{pinchadoId}";
+		else
+			return "redirect:/usuarios/perfil/{view}/{pinchadoId}"; 
     }
 	
 	/*

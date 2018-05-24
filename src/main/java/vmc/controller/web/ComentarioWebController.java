@@ -44,7 +44,8 @@ public class ComentarioWebController {
 	
 	@GetMapping
 	public String comentario(Model model, @RequestParam("pinchadoId") long pinchadoId,
-			 							  @RequestParam("videoId") long videoId) {
+			 							  @RequestParam("videoId") long videoId,
+			 							  @RequestParam("view") String view) {
 				
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario logueado = usuarioService.findByMail(auth.getName());
@@ -67,6 +68,7 @@ public class ComentarioWebController {
 		model.addAttribute("usuario", pinchado);		
 		model.addAttribute("comentarios", comentarios);
 		model.addAttribute("mailadmin", admin.getMail());
+		model.addAttribute("view", view);
 		
 		return "comentarios/comentarioVideos";
 	}

@@ -4,29 +4,28 @@
 	<meta charset="utf-8" />
 </head>
 <body th:fragment="hellouser :: body">
-	<div th:class="@{login-header-block}">
-		<div th:class="@{login-block be-drop-down login-user-down}">
-			<div th:switch="${usuario.foto}" th:class="@{login-user}">
-				<img th:case="''" th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
-				<img th:case="*" th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${usuario.foto}}">
-				<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${usuario.nombre}}"></span>
+	<div th:class="@{login-header-block be-drop-down login-user-down}">
+		<div th:switch="${usuario.foto}">
+			<div th:case="''">
+				<img th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
+				<span th:class="@{color-white}" th:text="@{'Hola, ' + ${usuario.nombre}}"></span>
 			</div>
-			<div th:each="rol : ${usuario.Roles}">
-				<div th:if="${rol.rol} == 'ADMIN'">	
-					<div th:class="drop-down-list">
-						<span th:class="drop-down-list">
-							<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
-							<a th:href="@{'/usuarios/detalle/no/' + ${usuario.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
-						</span>
-					</div>
-				</div>
-				<div th:if="${rol.rol} != 'ADMIN'">	
-					<div th:class="drop-down-list">
-						<span th:class="drop-down-list">
-							<a th:href="@{'/usuarios/detalle/no/' + ${usuario.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
-						</span>
-					</div>
-				</div>
+			<div th:case="*">
+				<img th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${usuario.foto}}">
+				<span th:class="@{color-white}" th:text="@{'Hola, ' + ${usuario.nombre}}"></span>
+			</div>
+		</div>
+		<div th:class="@{color-white}" th:each="rol : ${usuario.Roles}">
+			<div th:if="${rol.rol} == 'ADMIN'">
+				<span th:class="drop-down-list">
+					<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
+					<a th:href="@{'/usuarios/detalle/no/' + ${usuario.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+				</span>
+			</div>
+			<div th:if="${rol.rol} != 'ADMIN'">	
+				<span th:class="drop-down-list">
+					<a th:href="@{'/usuarios/detalle/no/' + ${usuario.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+				</span>
 			</div>
 		</div>
 	</div>

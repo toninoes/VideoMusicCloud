@@ -9,7 +9,7 @@
 	<div th:include="spinner :: body"></div>
 	
 	<!-- THE HEADER -->
-	<header>
+	<header th:if="${portal} != 'portaladmin'">
 		<div th:class="@{container-fluid custom-container}">
 			<div th:class="@{row no_row row-header}">
 	
@@ -32,29 +32,28 @@
 				</div>
 				
 				<!-- THE HELLO USER -->
-				<div th:class="@{login-header-block}">
-					<div th:class="@{login-block be-drop-down login-user-down}">
-						<div th:switch="${logueado.foto}" th:class="@{login-user}">
-							<img th:case="''" th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
-							<img th:case="*" th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${logueado.id} + ${ext}}">
-							<span th:class="@{be-drop-down-content}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
+				<div th:class="@{login-header-block be-drop-down login-user-down}">
+					<div th:switch="${usuario.foto}">
+						<div th:case="''">
+							<img th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
+							<span th:class="@{color-white}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
 						</div>
-						<div th:each="rol : ${usuario.Roles}">
-							<div th:if="${rol.rol} == 'ADMIN'">	
-								<div th:class="drop-down-list">
-									<span th:class="drop-down-list">
-										<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
-										<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
-									</span>
-								</div>
-							</div>
-							<div th:if="${rol.rol} != 'ADMIN'">	
-								<div th:class="drop-down-list">
-									<span th:class="drop-down-list">
-										<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
-									</span>
-								</div>
-							</div>
+						<div th:case="*">
+							<img th:class="@{login-user custom-photo-size}" th:src="@{'/usuarios/fotos/' + ${logueado.id} + ${ext}}">
+							<span th:class="@{color-white}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
+						</div>
+					</div>
+					<div th:class="@{color-white}" th:each="rol : ${usuario.Roles}">
+						<div th:if="${rol.rol} == 'ADMIN'">
+							<span th:class="drop-down-list">
+								<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
+								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+							</span>
+						</div>
+						<div th:if="${rol.rol} != 'ADMIN'">	
+							<span th:class="drop-down-list">
+								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+							</span>
 						</div>
 					</div>
 				</div>
@@ -63,6 +62,11 @@
 	</header>
 	
 	<!-- MAIN CONTENT -->
+	<div th:if="${portal} == 'portaladmin'">
+		<form th:action="@{/admin/home}" method="get">
+			<button class="btn btn-md btn-danger btn-block" type="Submit">Volver al Portal</button>
+		</form>
+	</div>
 	<div th:id="@{content-block}">
 		<div th:class="@{container be-detail-container}">
 			<div th:class="@{row}">
@@ -74,11 +78,11 @@
 								<img th:case="*" th:src="@{'/usuarios/fotos/' + ${usuario.id} + ${extpinchado}}" alt="">
 							</a>	
 							<form method="POST" enctype="multipart/form-data" th:action="@{'/usuarios/perfil/' + ${logueado.id} + '/' + ${usuario.id}}" th:if="${sigue} == 'hidden'">
-								<label th:class="@{be-ava-left btn color-1 size-2 hover-1}">
+								<label th:if="${portal} != 'portaladmin'" th:class="@{be-ava-left btn color-1 size-2 hover-1}">
 									<i th:class="@{fa fa-pencil}"></i>Foto
 									<input type="file" name="foto" id="foto" hidden="hidden">
 								</label>
-								<label th:class="@{be-ava-right btn btn-share color-4 size-2 hover-1}">
+								<label th:if="${portal} != 'portaladmin'" th:class="@{be-ava-right btn btn-share color-4 size-2 hover-1}">
 									<i th:class="@{fa fa-save}"></i>Guardar
 		    						<input type="submit" value="subirfoto" name="subirfoto" id="subirfoto" hidden="hidden">
 								</label>
@@ -88,7 +92,7 @@
 								</div>
 							</form>
 							<p th:class="be-use-name" th:text="${usuario.nombre}"></p>
-							<div th:if="@{${logueado.id} != ${usuario.id}}" th:switch="${sigue}">
+							<div th:if="@{${logueado.id} != ${usuario.id} and ${portal} != 'portaladmin'}" th:switch="${sigue}">
 								<div th:case="seguir">
 									<form method="POST" th:action="@{'/usuarios/perfil/dejar/' + ${logueado.id} + '/' + ${usuario.id}}">
 										<label th:class="@{btn btn-share color-4 size-2 hover-1 custom-font}"> 
@@ -108,7 +112,7 @@
 								<div th:case="*"></div>
 							</div>
 							<p th:class="be-use-name"></p>
-							<div th:class="be-user-social">							
+							<div th:if="${portal} != 'portaladmin'" th:class="be-user-social">							
 								<a th:class="@{social-btn color-1}" th:href="@{'https://es-es.facebook.com'}"><i th:class="@{fa fa-facebook}"></i></a>
 								<a th:class="@{social-btn color-2}" th:href="@{'https://twitter.com'}"><i th:class="@{fa fa-twitter}"></i></a>
 							</div>
@@ -118,26 +122,26 @@
 								<textarea th:class="@{be-desc-author be-desc-text}" th:text="${usuario.intereses}" readonly="readonly">
 								</textarea>				
 							</div>
-							<div th:class="be-user-statistic">
+							<div th:if="${portal} != 'portaladmin'" th:class="be-user-statistic">
 								<div th:class="@{stat-row clearfix}">
 									<form method="GET" th:action="@{'/usuarios/listado/seguidores/' + ${usuario.id} + '/0/0'}">
 										<div th:switch="${usuario.SeguidoresSize}">
 											<div th:case="0">
-												<label th:class="custom-cursor">
-													<i th:class="@{stat-icon icon-followers-b}"></i>Seguidores
+												<label th:class="@{custom-cursor color-white}">
+													<i th:class="@{stat-icon icon-followers}"></i>Seguidores
 												</label>
 												<label th:class="@{custom-cursor pull-right}">
-													<span th:class="stat-counter" th:text="${usuario.SeguidoresSize}"></span>
+													<span th:class="@{stat-counter color-white}" th:text="${usuario.SeguidoresSize}"></span>
 												</label>
 											</div>
 											<div th:case="*">
-												<label th:class="custom-cursor">
+												<label th:class="@{custom-cursor color-white}">
 													<input type="submit" hidden="hidden">
-													<i th:class="@{stat-icon icon-followers-b}"></i>Seguidores
+													<i th:class="@{stat-icon icon-followers}"></i>Seguidores
 												</label>
 												<label th:class="@{custom-cursor pull-right}">
 													<input type="submit" hidden="hidden">
-													<span th:class="stat-counter" th:text="${usuario.SeguidoresSize}"></span>
+													<span th:class="@{stat-counter color-white}" th:text="${usuario.SeguidoresSize}"></span>
 												</label>
 											</div>
 										</div>
@@ -147,21 +151,21 @@
 									<form method="GET" th:action="@{'/usuarios/listado/siguiendo/' + ${usuario.id} + '/0/0'}">
 										<div th:switch="${usuario.SiguiendoSize}">
 											<div th:case="0">
-												<label th:class="custom-cursor">
-													<i th:class="@{stat-icon icon-following-b}"></i>Siguiendo
+												<label th:class="@{custom-cursor color-white}">
+													<i th:class="@{stat-icon icon-following}"></i>Siguiendo
 												</label>
 												<label th:class="@{custom-cursor pull-right}">
-													<span th:class="stat-counter" th:text="${usuario.SiguiendoSize}"></span>
+													<span th:class="@{stat-counter color-white}" th:text="${usuario.SiguiendoSize}"></span>
 												</label>
 											</div>
 											<div th:case="*">
-												<label th:class="custom-cursor">
+												<label th:class="@{custom-cursor color-white}">
 													<input type="submit" hidden="hidden">
-													<i th:class="@{stat-icon icon-following-b}"></i>Siguiendo
+													<i th:class="@{stat-icon icon-following}"></i>Siguiendo
 												</label>
 												<label th:class="@{custom-cursor pull-right}">
 													<input type="submit" hidden="hidden">
-													<span th:class="stat-counter" th:text="${usuario.SiguiendoSize}"></span>
+													<span th:class="@{stat-counter color-white}" th:text="${usuario.SiguiendoSize}"></span>
 												</label>
 											</div>
 										</div>
@@ -179,8 +183,13 @@
 									<div th:class="@{col-ml-12 col-xs-6 col-sm-4}" th:each="video,stat : ${videos}" th:with="gusta=${likes[stat.index]}">
 										<div th:class="@{be-post style-5}">
 											<div align="center" th:class="@{be-img-block custom-video-perfil}">
-												<div th:onmouseover="'javascript:Play(\''+${video.id}+'\')'" th:onmouseout="'javascript:Pause(\''+${video.id}+'\')'">
+												<div th:if="${portal} != 'portaladmin'" th:onmouseover="'javascript:Play(\''+${video.id}+'\')'" th:onmouseout="'javascript:Pause(\''+${video.id}+'\')'">
 													<video th:id="'v'+${video.id}" controls th:class="@{be-img-block}" th:onended="'javascript:visualizaciones(\''+${video.id}+'\',\''+${video.visualizaciones}+'\')'">
+														<source th:src="'/videos/' + ${video.nombre}">
+													</video>
+												</div>
+												<div th:if="${portal} == 'portaladmin'">
+													<video th:id="'v'+${video.id}" th:class="@{be-img-block}">
 														<source th:src="'/videos/' + ${video.nombre}">
 													</video>
 												</div>
@@ -188,15 +197,20 @@
 											<div th:class="@{be-rowline}">
 												<ul>
 													<li>
-														<form method="GET" th:action="@{/comentarios}">
+														<form th:if="${portal} != 'portaladmin'" method="GET" th:action="@{/comentarios}">
 															<label th:class="custom-cursor">
 																<input type="submit" hidden="hidden">
 																<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${usuario.id}">
 																<input type="hidden" id="videoId" name="videoId" th:value="${video.id}">
+																<input type="hidden" id="view" name="view" th:value="${view}">
 																<i th:class="@{rowline-text}" th:text="${video.titulo}"></i>
 															</label>
 						    								<i th:class="@{rowline-text pull-right}" th:text="@{'#' + ${video.VideoGeneros[0].nombre} + ' ... '}"></i>
 						    							</form>
+						    							<div th:if="${portal} == 'portaladmin'">
+						    								<i th:class="@{rowline-text}" th:text="${video.titulo}"></i>
+						    								<i th:class="@{rowline-text pull-right}" th:text="@{'#' + ${video.VideoGeneros[0].nombre} + ' ... '}"></i>
+						    							</div>
 						    						</li>
 						    					</ul>
 						    				</div>
@@ -211,29 +225,29 @@
 														<span th:class="@{custom-td-font}"></span>
 														<span th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 													</i>
-													<a th:if="${view}=='perfilog'" class="megusta" th:onclick="'javascript:eliminar(\''+${logueado.id}+'\',\''+${video.id}+'\')'">
+													<a th:if="${view}=='perfilog' or ${portal} == 'portaladmin'" class="megusta" th:onclick="'javascript:eliminar(\''+${logueado.id}+'\',\''+${video.id}+'\',\''+${portal}+'\')'">
 														<span th:class="@{pull-right custom-margin-left}">
 															<i th:class="@{stat-icon icon-remove}"></i>
 														</span>
 													</a>
-													<a th:href="@{'mailto:'+ ${mailadmin}}">
+													<a th:if="${portal} != 'portaladmin'" th:href="@{'mailto:'+ ${mailadmin}}">
 														<img th:class="@{stat-icon pull-right}" th:src="@{/img/block-16x16.png}" alt="Denunciar video">
 													</a>
-													<label th:class="@{custom-cursor pull-right}">
+													<label th:if="${portal} != 'portaladmin'" th:class="@{custom-cursor pull-right}">
 														<input type="submit" hidden="hidden">
 														<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${usuario.id}">
 														<input type="hidden" id="videoId" name="videoId" th:value="${video.id}">
+														<input type="hidden" id="view" name="view" th:value="${view}">
 														<span th:class="@{custom-margin-icon}">
 															<i th:class="@{stat-icon icon-comment}"></i>
 														</span>
 													</label>
 												</form>
 											</div>
-											<div th:class="@{be-rowline row}">
-												<i class="rowline-text" th:text="@{Share it!}"></i>
-												<div class="sharethis-inline-share-buttons pull-right"></div>
+											<div th:if="${portal} != 'portaladmin'" th:class="@{be-rowline row}">
+												<div class="sharethis-inline-share-buttons"></div>
 											</div>
-											<div th:class="@{author-post}">
+											<div th:if="${portal} != 'portaladmin'" th:class="@{author-post}">
 												<div th:switch="${video.usuario.foto}">
 													<a th:case="''" th:href="@{'/usuarios/perfil/' + ${view} + '/' + ${video.usuario.id}}">
 														<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
@@ -270,7 +284,7 @@
 					</div>
 					
 					<!-- THE PAGINATOR -->
-					<div th:switch="${search}==null and ${visitas}==null and ${gustas}==null and ${titulo}==null and ${descripcion}==null and ${genero}==null and ${user}==null">
+					<div th:if="${portal} != 'portaladmin'" th:switch="${search}==null and ${visitas}==null and ${gustas}==null and ${titulo}==null and ${descripcion}==null and ${genero}==null and ${user}==null">
 						<div th:case="true" th:class="@{pagination}">
 					  		<a th:href="@{'/usuarios/perfil/' + ${view} + '/' + ${page-active-5} + '/0/' + ${usuario.id}}" th:if="${pages} > 5 and ${page} >= 5">&laquo;</a>
 						  	<a th:href="@{'/usuarios/perfil/' + ${view} + '/' + ${page-active} + '/0/' + ${usuario.id}}" th:if="${page-active}<=${pages-1} and ${page-active}==${page} and ${pages} > 1" class="active" th:text="${page - active + 1}"></a>
@@ -300,12 +314,26 @@
 	 				  	  	<a th:href="@{'/usuarios/perfil/' + ${view} + '/' + ${page-active+5} + '/0/' + ${usuario.id} + '/' + ${search} + '/' + ${visitas} + '/' + ${gustas} + '/' + ${titulo} + '/' + ${descripcion} + '/' + ${genero} + '/' + ${user}}" th:if="${pages} > 5 and ${page-active+5} < ${pages}">&raquo;</a>
 						</div>
 					</div>
+					<div th:if="${portal} == 'portaladmin'" th:class="@{pagination}">
+				  		<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active-5} + '/0/' + ${usuario.id}}" th:if="${pages} > 5 and ${page} >= 5">&laquo;</a>
+					  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active} + '/0/' + ${usuario.id}}" th:if="${page-active}<=${pages-1} and ${page-active}==${page} and ${pages} > 1" class="active" th:text="${page - active + 1}"></a>
+					  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active} + '/0/' + ${usuario.id}}" th:if="${page-active}<=${pages-1} and ${page-active}!=${page} and ${pages} > 1" th:text="${page - active + 1}"></a>
+					  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active+1} + '/1/' + ${usuario.id}}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}==${page} and ${pages} > 1" class="active" th:text="${page - active + 2}"></a>
+					  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active+1} + '/1/' + ${usuario.id}}" th:if="${page-active+1}<=${pages-1} and ${page-active+1}!=${page} and ${pages} > 1" th:text="${page - active + 2}"></a>				  
+					  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active+2} + '/2/' + ${usuario.id}}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}==${page} and ${pages} > 1" class="active" th:text="${page - active + 3}"></a>				  
+					  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active+2} + '/2/' + ${usuario.id}}" th:if="${page-active+2}<=${pages-1} and ${page-active+2}!=${page} and ${pages} > 1" th:text="${page - active + 3}"></a>				  
+					  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active+3} + '/3/' + ${usuario.id}}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}==${page} and ${pages} > 1" class="active" th:text="${page - active + 4}"></a>				  
+					  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active+3} + '/3/' + ${usuario.id}}" th:if="${page-active+3}<=${pages-1} and ${page-active+3}!=${page} and ${pages} > 1" th:text="${page - active + 4}"></a>				  
+					  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active+4} + '/4/' + ${usuario.id}}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}==${page} and ${pages} > 1" class="active" th:text="${page - active + 5}"></a>				  
+				  	  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active+4} + '/4/' + ${usuario.id}}" th:if="${page-active+4}<=${pages-1} and ${page-active+4}!=${page} and ${pages} > 1" th:text="${page - active + 5}"></a>				  
+ 				  	  	<a th:href="@{'/usuarios/perfil/perfilog/portaladmin/' + ${page-active+5} + '/0/' + ${usuario.id}}" th:if="${pages} > 5 and ${page-active+5} < ${pages}">&raquo;</a>
+					</div>
 				</div>
 			</div>
 		</div>
 		
 		<!-- THE CUSTOM PAGINATOR -->
-		<div th:class="be-user-statisticPerfil">
+		<div th:if="${pages} > 1" th:class="be-user-statisticPerfil">
 			<div th:class="@{stat-rowPerfil}">
 				<span th:class="@{color-white}">Resultados por página</span>
 				<div th:class="@{paginationCustom}">
@@ -325,6 +353,7 @@
 						  	<option value="2" th:class="@{color-blue}">2</option>
 						  	<option value="1" th:class="@{color-blue}">1</option>
 						</select>
+						<input type="hidden" name="pr" id="pr" th:value="${portal}">
 						<input type="submit" name="paginator" id="paginator" class="fa fa-check color-white login-header-block btn color-1 size-2 hover-1 pull-left custom-margin-icon" value="Ir">
 					</form>
 				</div>

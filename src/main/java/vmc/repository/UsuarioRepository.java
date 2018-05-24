@@ -31,7 +31,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	@Query("SELECT u FROM Usuario u WHERE u IN(:users) ORDER BY u.nombre, u.apellidos")
 	Page<Usuario> findAllSeguidores(Pageable p, @Param("users") Set<Usuario> users);
 	
-	List<Usuario> findByNombre(@Param("nombre") String nombre);
+	Set<Usuario> findByNombre(@Param("nombre") String nombre);
 	
 	Usuario findByMail(@Param("mail") String mail);
 	
@@ -39,7 +39,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	Usuario findByRolAdmin(@Param("roladmin") Rol roladmin);
 	
 	@Query("SELECT u FROM Usuario u WHERE u.nombre LIKE %:nombre% ORDER BY u.nombre")
-	List<Usuario> findByUsuarioSearch(@Param("nombre") String nombre);
+	Set<Usuario> findByUsuarioSearch(@Param("nombre") String nombre);
 	
 	@Query("SELECT u FROM Usuario u WHERE u.nombre LIKE %:nombre% AND u.id != :id ORDER BY u.nombre")
 	Page<Usuario> findByUsuarioSearch(Pageable p, @Param("nombre") String nombre, @Param("id") long id);

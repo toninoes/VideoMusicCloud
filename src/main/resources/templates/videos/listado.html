@@ -58,6 +58,7 @@
 											<input type="submit" hidden="hidden">
 											<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${usuario.id}">
 											<input type="hidden" id="videoId" name="videoId" th:value="${video.id}">
+											<input type="hidden" id="view" name="view" th:value="${view}">
 											<i th:class="@{rowline-text}" th:text="${video.titulo}"></i>
 										</label>
 										<i th:each="genero : ${video.VideoGeneros}">
@@ -85,6 +86,7 @@
 									<input type="submit" hidden="hidden">
 									<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${usuario.id}">
 									<input type="hidden" id="videoId" name="videoId" th:value="${video.id}">
+									<input type="hidden" id="view" name="view" th:value="${view}">
 									<span th:class="@{custom-margin-icon}">
 										<i th:class="@{stat-icon icon-comment}"></i>
 									</span>
@@ -92,8 +94,7 @@
 							</form>
 						</div>
 						<div th:class="@{be-rowline row}">
-							<div class="sharethis-inline-share-buttons pull-right"></div>
-							<i class="rowline-text pull-right custom-margin-icon" th:text="@{Share it!}"></i>
+							<div class="sharethis-inline-share-buttons"></div>
 						</div>
 						<div th:class="@{author-post}"> 
 							<a th:if="${logueado.id}==${video.usuario.id} and ${video.usuario.foto}==''" th:href="@{'/usuarios/perfil/perfilog/' + ${video.usuario.id}}">
@@ -164,7 +165,7 @@
 				</div>
 			</div>
 		</div>
-		<div th:class="be-user-statisticInicioListas">
+		<div th:if="${pages} > 1" th:class="be-user-statisticInicioListas">
 			<div th:class="@{stat-rowInicioListas}">
 				<span th:class="@{color-white}">Resultados por página</span>
 				<div th:class="@{paginationCustom}">
