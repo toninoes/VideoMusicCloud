@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 </head>
 <body th:fragment="buscausers :: body">
-	<div th:class="@{buscador login-header-block col-md-2 left-feild pull-left}">
+	<div th:class="@{buscador login-header-block2 custom-margin-left2}">
 		<form th:class="@{input-search}" method="POST" th:action="'/usuarios/listado/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${page} + '/' + ${active} + '/' + ${pages} + '/' + ${segsig}">
 			<div th:class="dropdown2">
 				<input type="text" placeholder="Buscar..." name="Busqueda" id="Busqueda">

@@ -104,15 +104,27 @@
 						<div th:class="@{be-rowline row}">
 							<div class="sharethis-inline-share-buttons"></div>
 						</div>
-						<div th:class="@{author-post}" th:switch="${video.usuario.foto}"> 
-							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${view} + '/' + ${video.usuario.id}}">
-								<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
-								<span>by <i th:text="${video.usuario.nombre}"></i></span>
-							</a>
-							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${view} + '/' + ${video.usuario.id}}">
-								<img th:src="@{'/usuarios/fotos/' + ${video.usuario.foto}}" alt="author" th:class="@{ava-author}">
-								<span>by <i th:text="${video.usuario.nombre}"></i></span>
-							</a>
+						<div th:class="@{author-post}" th:switch="${video.usuario.foto}">
+							<i th:case="''">
+								<a th:if="${video.usuario.id} == ${logueado.id}" th:href="@{'/usuarios/perfil/perfilog/' + ${video.usuario.id}}">
+									<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
+									<span>by <i th:text="${video.usuario.nombre}"></i></span>
+								</a>
+								<a th:if="${video.usuario.id} != ${logueado.id}" th:href="@{'/usuarios/perfil/perfil/' + ${video.usuario.id}}">
+									<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
+									<span>by <i th:text="${video.usuario.nombre}"></i></span>
+								</a>
+							</i>
+							<i th:case="*">
+								<a th:if="${video.usuario.id} == ${logueado.id}" th:href="@{'/usuarios/perfil/perfilog/' + ${video.usuario.id}}">
+									<img th:src="@{'/usuarios/fotos/' + ${video.usuario.foto}}" alt="author" th:class="@{ava-author}">
+									<span>by <i th:text="${video.usuario.nombre}"></i></span>
+								</a>
+								<a th:if="${video.usuario.id} != ${logueado.id}" th:href="@{'/usuarios/perfil/perfil/' + ${video.usuario.id}}">
+									<img th:src="@{'/usuarios/fotos/' + ${video.usuario.foto}}" alt="author" th:class="@{ava-author}">
+									<span>by <i th:text="${video.usuario.nombre}"></i></span>
+								</a>
+							</i>
 							<div th:class="@{pull-right}">
 								<a class="megusta" th:if="${gusta} == true" th:onclick="'javascript:likes(\''+${logueado.id}+'\',\''+${video.id}+'\')'">
 									<i th:id="'t'+${video.id}" th:class="@{stat-icon icon-like-b}"></i>
@@ -136,12 +148,14 @@
 			</div>
 		</div>
 		<form method="POST" th:action="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id}}" class="custom-margin-icon2">
-			<div class="g-recaptcha" data-sitekey="6LdTD1sUAAAAADIZ34RKbo881dd5D5LRuK2KMTCe"></div>
-			<input type="submit" th:class="@{btn color-1 size-2 hover-4 pull-right}" th:value="@{'Publicar Comentario'}">
+			<!-- RE-CAPTCHA
+			<div class="g-recaptcha" data-sitekey="6LdTD1sUAAAAADIZ34RKbo881dd5D5LRuK2KMTCe"></div>-->
 			<div th:class="@{custom-margin-icon2 form-group focus-2}">
-				<i th:class="@{form-label}">Escribe debajo tu comentario...</i>									
+				<i th:class="@{form-label}">Escribe debajo tu comentario...</i>							
+				<input type="submit" th:class="@{btn color-1 size-2 hover-7 pull-right}" th:value="@{'Publicar Comentario'}">		
 				<textarea maxlength="255" th:class="@{form-input}" name="descripcion" id="descripcion" th:placeholder="@{''}" th:text="@{''}">										
 				</textarea>
+				<input type="hidden" id="view" name="view" th:value="${view}">
 			</div>
 		</form>
 		<div th:class="@{content-block custom-margin-icon2}" th:each="comentario : ${comentarios}" th:switch="${comentario.descripcion}">
@@ -154,14 +168,34 @@
 						<span th:class="@{rowline-text}" th:text="${#dates.format(comentario.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 					</i>
 					<i th:class="@{rowline-text pull-right custom-margin-icon}" th:switch="${comentario.usuario.foto}"> 
-						<a th:case="''" th:href="@{'/usuarios/perfil/'  + ${view} + '/' + ${comentario.usuario.id}}">
-							<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
-							<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
-						</a>
-						<a th:case="*" th:href="@{'/usuarios/perfil/'  + ${view} + '/' + ${comentario.usuario.id}}">
-							<img th:src="@{'/usuarios/fotos/' + ${comentario.usuario.foto}}" alt="author" th:class="@{ava-author}">
-							<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
-						</a>
+						<i th:case="''">
+							<i th:if="${comentario.usuario.id} == ${logueado.id}">
+								<a th:href="@{'/usuarios/perfil/perfilog/' + ${comentario.usuario.id}}">
+									<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
+									<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
+								</a>
+							</i>
+							<i th:if="${comentario.usuario.id} != ${logueado.id}">
+								<a th:href="@{'/usuarios/perfil/perfil/' + ${comentario.usuario.id}}">
+									<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
+									<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
+								</a>
+							</i>
+						</i>
+						<i th:case="*">
+							<i th:if="${comentario.usuario.id} == ${logueado.id}">
+								<a th:href="@{'/usuarios/perfil/perfilog/' + ${comentario.usuario.id}}">
+									<img th:src="@{'/usuarios/fotos/' + ${comentario.usuario.foto}}" alt="author" th:class="@{ava-author}">
+									<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
+								</a>
+							</i>
+							<i th:if="${comentario.usuario.id} != ${logueado.id}">
+								<a th:href="@{'/usuarios/perfil/perfil/' + ${comentario.usuario.id}}">
+									<img th:src="@{'/usuarios/fotos/' + ${comentario.usuario.foto}}" alt="author" th:class="@{ava-author}">
+									<span>by <i th:text="${comentario.usuario.nombre}"></i></span>
+								</a>
+							</i>
+						</i>
 					</i>
 				</div>
 			</div>

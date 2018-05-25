@@ -63,9 +63,12 @@
 									<form method="GET" th:action="@{/comentarios}">
 										<label th:class="custom-cursor">
 											<input type="submit" hidden="hidden">
-											<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${usuario.id}">
+											<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${video.usuario.id}">
 											<input type="hidden" id="videoId" name="videoId" th:value="${video.id}">
-											<input type="hidden" id="view" name="view" th:value="${view}">
+											<i th:switch="${logueado.id} == ${usuario.id}">
+												<input th:case="true" type="hidden" id="view" name="view" th:value="perfilog">
+												<input th:case="false" type="hidden" id="view" name="view" th:value="perfil">
+											</i>
 											<i th:class="@{rowline-text}" th:text="${video.titulo}"></i>
 										</label>
 										<i th:each="genero : ${video.VideoGeneros}">
@@ -91,9 +94,12 @@
 								</a>
 								<label th:class="@{custom-cursor pull-right}">
 									<input type="submit" hidden="hidden">
-									<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${usuario.id}">
+									<input type="hidden" id="pinchadoId" name="pinchadoId" th:value="${video.usuario.id}">
 									<input type="hidden" id="videoId" name="videoId" th:value="${video.id}">
-									<input type="hidden" id="view" name="view" th:value="${view}">
+									<i th:switch="${logueado.id} == ${usuario.id}">
+										<input th:case="true" type="hidden" id="view" name="view" th:value="perfilog">
+									    <input th:case="false" type="hidden" id="view" name="view" th:value="perfil">
+									</i>
 									<span th:class="@{custom-margin-icon}">
 										<i th:class="@{stat-icon icon-comment}"></i>
 									</span>

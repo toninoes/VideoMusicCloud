@@ -84,6 +84,7 @@ public class ComentarioWebController {
 	
 	@PostMapping("/comentarioVideos/{logueadoId}/{pinchadoId}/{videoId}")
 	public String saveComment(Model model, @RequestParam("descripcion") String descripcion,
+										   @RequestParam("view") String view,
 										   @PathVariable long logueadoId,
 										   @PathVariable long pinchadoId,
 										   @PathVariable long videoId) {
@@ -108,6 +109,7 @@ public class ComentarioWebController {
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
 		model.addAttribute("comentarios", comentariosAllVideo);
+		model.addAttribute("view", view);
 		
 		return "comentarios/comentarioVideos";
 	}
@@ -117,7 +119,8 @@ public class ComentarioWebController {
 	 */
 	
 	@PostMapping("/{logueadoId}/{pinchadoId}/{videoId}/{comentario}/{vista}/{views}")
-	public String saveVisit(Model model, @PathVariable long logueadoId,
+	public String saveVisit(Model model, @RequestParam("view") String view,
+										 @PathVariable long logueadoId,
 										 @PathVariable long pinchadoId,
 										 @PathVariable long videoId,
 										 @PathVariable boolean comentario,
@@ -142,6 +145,7 @@ public class ComentarioWebController {
 		model.addAttribute("video", video);
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
+		model.addAttribute("view", view);
 		
 		return "comentarios/comentarioVideos";
 	}
