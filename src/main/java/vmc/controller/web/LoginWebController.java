@@ -179,21 +179,4 @@ public class LoginWebController {
 		modelAndView.setViewName("admin/home");
 		return modelAndView;
 	}
-	
-	/*@PostMapping("/admin/home/{eliminar}")
-	public ModelAndView deleteUser(@RequestParam(value = "uboxes", required=false) long[] uboxes) {
-		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Usuario usuario = usuarioService.findByMail(auth.getName());
-		if(uboxes != null)
-			for(long id: uboxes)
-				usuarioService.delete(id);
-		List<Usuario> usuarios = usuarioService.findAll();
-		usuarios.remove(usuario);
-		modelAndView.addObject("mensaje","Portal de Administración");
-		modelAndView.addObject("usuarios", usuarios);
-		modelAndView.addObject("usuario", usuario);
-		modelAndView.setViewName("admin/home");
-		return modelAndView;
-	}*/
 }

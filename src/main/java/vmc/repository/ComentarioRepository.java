@@ -34,15 +34,5 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
 	@Modifying
 	@Query("DELETE FROM Comentario c WHERE c.video.id = :videoId")
 	void deleteByVideo(@Param("videoId") long videoId);
-	
-	//@Transactional
-	//@Modifying
-	//@Query("DELETE FROM Comentario c WHERE c.id = :id")
-	//void deleteByVideoUsuario(@Param("id") long id);
-	
-	//@Transactional
-	//@Modifying
-	//@Query("UPDATE Comentario c SET c.descripcion = '', c.gusta = true WHERE c.usuario.id = :usuarioId AND c.video.id = :videoId")
-	//void updateByVideoUsuario(@Param("usuarioId") long usuarioId, @Param("videoId") long videoId);
 }
 
