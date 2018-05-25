@@ -191,17 +191,17 @@ public class VideoService {
 		}
 		
 		if(genero && !busqueda.equals("0") && view.equals("listado"))
-			videosGe = getVideosGeneros(p, videosAll, busqueda.toLowerCase());
+			videosGe = getVideosGeneros(videosAll, busqueda.toLowerCase());
 		else if(genero && !busqueda.equals("0") && view.equals("perfil")) {
 			videosGe = videoRepository.findByVideoUsuario(logueado.getId());
-			videosGe = getVideosGeneros(p, videosGe, busqueda.toLowerCase());
+			videosGe = getVideosGeneros(videosGe, busqueda.toLowerCase());
 		} else if(genero && !busqueda.equals("0")) {
 			videosGe = videoRepository.findByVideos(usuarios);
-			videosGe = getVideosGeneros(p, videosGe, busqueda.toLowerCase());
+			videosGe = getVideosGeneros(videosGe, busqueda.toLowerCase());
 		}
 		
 		if(user && !busqueda.equals("0"))
-			videosUs = getVideosUsuarios(p, busqueda.toLowerCase(), usuarios);
+			videosUs = getVideosUsuarios(busqueda.toLowerCase(), usuarios);
 		
 		if(visitas && gustas && titulo && descripcion && genero && user && busqueda.equals("0") && view.equals("listado"))
 			return videoRepository.findAll(p);
@@ -214,7 +214,7 @@ public class VideoService {
 				v = videoRepository.findByPageTitulo(p, busqueda.toLowerCase());
 			return v;
 		} else {
-			videos = organizeVideos(p, videosViGu, videosTiDe, videosGe, videosUs, ordenacion);
+			videos = organizeVideos(videosViGu, videosTiDe, videosGe, videosUs, ordenacion);
 			v = ordenarVideos(p, videos, ordenacion);
 			return v;
 		}
@@ -313,7 +313,7 @@ public class VideoService {
 				);		
 	}
 	
-	private List<Video> getVideosGeneros(Pageable p, List<Video> videosAll, String busqueda) {
+	private List<Video> getVideosGeneros(List<Video> videosAll, String busqueda) {
 		
 		List<Video> videos = new ArrayList<Video>();
 		Set<Genero> generos = generoRepository.findGeneroByNombre(busqueda);
@@ -327,7 +327,7 @@ public class VideoService {
 		return videos;
 	}
 	
-	private List<Video> getVideosUsuarios(Pageable p, String busqueda, Set<Usuario> users) {
+	private List<Video> getVideosUsuarios(String busqueda, Set<Usuario> users) {
 		
 		Set<Usuario> usuarios = null;
 		Set<Usuario> us = null;
@@ -347,7 +347,7 @@ public class VideoService {
 		return videos;
 	}
 	
-	private List<Video> organizeVideos(Pageable p, List<Video> videosViGu, List<Video> videosTiDe, List<Video> videosGe, List<Video> videosUs,
+	private List<Video> organizeVideos(List<Video> videosViGu, List<Video> videosTiDe, List<Video> videosGe, List<Video> videosUs,
 			                           String ordenacion) {
 		
 		List<Video> videos = null;

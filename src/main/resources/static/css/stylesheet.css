@@ -301,7 +301,7 @@ a.megusta {
 }
 
 .dropdown2 {
-    position: relative !important;
+    position: absolute !important;
     display: block !important;
     width: 100% !important;
 }
@@ -310,7 +310,7 @@ a.megusta {
     display: none !important;
     position: absolute !important;
     background-color: #222835 !important;
-    top: 52px !important;
+    top: 47px !important;
     left: -200px;
     width: 1599px !important;
     height: 50px !important;

@@ -104,7 +104,9 @@ public class VideoWebController {
 			
 			Set<Usuario> usuarios = new HashSet<Usuario>();
 			List<Video> videosAll = videoService.findAll();
-			videos = videoService.findSearch(p, videosAll, visitas, gustas, titulo, descripcion, genero, user, search, "listado", null, usuarios);
+			for(Video v: videosAll)
+				usuarios.add(v.getUsuario());
+			videos = videoService.findSearch(p, videosAll, visitas, gustas, titulo, descripcion, genero, user, search, "listado", usuario, usuarios);
 			
 		} else videos = videoService.findAll(p);
 		
@@ -227,7 +229,7 @@ public class VideoWebController {
 	/*
    	 * GET - PAGINADOR DE LISTADO DE VIDEOS (INICIO O LISTAS) - RESULTADO DE BUSQUEDA
    	 */
-    
+	
     @GetMapping("/{view}/{page}/{active}/{search}/{visitas}/{gustas}/{titulo}/{descripcion}/{genero}/{user}")
     public String paginatorMisVideosBusqueda(@PathVariable String view,
     								 		 @PathVariable int page,
