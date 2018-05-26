@@ -54,12 +54,12 @@
 						<div th:if="${rol.rol} == 'ADMIN'">
 							<span th:class="drop-down-list">
 								<a th:href="@{/admin/home}" th:text="@{'Administración'}"></a>
-								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
 							</span>
 						</div>
 						<div th:if="${rol.rol} != 'ADMIN'">	
 							<span th:class="drop-down-list">
-								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${usuario.id}}" th:text="@{'Editar Perfil'}"></a>
+								<a th:href="@{'/usuarios/detalle/no/' + ${logueado.id} + '/' + ${logueado.id}}" th:text="@{'Editar Perfil'}"></a>
 							</span>
 						</div>
 					</div>
