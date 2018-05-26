@@ -72,6 +72,9 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	@Query("SELECT v FROM Video v WHERE v.usuario IN(:u) AND v.privado = 0 ORDER BY v.creacion DESC")
 	Page<Video> findByPageVideos(Pageable p, @Param("u") Set<Usuario> u);
 	
+	@Query("SELECT v FROM Video v WHERE v.usuario IN(:u) AND v.privado = 0 ORDER BY v.creacion DESC")
+	Page<Video> findByPageGenerosUsers(Pageable p, @Param("u") Set<Usuario> u);
+	
 	@Query("SELECT v FROM Video v WHERE v.usuario =:usuario AND v.privado = 0 ORDER BY v.creacion DESC")
 	Page<Video> findByPageSiguiendo(Pageable p, @Param("usuario") Usuario usuario);
 	
@@ -117,6 +120,9 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	@Query("SELECT v FROM Video v WHERE v.descripcion LIKE %:busqueda% AND v.privado = 0 AND v.usuario IN(:u)")
 	List<Video> findByDescripcionUsers(@Param("u") Set<Usuario> u, @Param("busqueda") String busqueda);
 	
+	@Query("SELECT v FROM Video v WHERE v.descripcion LIKE %:busqueda% AND v.privado = 0 AND v.usuario IN(:u)")
+	Page<Video> findByPageDescripcionUsers(Pageable p, @Param("u") Set<Usuario> u, @Param("busqueda") String busqueda);
+	
 	@Query("SELECT v FROM Video v WHERE v.descripcion LIKE %:descripcion% AND v.privado = 0")
 	Page<Video> findByPageDescripcion(Pageable p, @Param("descripcion") String descripcion);
 		
@@ -144,11 +150,17 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	@Query("SELECT v FROM Video v WHERE v IN(:vi) AND v.privado = 0 ORDER BY v.creacion DESC")
 	Page<Video> findByPageGenerosFecha(Pageable p, @Param("vi") List<Video> vi);
 	
-	@Query("SELECT v FROM Video v WHERE v.usuario IN(:usuario) AND v.privado = 0 ORDER BY v.creacion DESC")
-	List<Video> findByUsuarioSearch(@Param("usuario") Set<Usuario> usuario);
+	@Query("SELECT v FROM Video v WHERE v IN(:vi) AND v.titulo LIKE %:busqueda% AND v.privado = 0 ORDER BY v.creacion DESC")
+	Page<Video> findByPageGenerosTituloFecha(Pageable p, @Param("vi") List<Video> vi, @Param("busqueda") String busqueda);
 	
-	@Query("SELECT v FROM Video v WHERE v.usuario IN(:usuario) AND v.privado = 0 ORDER BY v.creacion DESC")
-	Page<Video> findByPageUsuarioSearch(Pageable p, @Param("usuario") Set<Usuario> usuario);
+	@Query("SELECT v FROM Video v WHERE v.usuario IN(:u) AND v.privado = 0 ORDER BY v.creacion DESC")
+	List<Video> findByUsuario(@Param("u") Usuario u);
+	
+	@Query("SELECT v FROM Video v WHERE v.usuario IN(:u) AND v.privado = 0 ORDER BY v.creacion DESC")
+	List<Video> findByUsuarioSearch(@Param("u") Set<Usuario> u);
+	
+	@Query("SELECT v FROM Video v WHERE v.usuario IN(:u) AND v.privado = 0 ORDER BY v.creacion DESC")
+	Page<Video> findByPageUsuarioSearch(Pageable p, @Param("u") Set<Usuario> u);
 	
 	@Query("SELECT v FROM Video v WHERE v IN(:videos) AND v.privado = 0 ORDER BY v.creacion DESC")
 	Page<Video> findVideos(Pageable p, @Param("videos") List<Video> videos);

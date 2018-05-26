@@ -204,8 +204,8 @@ public class UsuarioService {
 			BCryptPasswordEncoder nueva = bCryptPasswordEncoder;
 			usuario.setPassword(nueva.encode(n));
 			usuarioRepository.save(usuario);
-		} else
-			throw new ErrorInternoServidorException("Passwords", "Usuario", usuario.getId(), "Algunas de las contraseñas no coinciden");
+		} //else
+			//throw new ErrorInternoServidorException("Passwords", "Usuario", usuario.getId(), "Algunas de las contraseñas no coinciden");
 		
 		return usuario.getId();
 	}

@@ -200,7 +200,7 @@ public class VideoService {
 			videosGe = getVideosGeneros(videosGe, busqueda.toLowerCase());
 		}
 		
-		if(user && !busqueda.equals("0"))
+		if(user && !busqueda.equals("0") && !view.equals("perfil"))
 			videosUs = getVideosUsuarios(busqueda.toLowerCase(), usuarios);
 		
 		if(visitas && gustas && titulo && descripcion && genero && user && busqueda.equals("0") && view.equals("listado"))
@@ -213,13 +213,31 @@ public class VideoService {
 			else
 				v = videoRepository.findByPageTitulo(p, busqueda.toLowerCase());
 			return v;
-		} else if(titulo || descripcion || genero || user && !busqueda.equals("0")){
+		} else if(titulo && descripcion && genero && user && !busqueda.equals("0")) {
 			videos = organizeVideos1(videosTiDe, videosGe);
 			videos = organizeVideos2(videos, videosUs);
 			if(videos.isEmpty())
 				v = videoRepository.findNothing(p);
 			else
 				v = videoRepository.findVideos(p, videos);
+			return v;
+		} else if(user && !titulo && !descripcion && !genero && !busqueda.equals("0") && videosUs.size() > 0) {
+			Set<Usuario> users = new HashSet<Usuario>();
+			for(Video vv: videosUs)
+				users.add(vv.getUsuario());
+			v = videoRepository.findByPageVideos(p, users);
+			return v;
+		} else if(genero && !titulo && !descripcion && !user && !busqueda.equals("0") && videosGe.size() > 0) {
+			v = videoRepository.findByPageGenerosFecha(p, videosGe);
+			return v;
+		} else if(descripcion && !titulo && !user && !genero && !busqueda.equals("0") && videosTiDe.size() > 0) {
+			Set<Usuario> users = new HashSet<Usuario>();
+			for(Video vv: videosTiDe)
+				users.add(vv.getUsuario());
+			v = videoRepository.findByPageDescripcionUsers(p, users, busqueda.toLowerCase());
+			return v;
+		} else if(genero && titulo && !descripcion && !user && !busqueda.equals("0") && videosGe.size() > 0) {
+			v = videoRepository.findByPageGenerosTituloFecha(p, videosGe, busqueda.toLowerCase());
 			return v;
 		} else {
 			v = ordenarVideos(p, videosViGu, ordenacion);
@@ -358,17 +376,12 @@ public class VideoService {
 	private List<Video> getVideosUsuarios(String busqueda, Set<Usuario> users) {
 		
 		Set<Usuario> usuarios = null;
-		Set<Usuario> us = null;
 		List<Video> videos = null;
 	
 		if(!users.isEmpty()) {
-			us = new HashSet<Usuario>();
 			usuarios = usuarioRepository.findByUsuarioSearch(busqueda);
-			for(Usuario u: users)
-				if(usuarios.contains(u))
-					us.add(u);
-			if(!us.isEmpty())
-				videos = videoRepository.findByUsuarioSearch(us);
+			if(usuarios != null && !usuarios.isEmpty())
+				videos = videoRepository.findByUsuarioSearch(usuarios);
 		}
 		if(videos == null) 
 			videos = videoRepository.findNothing();

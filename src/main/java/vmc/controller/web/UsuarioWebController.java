@@ -419,6 +419,7 @@ public class UsuarioWebController {
     	model.addAttribute("genero", false);
     	model.addAttribute("user", false);
     	model.addAttribute("pages", videos.getTotalPages());
+    	model.addAttribute("elements", videos.getTotalElements());
     	model.addAttribute("videos", videos);
 		model.addAttribute("portal", portal);
 

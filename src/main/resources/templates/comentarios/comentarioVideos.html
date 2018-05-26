@@ -36,7 +36,7 @@
 				
 				<!-- THE HELLO USER -->
 				<div th:class="@{hellouser login-header-block be-drop-down login-user-down}">
-					<div th:switch="${usuario.foto}">
+					<div th:switch="${logueado.foto}">
 						<div th:case="''">
 							<img th:class="@{login-user custom-photo-size}" th:src="@{/img/ava_10.jpg}">
 							<span th:class="@{color-white}" th:text="@{'Hola, ' + ${logueado.nombre}}"></span>
@@ -82,7 +82,7 @@
 								<li>
 									<a th:class="@{rowline-text}" th:href="@{#}" th:text="${video.titulo}"></a>
 									<i th:each="genero : ${video.VideoGeneros}">
-	    								<a th:class="@{rowline-text pull-right}" th:href="@{#}" th:text="@{'#' + ${genero.nombre} + ' '}"></a>
+	    								<i th:class="@{rowline-text pull-right}" th:href="@{#}" th:text="@{'#' + ${genero.nombre} + ' '}"></i>
 	    							</i>
 	    						</li>
 	    					</ul>
@@ -148,8 +148,8 @@
 			</div>
 		</div>
 		<form method="POST" th:action="@{'/comentarios/comentarioVideos/' + ${logueado.id} + '/' + ${usuario.id} + '/' + ${video.id}}" class="custom-margin-icon2">
-			<!-- RE-CAPTCHA
-			<div class="g-recaptcha" data-sitekey="6LdTD1sUAAAAADIZ34RKbo881dd5D5LRuK2KMTCe"></div>-->
+			<!-- RE-CAPTCHA -->
+			<div class="g-recaptcha" data-sitekey="6LdTD1sUAAAAADIZ34RKbo881dd5D5LRuK2KMTCe"></div>
 			<div th:class="@{custom-margin-icon2 form-group focus-2}">
 				<i th:class="@{form-label}">Escribe debajo tu comentario...</i>							
 				<input type="submit" th:class="@{btn color-1 size-2 hover-7 pull-right}" th:value="@{'Publicar Comentario'}">		

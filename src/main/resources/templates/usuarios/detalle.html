@@ -92,19 +92,19 @@
 								<div th:class="@{input-col col-xs-12 col-sm-12 custom-margin-head}">
 									<div th:class="@{form-group focus-2}">
 										<div th:class="@{form-label}">Nombre</div>
-										<input th:class="@{form-input}" type="text" name="nombre" id="nombre" th:value="${usuario.nombre}" required>
+										<input th:class="@{form-input}" type="text" name="nombre" id="nombre" th:value="${usuario.nombre}" required maxlength="50">
 									</div>							
 								</div>
 								<div th:class="@{input-col col-xs-12 col-sm-12}">
 									<div th:class="@{form-group focus-2}">
 										<div th:class="@{form-label}">Apellidos</div>									
-										<input th:class="@{form-input}" type="text" name="apellidos" id="apellidos" th:value="${usuario.apellidos}" required>
+										<input th:class="@{form-input}" type="text" name="apellidos" id="apellidos" th:value="${usuario.apellidos}" required maxlength="50">
 									</div>								
 								</div>
 								<div th:class="@{input-col col-xs-12 col-sm-12}">
 									<div th:class="@{form-group focus-2}">
 										<div th:class="@{form-label}">Intereses</div>									
-										<textarea maxlength="255" th:class="@{form-input}" name="intereses" id="intereses" th:placeholder="@{''}" th:text="${usuario.intereses}">
+										<textarea th:class="@{form-input}" name="intereses" id="intereses" th:placeholder="@{''}" th:text="${usuario.intereses}" maxlength="252">
 										</textarea>
 									</div>								
 								</div>								
@@ -129,19 +129,19 @@
 									<div th:class="@{input-col col-xs-12 col-sm-4}">
 										<div th:class="@{form-group focus-2}">
 											<div th:class="@{form-label}">Antigua Clave</div>									
-											<input th:class="@{form-input}" name="oldpassword" id="oldpassword" type="password" th:placeholder="@{''}" required maxlength="50">
+											<input th:class="@{form-input}" name="oldpassword" id="oldpassword" type="password" th:placeholder="@{''}" required maxlength="64">
 										</div>								
 									</div>
 									<div th:class="@{input-col col-xs-12 col-sm-4}">
 										<div th:class="@{form-group focus-2}">
 											<div th:class="@{form-label}">Nueva Clave</div>									
-											<input th:class="@{form-input}" type="password" name="newpassword" id="newpassword" th:placeholder="@{''}" required maxlength="50">
+											<input th:class="@{form-input}" type="password" name="newpassword" id="newpassword" th:placeholder="@{''}" required maxlength="64">
 										</div>								
 									</div>
 									<div th:class="@{input-col col-xs-12 col-sm-4}">
 										<div th:class="@{form-group focus-2}">
 											<div th:class="@{form-label}">Repetir Clave</div>									
-											<input th:class="@{form-input}" type="password" name="rnewpassword" id="rnewpassword" th:placeholder="@{''}" required maxlength="50">
+											<input th:class="@{form-input}" type="password" name="rnewpassword" id="rnewpassword" th:placeholder="@{''}" required maxlength="64">
 										</div>								
 									</div>
 									<div th:class="@{input-col col-xs-12 col-sm-12}">

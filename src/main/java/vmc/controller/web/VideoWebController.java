@@ -190,7 +190,6 @@ public class VideoWebController {
 			usuarios.addAll(usuario.getSiguiendo());
 			List<Video> videosMy = videoService.getMyVideos(usuario, usuarios);
 			videos = videoService.findSearch(p, videosMy, visitas, gustas, titulo, descripcion, genero, user, search, "misvideos", usuario, usuarios);
-			
 		} else {
 			usuarios = new HashSet<Usuario>();
 			usuarios.add(usuario);
