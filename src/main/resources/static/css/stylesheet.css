@@ -197,6 +197,16 @@ a.megusta {
 	background-color: black !important;
 }
 
+.custom-width {
+	width: 100% !important;
+	border: 0;
+}
+
+.custom-height {
+	height: 30px !important;
+	overflow-y: hidden; 
+}
+
 .custom-textarea {
 	font-size: 10px !important;
 }

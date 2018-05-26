@@ -132,6 +132,7 @@ public class VideoWebController {
 		model.addAttribute("logueado", admin);
 		model.addAttribute("mailadmin", admin.getMail());
 		model.addAttribute("pages", videos.getTotalPages());
+		model.addAttribute("elements", videos.getTotalElements());
 		model.addAttribute("videos", videos);
 		model.addAttribute("likes", likes);
 		model.addAttribute("view", "listado");
@@ -185,16 +186,16 @@ public class VideoWebController {
 		   (search != null && !search.equals("0"))) {
 			
 			usuarios = new HashSet<Usuario>();
-			List<Video> videosMy = videoService.findAll();
 			usuarios.add(usuario);
 			usuarios.addAll(usuario.getSiguiendo());
+			List<Video> videosMy = videoService.getMyVideos(usuario, usuarios);
 			videos = videoService.findSearch(p, videosMy, visitas, gustas, titulo, descripcion, genero, user, search, "misvideos", usuario, usuarios);
 			
 		} else {
 			usuarios = new HashSet<Usuario>();
 			usuarios.add(usuario);
 			usuarios.addAll(usuario.getSiguiendo());
-			videos = videoService.getMyVideos(p, usuario, usuarios);
+			videos = videoService.getMyPageVideos(p, usuario, usuarios);
 		}
 		
 		for(Video v : videos) {
@@ -209,6 +210,7 @@ public class VideoWebController {
 		}
 		
 		model.addAttribute("pages", videos.getTotalPages());
+		model.addAttribute("elements", videos.getTotalElements());
 		model.addAttribute("videos", videos);
 		model.addAttribute("likes", likes);
 		model.addAttribute("usuario", usuario);

@@ -226,7 +226,10 @@
 						    				</div>
 						    				<div th:class="@{be-rowline}">
 						    					<ul>
-													<li><i th:class="@{rowline-text}" th:text="${video.descripcion}"></i></li>
+													<li>
+														<textarea th:class="@{rowline-text custom-width custom-height}" th:text="${video.descripcion}" readonly="readonly">
+														</textarea>
+													</li>
 												</ul>
 											</div>
 											<div th:class="@{be-rowline}">
@@ -346,7 +349,7 @@
 		</div>
 		
 		<!-- THE CUSTOM PAGINATOR -->
-		<div th:if="${pages} > 1" th:class="be-user-statisticPerfil">
+		<div th:if="${elements} > 1" th:class="be-user-statisticPerfil">
 			<div th:class="@{stat-rowPerfil}">
 				<span th:class="@{color-white}">Resultados por página</span>
 				<div th:class="@{paginationCustom}">

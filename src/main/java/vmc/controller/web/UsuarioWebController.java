@@ -131,6 +131,7 @@ public class UsuarioWebController {
 		
 		model.addAttribute("usuarios", usuarios);
 		model.addAttribute("pages", usuarios.getTotalPages());
+		model.addAttribute("elements", usuarios.getTotalElements());
 		model.addAttribute("logueado", logueado);
 		model.addAttribute("usuario", pinchado);
 		model.addAttribute("segsig", segsig);
@@ -300,6 +301,7 @@ public class UsuarioWebController {
 			} else likes.add(false);
 		}
 		model.addAttribute("pages", videos.getTotalPages());
+		model.addAttribute("elements", videos.getTotalElements());
 		model.addAttribute("videos", videos);
 		
 		if(logueado.getId() == pinchadoId)

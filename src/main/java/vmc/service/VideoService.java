@@ -169,23 +169,23 @@ public class VideoService {
 		
 		if(titulo && descripcion && !busqueda.equals("0")) {
 			if(view.equals("perfil"))
-				videosViGu = videoRepository.findByTituloDescripcionUser(logueado, busqueda.toLowerCase());
+				videosTiDe = videoRepository.findByTituloDescripcionUser(logueado, busqueda.toLowerCase());
 			else if(view.equals("misvideos"))
-				videosViGu = videoRepository.findByTituloDescripcionUsers(usuarios, busqueda.toLowerCase());
+				videosTiDe = videoRepository.findByTituloDescripcionUsers(usuarios, busqueda.toLowerCase());
 			else
 				videosTiDe = videoRepository.findByTituloDescripcion(busqueda.toLowerCase());
 		} else if(titulo) {
 			if(view.equals("perfil"))
-				videosViGu = videoRepository.findByTituloUser(logueado, busqueda.toLowerCase());
+				videosTiDe = videoRepository.findByTituloUser(logueado, busqueda.toLowerCase());
 			else if(view.equals("misvideos"))
-				videosViGu = videoRepository.findByTituloUsers(usuarios, busqueda.toLowerCase());
+				videosTiDe = videoRepository.findByTituloUsers(usuarios, busqueda.toLowerCase());
 			else
 				videosTiDe = videoRepository.findByTitulo(busqueda.toLowerCase());
 		} else if(descripcion) {
 			if(view.equals("perfil"))
-				videosViGu = videoRepository.findByDescripcionUser(logueado, busqueda.toLowerCase());
+				videosTiDe = videoRepository.findByDescripcionUser(logueado, busqueda.toLowerCase());
 			else if(view.equals("misvideos"))
-				videosViGu = videoRepository.findByDescripcionUsers(usuarios, busqueda.toLowerCase());
+				videosTiDe = videoRepository.findByDescripcionUsers(usuarios, busqueda.toLowerCase());
 			else
 				videosTiDe = videoRepository.findByDescripcion(busqueda.toLowerCase());
 		}
@@ -213,9 +213,16 @@ public class VideoService {
 			else
 				v = videoRepository.findByPageTitulo(p, busqueda.toLowerCase());
 			return v;
+		} else if(titulo || descripcion || genero || user && !busqueda.equals("0")){
+			videos = organizeVideos1(videosTiDe, videosGe);
+			videos = organizeVideos2(videos, videosUs);
+			if(videos.isEmpty())
+				v = videoRepository.findNothing(p);
+			else
+				v = videoRepository.findVideos(p, videos);
+			return v;
 		} else {
-			videos = organizeVideos(videosViGu, videosTiDe, videosGe, videosUs, ordenacion);
-			v = ordenarVideos(p, videos, ordenacion);
+			v = ordenarVideos(p, videosViGu, ordenacion);
 			return v;
 		}
 	}
@@ -280,7 +287,7 @@ public class VideoService {
         return ResponseEntity.notFound().build();
     }
 	
-	public Page<Video> getMyVideos(Pageable p, Usuario logueado, Set<Usuario> users) {
+	public Page<Video> getMyPageVideos(Pageable p, Usuario logueado, Set<Usuario> users) {
 		
 		Set<Usuario> us = null;
 		Page<Video> videos = null;
@@ -291,10 +298,31 @@ public class VideoService {
 			for(Usuario u: users)
 				if(logueado.getSiguiendo().contains(u))
 					us.add(u);
-			videos = videoRepository.findByPageUsuarioSearch(p, us);
+			if(!us.isEmpty())
+				videos = videoRepository.findByPageUsuarioSearch(p, us);
 		}
 		if(videos == null) 
 			videos = videoRepository.findNothing(p);
+		
+		return videos;
+	}
+	
+	public List<Video> getMyVideos(Usuario logueado, Set<Usuario> users) {
+		
+		Set<Usuario> us = null;
+		List<Video> videos = null;
+	
+		if(!users.isEmpty()) {
+			us = new HashSet<Usuario>();
+			us.add(logueado);
+			for(Usuario u: users)
+				if(logueado.getSiguiendo().contains(u))
+					us.add(u);
+			if(!us.isEmpty())
+				videos = videoRepository.findByUsuarioSearch(us);
+		}
+		if(videos == null) 
+			videos = videoRepository.findNothing();
 		
 		return videos;
 	}
@@ -339,7 +367,8 @@ public class VideoService {
 			for(Usuario u: users)
 				if(usuarios.contains(u))
 					us.add(u);
-			videos = videoRepository.findByUsuarioSearch(us);
+			if(!us.isEmpty())
+				videos = videoRepository.findByUsuarioSearch(us);
 		}
 		if(videos == null) 
 			videos = videoRepository.findNothing();
@@ -347,46 +376,34 @@ public class VideoService {
 		return videos;
 	}
 	
-	private List<Video> organizeVideos(List<Video> videosViGu, List<Video> videosTiDe, List<Video> videosGe, List<Video> videosUs,
-			                           String ordenacion) {
+	private List<Video> organizeVideos1(List<Video> videosTiDe, List<Video> videosGe) {
 		
-		List<Video> videos = null;
-		List<Video> videosTempTiDe = new ArrayList<Video>();
-		List<Video> videosTempGe = new ArrayList<Video>();
-		List<Video> videosTempUs = new ArrayList<Video>();
+		List<Video> videos = new ArrayList<Video>();
 		
-		if(videosViGu != null && !videosViGu.isEmpty())
-			videos = videosViGu;
+		if(videosTiDe != null && videosGe != null && !videosTiDe.isEmpty() && !videosGe.isEmpty()) {
+			for(Video v : videosTiDe)
+				if(videosGe.contains(v))
+					videos.add(v);
+		} else if(videosTiDe != null)
+			videos.addAll(videosTiDe);
+		else if(videosGe != null)
+			videos.addAll(videosGe);
 		
-		if(videosTiDe != null && !videosTiDe.isEmpty() && videos != null && !videos.isEmpty()) {
-			for(Video vTD: videosTiDe)
-				for(Video v: videos)
-					if(vTD.getId() == v.getId())
-						videosTempTiDe.add(v);
-			videos.clear();
-			videos = videosTempTiDe;
-		} else if(videosTiDe != null && !videosTiDe.isEmpty())
-			videos = videosTiDe;
+		return videos;
+	}
 	
-		if(videosGe != null && !videosGe.isEmpty() && videos != null && !videos.isEmpty()) {
-			for(Video vG: videosGe)
-				for(Video v: videos)
-					if(vG.getId() == v.getId())
-						videosTempGe.add(v);
-			videos.clear();
-			videos = videosTempGe;
-		} else if(videosGe != null && !videosGe.isEmpty())
-			videos = videosGe;
+	private List<Video> organizeVideos2(List<Video> videosTemp, List<Video> videosUs) {
 		
-		if(videosUs != null && !videosUs.isEmpty() && videos != null && !videos.isEmpty()) {
-			for(Video vU: videosUs)
-				for(Video v: videos)
-					if(vU.getId() == v.getId())
-						videosTempUs.add(v);
-			videos.clear();
-			videos = videosTempUs;
-		} else if(videosUs != null && !videosUs.isEmpty())
-			videos = videosUs;
+		List<Video> videos = new ArrayList<Video>();
+		
+		if(videosTemp != null && videosUs != null && !videosTemp.isEmpty() && !videosUs.isEmpty()) {
+			for(Video v : videosTemp)
+				if(videosUs.contains(v))
+					videos.add(v);
+		} else if(videosTemp != null)
+			videos.addAll(videosTemp);
+		else if(videosUs != null)
+			videos.addAll(videosUs);
 		
 		return videos;
 	}

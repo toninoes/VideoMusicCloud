@@ -149,4 +149,7 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	
 	@Query("SELECT v FROM Video v WHERE v.usuario IN(:usuario) AND v.privado = 0 ORDER BY v.creacion DESC")
 	Page<Video> findByPageUsuarioSearch(Pageable p, @Param("usuario") Set<Usuario> usuario);
+	
+	@Query("SELECT v FROM Video v WHERE v IN(:videos) AND v.privado = 0 ORDER BY v.creacion DESC")
+	Page<Video> findVideos(Pageable p, @Param("videos") List<Video> videos);
 }
