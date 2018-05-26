@@ -18,9 +18,9 @@
 			<br/>
 			 
 			<input type="text" id="mail" name="mail"  th:placeholder="Email"
-				class="form-control" /> <br/> 
+				class="form-control" maxlength="64"/> <br/> 
 			<input type="password"  th:placeholder="Password"
-				id="password" name="password" class="form-control" /> <br /> 
+				id="password" name="password" class="form-control" maxlength="64"/> <br /> 
 				
 			<div align="center" th:if="${param.error}">
 				<p style="font-size: 20; color: #FF1C19;">Mail o contraseñas no válidos</p>
