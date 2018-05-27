@@ -71,7 +71,7 @@
 				<div th:class="@{col-lg-12 col-md-12 col-sm-12 col-xs-12 col-ml-12 col-xl-4}">
 					<div th:class="@{be-post style-5}">
 						<div align="center" th:class="@{custom-video bgcolor-black}">
-							<div th:onmouseover="'javascript:Play(\''+${video.id}+'\')'" th:onmouseout="'javascript:Pause(\''+${video.id}+'\')'">
+							<div th:onmouseover="'javascript:Play(\''+${video.id}+'\')'"> <!--th:onmouseout="'javascript:Pause(\''+${video.id}+'\')'">-->
 								<video th:id="'v'+${video.id}" controls th:class="@{be-img-block}" th:onended="'javascript:visualizaciones(\''+${video.id}+'\',\''+${video.visualizaciones}+'\')'">
 									<source th:src="'/videos/' + ${video.nombre}">
 								</video>

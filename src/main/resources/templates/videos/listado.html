@@ -51,7 +51,7 @@
 				<div th:class="@{col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ml-12 col-xl-4}" th:each="video,stat : ${videos}" th:with="gusta=${likes[stat.index]}">
 					<div th:class="@{be-post style-5}">
 						<div align="center">
-							<div th:onmouseover="'javascript:Play(\''+${video.id}+'\')'" th:onmouseout="'javascript:Pause(\''+${video.id}+'\')'">
+							<div th:onmouseover="'javascript:Play(\''+${video.id}+'\')'"> <!--th:onmouseout="'javascript:Pause(\''+${video.id}+'\')'">-->
 								<video th:id="'v'+${video.id}" controls th:class="@{be-img-block}" th:onended="'javascript:visualizaciones(\''+${video.id}+'\',\''+${video.visualizaciones}+'\')'">
 									<source th:src="'/videos/' + ${video.nombre}">
 								</video>
