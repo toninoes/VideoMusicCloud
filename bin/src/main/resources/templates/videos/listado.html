@@ -7,13 +7,51 @@
 <body>
 	<!-- THE LOADER -->
 	<div th:include="spinner :: body"></div>
+	
 	<!-- THE HEADER -->
 	<header>
 		<div th:class="@{container-fluid custom-container}">
 			<div th:class="@{row no_row row-header}">
+	
 				<!-- THE LOGO -->
 				<div th:include="logo :: body"></div>
-				<div th:class="header-menu-block">
+	
+				<!-- THE SEARCH -->
+				<div th:class="@{login-header-block col-md-2 left-feild pull-left}">
+					<form th:class="@{input-search}" method="POST" th:action="@{/videos/listado}">
+						<div th:class="dropdown2">
+							<input th:class="@{input-search}" type="text" placeholder="Buscar..." name="Busqueda" id="Busqueda">
+	       					<i class="fa fa-search"></i>
+	       					<div th:class="@{dropdown-content2}">
+	       						<label th:class="custom-right" for="Novedades"> Los + Nuevos
+	       							<input type="checkbox" th:class="@{color-white}" id="Novedades" name="Novedades">
+	       						</label>
+	       						<label th:class="custom-right" for="Visualizaciones"> Los + Vistos
+	       							<input type="checkbox" th:class="@{color-white}" id="Visualizaciones" name="Visualizaciones">
+	       						</label>
+	       						<label th:class="custom-right" for="Likes"> Los que + Gustan
+	       							<input type="checkbox" th:class="@{color-white}" id="Likes" name="Likes">
+	       						</label>
+	       						<label th:class="custom-right" for="Titulo"> Por Título
+	       							<input type="checkbox" th:class="@{color-white}" id="Titulo" name="Titulo">
+	       						</label>
+	       						<label th:class="custom-right" for="Descripcion"> Por Descripción
+	       							<input type="checkbox" th:class="@{color-white}" id="Descripcion" name="Descripcion">
+	       						</label>
+	       						<label th:class="custom-right" for="Genero"> Por Género
+	       							<input type="checkbox" th:class="@{color-white}" id="Genero" name="Genero">
+	       						</label>
+	       						<label th:class="custom-right" for="Comentario"> Por Comentario
+	       							<input type="checkbox" th:class="@{color-white}" id="Comentario" name="Comentario">
+	       						</label>
+	       					</div>
+	       				</div>		
+	       				<input type="submit" th:value="''" name="submit" id="submit">
+	       			</form>
+				</div>	
+				
+				<!-- THE MENU -->			
+				<div th:class="@{header-menu-block}">
 					<button th:class="@{cmn-toggle-switch cmn-toggle-switch__htx}"></button>
 					<ul th:class="header-menu" id="one">
 						<li><a th:href="@{/videos/misvideos}">Inicio</a></li>
@@ -23,51 +61,57 @@
 						<li><a th:href="@{#}">Suscripción</a></li>
 					</ul>
 				</div>
+				
 				<!-- THE HELLO USER -->
 				<div th:include="hellouser :: body"></div>
 			</div>
 		</div>
 	</header>
+	
 	<!-- MAIN CONTENT -->
 	<div th:id="@{content-block}">
 		<div th:class="@{container-fluid custom-container be-detail-container custom-font}">
 			<div th:class="@{row}">
-				<div th:class="@{col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ml-12 col-xl-4}" th:each="videogeneros : ${videosgeneros}">
+				<div th:class="@{col-lg-6 col-md-6 col-sm-12 col-xs-12 col-ml-12 col-xl-4}" th:each="video : ${videos}">
 					<div th:class="@{be-post style-5}">
 						<div align="center" th:class="@{custom-video}">
 							<video controls th:class="@{be-img-block}">
-								<source th:src="'/videos/' + ${videogeneros.key.nombre}">
+								<source th:src="'/videos/' + ${video.nombre}">
 							</video>
 						</div>
 						<div th:class="@{be-rowline}">
 							<ul>
-	    						<li><a th:class="@{list-inline rowline-text}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${videogeneros.key.titulo}" th:text="'#Título'"></a>
-	    							<a th:class="@{list-inline rowline-text pull-right}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${videogeneros.value}" th:text="'#Géneros'"></a></li>
+								<li>
+									<a th:class="@{rowline-text}" th:href="@{#}" th:text="${video.titulo}"></a>
+									<i th:each="genero : ${video.VideoGeneros}">
+	    								<a th:class="@{rowline-text pull-right}" th:href="@{#}" th:text="@{'#' + ${genero.nombre} + ' '}"></a>
+	    							</i>
+	    						</li>
 	    					</ul>
 	    				</div>
 	    				<div th:class="@{be-rowline}">
 	    					<ul>
-								<li><a th:class="@{list-inline rowline-text}" th:href="@{#}" th:data-toggle="tooltip" th:data-placement="top" th:title="${videogeneros.key.descripcion}" th:text="'#Descripción'"></a></li>
+								<li><a th:class="@{rowline-text}" th:href="@{#}" th:text="${video.descripcion}"></a></li>
 							</ul>
 						</div>
 						<div th:class="@{be-rowline}">
 							<i th:class="@{fa fa-calendar}">
 								<span th:class="@{custom-td-font}"></span>
-								<span th:class="@{rowline-text}" th:text="${#dates.format(videogeneros.key.creacion, 'dd-MM-yyyy HH:mm')}"></span>
+								<span th:class="@{rowline-text}" th:text="${#dates.format(video.creacion, 'dd-MM-yyyy HH:mm')}"></span>
 							</i>
 						</div>
-						<div th:class="@{author-post}" th:switch="${videogeneros.key.usuario.foto}"> 
-							<a th:case="'img/ava_10.jpg'" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${videogeneros.key.usuario.id}}">
+						<div th:class="@{author-post}" th:switch="${video.usuario.foto}"> 
+							<a th:case="''" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id}}">
 								<img th:src="@{/img/ava_10.jpg}" alt="author" th:class="@{ava-author}">
-								<span>by <i th:text="${videogeneros.key.usuario.nombre}"></i></span>
+								<span>by <i th:text="${video.usuario.nombre}"></i></span>
 							</a>
-							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${videogeneros.key.usuario.id}}">
-								<img th:src="@{'/usuarios/fotos/' + ${videogeneros.key.usuario.foto}}" alt="author" th:class="@{ava-author}">
-								<span>by <i th:text="${videogeneros.key.usuario.nombre}"></i></span>
+							<a th:case="*" th:href="@{'/usuarios/perfil/' + ${usuario.id} + '/' + ${video.usuario.id}}">
+								<img th:src="@{'/usuarios/fotos/' + ${video.usuario.foto}}" alt="author" th:class="@{ava-author}">
+								<span>by <i th:text="${video.usuario.nombre}"></i></span>
 							</a>
 							<span th:class="@{pull-right}">
-								<i th:class="@{stat-icon icon-like-b}"></i>&nbsp;<span th:text="${videogeneros.key.likes}"></span> 
-								<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<span th:text="${videogeneros.key.visualizaciones}"></span>
+								<i th:class="@{stat-icon icon-like-b}"></i>&nbsp;<span th:text="${video.likes}"></span> 
+								<i th:class="@{stat-icon icon-views-b}"></i>&nbsp;<span th:text="${video.visualizaciones}"></span>
 							</span>
 						</div>
 					</div>
@@ -75,6 +119,7 @@
 			</div>
 		</div>
 	</div>
+	
 	<!-- THE FOOTER -->
 	<div th:include="footer :: div"></div>
 </body>

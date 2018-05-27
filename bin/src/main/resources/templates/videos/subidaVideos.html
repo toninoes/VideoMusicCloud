@@ -62,8 +62,13 @@
 					    			<div th:class="@{subscribe-form}">
 						    			<label th:class="@{btn btn-share color-1 size-2 hover-1}">
 						    				<i th:class="@{fa fa-upload}"></i>Subir Video
+				
 						    				<input type="submit" value="subirvideo" name="subirvideo" id="subirvideo" hidden="hidden">
+						    				
 						    			</label>
+						    			<div th:text="${mensaje}">
+						    			
+						    			</div>
 						    		</div>
 						    	</div>
 							</form>
