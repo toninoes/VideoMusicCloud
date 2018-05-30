@@ -24,13 +24,19 @@ Aplicación web en Java de repositorio de videos musicales
 - Git
 - Spring Tool Suite 3.9.2
 
+### Diagrama ER
+
+![Diagrama ER](https://github.com/toninoes/VideoMusicCloud/blob/master/src/main/resources/static/img/eer.png)
+
+
 ### Capturas de la aplicación funcionando
 
 Vista del perfil de usuario:
 
 ![perfil](https://github.com/toninoes/VideoMusicCloud/blob/master/src/main/resources/static/img/perfil.png)
 
-Vista de los listados de vídeos:
+
+Listado de vídeos y buscador:
 
 ![perfil](https://github.com/toninoes/VideoMusicCloud/blob/master/src/main/resources/static/img/listas.png)
 
