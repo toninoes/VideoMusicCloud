@@ -2,18 +2,15 @@
 Aplicación web en Java de repositorio de videos musicales
 
 
-## Proyectos Informáticos - Universidad de Cádiz
-Grado en Ingenierı́a Informática. Curso 2017-2018
-
+## Organización
 
 ### Participantes en el proyecto
 
-- José María García Sánchez
-- Antonio Ruiz Rondán
-- Antonio José Rodríguez Cárdenas
-- Luis Fernando Pérez Peregrino
-- Andrés Martínez Gavira
-- Santiago Zaldívar Lavalle
+- **Mánager**: José María García Sánchez. 
+- **Analista**: Antonio Ruiz Rondán.
+- **Diseñador**: Andrés Martínez Gavira.
+- **Programadores**: Antonio Ruiz Rondán, Andrés Martínez Gavira y Luis Fernando Pérez Peregrino.
+- **Testers**: Antonio José Rodríguez Cárdenas y Santiago Zaldívar Lavalle.
 
 
 ### Herramientas-Tecnologías utilizadas
@@ -28,28 +25,67 @@ Grado en Ingenierı́a Informática. Curso 2017-2018
 - Spring Tool Suite 3.9.2
 
 
-### Sincronizar el repositorio
+## Manual de instalación y explotación
 
-- **La primera vez:** ejecutar los siguientes comandos en el directorio donde vaya a almacenar los archivos de la aplicación ("workspace"):
+Las instrucciones de instalación y explotación del sistema se detallan a continuación.
 
-```sh
-pinf2018@vmc ~/workspace $ mkdir VideoMusicCloud
-pinf2018@vmc ~/workspace $ cd VideoMusicCloud
-pinf2018@vmc ~/workspace/VideoMusicCloud $ git init
-pinf2018@vmc ~/workspace/VideoMusicCloud $ git remote add origin https://github.com/toninoes/VideoMusicCloud.git
-pinf2018@vmc ~/workspace/VideoMusicCloud $ git pull origin master
-```
+### Requisitos previos
 
-- **El resto de las veces:** para descargar archivos con las últimas modificaciones de los demás participantes en el proyecto, ubicados ya dentro del directorio del proyecto ("~/workspace/VideoMusicCloud"):
+Los requerimientos que el sistema debe tener para el correcto funcionamiento. Entre paréntesis las versiones sobre las que se ha trabajado:
 
-```sh
-pinf2018@vmc ~/workspace/VideoMusicCloud $ git pull origin master
-```
+- S.O.: Ubuntu Server (versión 18.04 LTS - 64 bits)
+- Lenguajes: Java (v. 8)
+- Java SE Development Kit 8
+- Apache Tomcat 8 (v. 8.0.50)
+- MySQL Community Server 5 (v. 5.7.21)
+- Apache Maven 3 (v. 3.5.3)
 
-- Tras realizar nuestras propias aportaciones/modificaciones y subir los nuevos cambios al repositorio:
+Para tenerlo todo instalado en Ubuntu, simplemente teclear:
 
 ```sh
-pinf2018@vmc ~/workspace/VideoMusicCloud $ git add --all
-pinf2018@vmc ~/workspace/VideoMusicCloud $ git commit -m "Descripción de nuestras aportaciones/modificaciones en el proyecto"
-pinf2018@vmc ~/workspace/VideoMusicCloud $ git push origin master
+vmc@pinf ~ $ sudo apt-get install openjdk-8-jdk openjdk-8-doc openjdk-8-jre
+vmc@pinf ~ $ sudo apt-get install git mysql-server tomcat8 maven
 ```
+
+### Procedimientos de instalación
+
+Primero clonamos el proyecto:
+
+```sh
+vmc@pinf ~ $ cd /tmp
+vmc@pinf /tmp $ git clone https://github.com/toninoes/VideoMusicCloud.git
+```
+
+Una vez clonado el repositorio, para la correcta instalación y despliegue de la aplicación se necesitará ejecutar el siguiente script en bash (VideoMusicCloud.sh) que contiene a su vez una llamada a otro fichero sql (VideoMusicCloud.sql), ambos scripts se ubican en la raiz de este proyecto:
+
+Por tanto ejecutamos:
+
+```sh
+vmc@pinf /tmp $ cd VideoMusicCloud
+vmc@pinf /tmp/VideoMusicCloud $ sudo bash VideoMusicCloud.sh
+```
+
+### Procedimientos de operación y nivel de servicio
+
+Es preciso asegurarnos de tener correctamente instalado y configurado nuestro gestor de base de datos MySQL, tal y como aparece en el fichero **application.properties**, debe de haber un usuario llamado **VideoMusicCloud** cuya contraseña sea **VideoMusicCloud**.
+
+Obviamente esto debe modificarse en un entorno de producción por los problemas de seguridad que plantearía dejarlo de esta manera, para ello habría que cambiar dicha configuración, las siguientes 2 líneas:
+
+```sh
+# ===============================
+# = CONFIGURACION DE BBDD
+# ===============================
+spring.datasource.username=USUARIO_NUEVO
+spring.datasource.password=CLAVE_NUEVA
+```
+
+Se debe otorgar permisos al usuario **USUARIO_NUEVO** sobre la base de datos: **videomusiccloud**. Esta asignación de privilegios se consigue con la siguiente orden:
+
+```sh
+GRANT ALL ON ‘videomusiccloud‘.* TO ’USUARIO_NUEVO’@’localhost’
+IDENTIFIED BY ’CLAVE_NUEVA’;
+```
+
+### Pruebas de implantación
+
+Tras su ejecución y si todo ha ido bien, la aplicación se encontrará correctamente instalada. Podremos dirigirnos a: [http://localhost:8080/VideoMusicCloud/](http://localhost:8080/VideoMusicCloud/).
