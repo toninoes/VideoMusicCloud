@@ -24,6 +24,16 @@ Aplicación web en Java de repositorio de videos musicales
 - Git
 - Spring Tool Suite 3.9.2
 
+### Capturas de la aplicación funcionando
+
+Vista del perfil de usuario:
+
+![perfil](https://github.com/toninoes/VideoMusicCloud/blob/master/src/main/resources/static/img/perfil.png)
+
+Vista de los listados de vídeos:
+
+![perfil](https://github.com/toninoes/VideoMusicCloud/blob/master/src/main/resources/static/img/listas.png)
+
 
 ## Manual de instalación y explotación
 
@@ -89,3 +99,5 @@ IDENTIFIED BY ’CLAVE_NUEVA’;
 ### Pruebas de implantación
 
 Tras su ejecución y si todo ha ido bien, la aplicación se encontrará correctamente instalada. Podremos dirigirnos a: [http://localhost:8080/VideoMusicCloud/](http://localhost:8080/VideoMusicCloud/).
+
+
