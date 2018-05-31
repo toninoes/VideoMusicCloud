@@ -1,5 +1,5 @@
 # VideoMusicCloud
-Aplicación web en Java de repositorio de videos musicales
+Aplicación web realizada en Spring consistente en un repositorio de videos musicales para artistas locales emergentes.
 
 
 ## Organización
@@ -24,29 +24,31 @@ Aplicación web en Java de repositorio de videos musicales
 - Git
 - Spring Tool Suite 3.9.2
 
+
 ### Diagrama ER
+
 
 ![Diagrama ER](https://github.com/toninoes/VideoMusicCloud/blob/master/src/main/resources/static/img/eer.png)
 
 
 ### Capturas de la aplicación funcionando
-
 Vista del perfil de usuario:
+
 
 ![perfil](https://github.com/toninoes/VideoMusicCloud/blob/master/src/main/resources/static/img/perfil.png)
 
 
 Listado de vídeos y buscador:
 
+
 ![perfil](https://github.com/toninoes/VideoMusicCloud/blob/master/src/main/resources/static/img/listas.png)
 
 
 ## Manual de instalación y explotación
-
 Las instrucciones de instalación y explotación del sistema se detallan a continuación.
 
-### Requisitos previos
 
+### Requisitos previos
 Los requerimientos que el sistema debe tener para el correcto funcionamiento. Entre paréntesis las versiones sobre las que se ha trabajado:
 
 - S.O.: Ubuntu Server (versión 18.04 LTS - 64 bits)
@@ -63,8 +65,8 @@ vmc@pinf ~ $ sudo apt-get install openjdk-8-jdk openjdk-8-doc openjdk-8-jre
 vmc@pinf ~ $ sudo apt-get install git mysql-server tomcat8 maven
 ```
 
-### Procedimientos de instalación
 
+### Procedimientos de instalación
 Primero clonamos el proyecto:
 
 ```sh
@@ -81,8 +83,8 @@ vmc@pinf /tmp $ cd VideoMusicCloud
 vmc@pinf /tmp/VideoMusicCloud $ sudo bash VideoMusicCloud.sh
 ```
 
-### Procedimientos de operación y nivel de servicio
 
+### Procedimientos de operación y nivel de servicio
 Es preciso asegurarnos de tener correctamente instalado y configurado nuestro gestor de base de datos MySQL, tal y como aparece en el fichero **application.properties**, debe de haber un usuario llamado **VideoMusicCloud** cuya contraseña sea **VideoMusicCloud**.
 
 Obviamente esto debe modificarse en un entorno de producción por los problemas de seguridad que plantearía dejarlo de esta manera, para ello habría que cambiar dicha configuración, las siguientes 2 líneas:
@@ -102,8 +104,8 @@ GRANT ALL ON ‘videomusiccloud‘.* TO ’USUARIO_NUEVO’@’localhost’
 IDENTIFIED BY ’CLAVE_NUEVA’;
 ```
 
-### Pruebas de implantación
 
+### Pruebas de implantación
 Tras su ejecución y si todo ha ido bien, la aplicación se encontrará correctamente instalada. Podremos dirigirnos a: [http://localhost:8080/VideoMusicCloud/](http://localhost:8080/VideoMusicCloud/).
 
 
