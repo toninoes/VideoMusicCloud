@@ -1,5 +1,5 @@
 # VideoMusicCloud
-Aplicación web realizada en Spring consistente en un repositorio de videos musicales para artistas locales emergentes.
+Aplicación web realizada en Spring consistente en un repositorio de videos musicales para artistas emergentes.
 
 
 ## Organización
