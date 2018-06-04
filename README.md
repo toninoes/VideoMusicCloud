@@ -100,7 +100,7 @@ spring.datasource.password=CLAVE_NUEVA
 Se debe otorgar permisos al usuario **USUARIO_NUEVO** sobre la base de datos: **videomusiccloud**. Esta asignación de privilegios se consigue con la siguiente orden:
 
 ```sh
-GRANT ALL ON `videomusiccloud`.* TO 'VideoMusicCloud'@'localhost' IDENTIFIED BY 'VideoMusicCloud';
+GRANT ALL ON `videomusiccloud`.* TO 'USUARIO_NUEVO'@'localhost' IDENTIFIED BY 'CLAVE_NUEVA';
 ```
 
 
